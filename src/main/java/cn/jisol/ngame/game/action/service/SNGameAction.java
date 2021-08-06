@@ -107,6 +107,17 @@ public class SNGameAction extends NCallServiceImpl {
     }
 
     /**
+     * 结束帧同步模式
+     */
+    @NGameRPCMethod
+    public void nGameSyncEnd(){
+        if(Objects.nonNull(nSyncMode))
+            nSyncMode.end();
+
+        System.out.println("SNGameAction - nGameSyncEnd : 结束同步模式");
+    }
+
+    /**
      * 向帧同步模式存储
      */
     @NGameRPCMethod
