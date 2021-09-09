@@ -1,6 +1,7 @@
 package cn.jisol.ngame.socket.websocket.game;
 
 import cn.hutool.json.JSONUtil;
+import cn.jisol.ngame.client.NClient;
 import cn.jisol.ngame.client.defalut.DefaultNClient;
 import cn.jisol.ngame.game.action.client.CNGameAction;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
@@ -15,11 +16,12 @@ import org.springframework.stereotype.Controller;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
 @ServerEndpoint(
-    value = "/game/{roomId}",
+    value = "/game/{roomId}/{uuid}",
     encoders = {DefaultProtoBufEncoder.class},
     decoders = {DefaultProtoBufDecoder.class}
 )
@@ -31,16 +33,19 @@ public class GameWebSocket {
     @OnOpen
     public void onOpen(Session session){
 
-        String uuid = session.getPathParameters().get("roomId");
-        DefaultNRoom room = ROOMS.get(uuid);
+        String roomId = session.getPathParameters().get("roomId");
+        String uuid = session.getPathParameters().get("uuid");
+        DefaultNRoom room = ROOMS.get(roomId);
 
         if(Objects.isNull(room)){
             //创建一个房间
-            room = new DefaultNRoom(uuid);
+            room = new DefaultNRoom(roomId);
             ROOMS.put(room.getUuid(),room);
         }
 
-        room.addClient(new DefaultNClient(session));
+        DefaultNClient client = new DefaultNClient(uuid,session);
+        room.addClient(client);
+        client.setRoom(room);
 
     }
 
@@ -48,11 +53,12 @@ public class GameWebSocket {
     public void onMessage(Session session,NGameMessage message){
         //找到用户
 
-        String uuid = session.getPathParameters().get("roomId");
-        if(Objects.nonNull(ROOMS.get(uuid))){
-            ROOMS.get(uuid).getClients().forEach(
+        String roomId = session.getPathParameters().get("roomId");
+        String uuid = session.getPathParameters().get("uuid");
+        if(Objects.nonNull(ROOMS.get(roomId))){
+            ROOMS.get(roomId).getClients().forEach(
                 client -> {
-                    if(client.getUuid().equals(session.getId()))
+                    if(client.getUuid().equals(uuid))
                         client.onMessage(message);
                 }
             );
@@ -62,7 +68,10 @@ public class GameWebSocket {
 
     @OnClose
     public void onClose(Session session){
+        String roomId = session.getPathParameters().get("roomId");
+        String uuid = session.getPathParameters().get("uuid");
 
+        ROOMS.get(roomId).getClients().removeIf(client -> client.getUuid().equals(uuid));
     }
 
     @OnError

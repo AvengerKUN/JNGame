@@ -7,6 +7,7 @@ import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
 import cn.jisol.ngame.rpc.mode.uid.NUIDMode;
+import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;

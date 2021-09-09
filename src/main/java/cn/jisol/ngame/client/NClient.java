@@ -35,6 +35,7 @@ public abstract class NClient<M,S> {
     public abstract void onMessage(M data);
 
     public void onSend(S o){
-        session.getAsyncRemote().sendObject(o);
+        if(session.isOpen())
+            session.getAsyncRemote().sendObject(o);
     };
 }

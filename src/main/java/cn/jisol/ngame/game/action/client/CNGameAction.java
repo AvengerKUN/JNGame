@@ -1,11 +1,13 @@
 package cn.jisol.ngame.game.action.client;
 
 import cn.jisol.ngame.client.NClient;
+import cn.jisol.ngame.entity.action.GAction;
 import cn.jisol.ngame.proto.snake.GSnakeMessage;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
 import cn.jisol.ngame.rpc.mode.NRPCMode;
 import cn.jisol.ngame.rpc.mode.uid.NUIDMode;
+import cn.jisol.ngame.sync.fps.NFPSInfo;
 
 import java.util.HashMap;
 
@@ -40,4 +42,10 @@ public interface CNGameAction {
     @NUIDMode("1")
     @NGameRPCMethod(mode = NRPCMode.UID)
     public void nGameUUIDMode();
+
+    /**
+     * 接收帧同步
+     */
+    @NGameRPCMethod
+    public void nGameSyncCallBack(NFPSInfo<GAction> nFPSInfo);
 }

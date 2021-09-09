@@ -1,41 +1,37 @@
 package cn.jisol.ngame.game.action.service;
 
+import cn.hutool.core.lang.Editor;
+import cn.hutool.core.lang.Filter;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.jisol.ngame.client.defalut.DefaultNClient;
+import cn.jisol.ngame.entity.action.GAction;
 import cn.jisol.ngame.ncall.NCall;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
-import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.proto.snake.GSnakeMessage;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
 import cn.jisol.ngame.rpc.NRPCParam;
 import cn.jisol.ngame.rpc.mode.NRPCMode;
 import cn.jisol.ngame.rpc.mode.uid.NUIDMode;
+import cn.jisol.ngame.socket.websocket.game.GameWebSocket;
 import cn.jisol.ngame.sync.fps.NFPSInfo;
 import cn.jisol.ngame.sync.fps.NSyncFPSMethod;
-import cn.jisol.ngame.sync.fps.NSyncFPSModeImpl;
-import com.google.protobuf.Any;
+import cn.jisol.ngame.sync.fps.NSyncFPSMode;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 @NGameRPCClass
 public class SNGameAction extends NCallServiceImpl {
 
-    private NSyncFPSModeImpl<Number> nSyncMode;
+    //同步nSyncModes
+    private Map<String, NSyncFPSMode<GAction>> nSyncModes = new HashMap<>();
 
     @Override
     public List<NCall> register() {
-        this.nSyncMode = new NSyncFPSModeImpl<>();
-        this.nSyncMode.setIntervalTime(1000/2); //设置延迟时间
-        return new ArrayList<NCall>(){
-            {
-                add(nSyncMode);
-            }
-        };
+        return new ArrayList<NCall>(){{}};
     }
 
 
@@ -99,9 +95,18 @@ public class SNGameAction extends NCallServiceImpl {
      * 开始帧同步模式
      */
     @NGameRPCMethod
-    public void nGameSyncStart(){
-        if(Objects.nonNull(nSyncMode))
-            nSyncMode.start();
+    public void nGameSyncStart(DefaultNClient client){
+
+        NSyncFPSMode<GAction> nSyncMode = null;
+        if(Objects.isNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid()))){
+            nSyncMode = new NSyncFPSMode<>();
+            nSyncMode.setIntervalTime(1000/15); //设置延迟时间
+            nSyncMode.setUuid(client.getRoom().getUuid());
+            this.nSyncModes.put(client.getRoom().getUuid(),nSyncMode);
+            addRegister(nSyncMode);
+        }
+
+        nSyncMode.start();
 
         System.out.println("SNGameAction - nGameSyncStart : 开始同步模式");
     }
@@ -110,8 +115,9 @@ public class SNGameAction extends NCallServiceImpl {
      * 结束帧同步模式
      */
     @NGameRPCMethod
-    public void nGameSyncEnd(){
-        if(Objects.nonNull(nSyncMode))
+    public void nGameSyncEnd(DefaultNClient client){
+        NSyncFPSMode<GAction> nSyncMode = null;
+        if(Objects.nonNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid())))
             nSyncMode.end();
 
         System.out.println("SNGameAction - nGameSyncEnd : 结束同步模式");
@@ -121,9 +127,14 @@ public class SNGameAction extends NCallServiceImpl {
      * 向帧同步模式存储
      */
     @NGameRPCMethod
-    public void nGameSyncSave(@NRPCParam("number") Integer number){
+    public void nGameSyncSave(DefaultNClient client,@NRPCParam("action") GAction action){
 
-        nSyncMode.addFPSInfo(number);
+        NSyncFPSMode<GAction> nSyncMode = null;
+
+        action.setUserId(client.getUuid());
+
+        if(Objects.nonNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid())))
+            nSyncMode.addFPSInfo(String.format("%s-%s",client.getUuid(),action.getUid()),action);
 
     }
 
@@ -131,9 +142,24 @@ public class SNGameAction extends NCallServiceImpl {
      * 同步模式回调
      */
     @NSyncFPSMethod
-    public void nGameSyncCallBack(NFPSInfo<Number> nFPSInfo){
+    public void nGameSyncCallBack(String uuid,NFPSInfo<GAction> nFPSInfo){
 
-        System.out.println(String.format("SNGameAction - nGameSyncCallBack : 同步模式回调[%s]",nFPSInfo.getIndex()));
+
+        GameWebSocket.ROOMS.get(uuid).getClients().forEach(
+                (DefaultNClient client) -> {
+
+                    NFPSInfo<GAction> info = new NFPSInfo<>();
+                    info.setDs(new ArrayList<GAction>(Arrays.asList(
+                            ArrayUtil.filter(nFPSInfo.getDs().toArray(new GAction[0]), (Filter<GAction>) v -> !client.getUuid().equals(v.getUserId()))
+                    )));
+                    info.setI(nFPSInfo.getI());
+
+                    client.getCNGameAction().nGameSyncCallBack(info);
+
+                }
+        );
+
+//        System.out.println(String.format("SNGameAction - nGameSyncCallBack : 房间[%s]-同步模式回调[%s]",uuid,nFPSInfo.getI()));
 
     }
 

@@ -1,27 +1,35 @@
 package cn.jisol.ngame.sync.fps;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 @Getter
 @Setter
-public class NFPSInfo<D> {
+public class NFPSInfo<D> implements Serializable {
 
     //帧索引
-    private Number index = null;
+    private Number i = 0;
 
     //帧数据
-    private ArrayList<D> data = null;
+    private ArrayList<D> ds = new ArrayList<>();
 
     public boolean addInfo(D info){
-        if(Objects.isNull(data))
-            data = new ArrayList<>();
+        if(Objects.isNull(ds))
+            ds = new ArrayList<>();
 
-        return data.add(info);
+        return ds.add(info);
+    }
+
+    public boolean addInfos(Collection<D> info){
+        if(Objects.isNull(ds))
+            ds = new ArrayList<>();
+
+        return ds.addAll(info);
     }
 
 }

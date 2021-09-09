@@ -3,27 +3,23 @@ package cn.jisol.ngame.sync.fps;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.jisol.ngame.ncall.NCallService;
 import cn.jisol.ngame.sync.NSyncMode;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 同步帧 - 一般用于同步操作
  */
 @Getter
 @Setter
-public class NSyncFPSModeImpl<D> implements NSyncMode {
+public class NSyncFPSMode<D> implements NSyncMode {
 
     private NCallService nCallService;
     private ArrayList<Method> methods = new ArrayList<>();
     private Thread thread;
+    private String uuid;
 
     //间隔时间
     private Integer intervalTime = 1000/15;
@@ -33,6 +29,8 @@ public class NSyncFPSModeImpl<D> implements NSyncMode {
     private LinkedList<NFPSInfo<D>> dataList = null;
     //当前帧
     private Integer index = null;
+    //当前临时帧数据
+    private Map<String,D> fInfos = null;
 
     @Override
     public void init(NCallService nCallService) {
@@ -65,7 +63,7 @@ public class NSyncFPSModeImpl<D> implements NSyncMode {
 
             while (isExecute){
                 nFPSInfo = new NFPSInfo<D>();
-                nFPSInfo.setIndex(index);
+                nFPSInfo.setI(index);
                 dataList.add(nFPSInfo);
 
                 try {
@@ -74,10 +72,13 @@ public class NSyncFPSModeImpl<D> implements NSyncMode {
                     e.printStackTrace();
                 }
 
+                if(Objects.nonNull(this.fInfos)) dataList.get(dataList.size() - 1).addInfos(this.fInfos.values());
+                this.fInfos = null;
+
                 //调用方法
                 methods.forEach(method -> {
                     try {
-                        method.invoke(this.nCallService,dataList.get(dataList.size() - 1));
+                        method.invoke(this.nCallService,this.uuid,dataList.get(dataList.size() - 1));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -106,5 +107,13 @@ public class NSyncFPSModeImpl<D> implements NSyncMode {
         dataList.get(dataList.size() - 1).addInfo(info);
         return true;
 
+    }
+    //将数据插入到最新帧 唯一存储 用于限制 客户端重复提交
+    public boolean addFPSInfo(String key,D info){
+
+        if(!this.isExecute || Objects.isNull(dataList) || dataList.size() < 1) return false;
+        if(Objects.isNull(this.fInfos)) this.fInfos = new HashMap<>();
+        this.fInfos.put(key,info);
+        return true;
     }
 }
