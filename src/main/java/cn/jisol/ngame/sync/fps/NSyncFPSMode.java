@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 同步帧 - 一般用于同步操作
@@ -112,7 +113,7 @@ public class NSyncFPSMode<D> implements NSyncMode {
     public boolean addFPSInfo(String key,D info){
 
         if(!this.isExecute || Objects.isNull(dataList) || dataList.size() < 1) return false;
-        if(Objects.isNull(this.fInfos)) this.fInfos = new HashMap<>();
+        if(Objects.isNull(this.fInfos)) this.fInfos = new ConcurrentHashMap<>();
         this.fInfos.put(key,info);
         return true;
     }

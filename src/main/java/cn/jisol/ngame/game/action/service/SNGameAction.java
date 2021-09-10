@@ -21,6 +21,7 @@ import cn.jisol.ngame.sync.fps.NSyncFPSMode;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 @NGameRPCClass
@@ -149,7 +150,7 @@ public class SNGameAction extends NCallServiceImpl {
                 (DefaultNClient client) -> {
 
                     NFPSInfo<GAction> info = new NFPSInfo<>();
-                    info.setDs(new ArrayList<GAction>(Arrays.asList(
+                    info.setDs(new ArrayList<>(Arrays.asList(
                             ArrayUtil.filter(nFPSInfo.getDs().toArray(new GAction[0]), (Filter<GAction>) v -> !client.getUuid().equals(v.getUserId()))
                     )));
                     info.setI(nFPSInfo.getI());
