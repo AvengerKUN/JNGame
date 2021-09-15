@@ -5,6 +5,8 @@ import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.jisol.ngame.client.defalut.DefaultNClient;
+import cn.jisol.ngame.dto.DSyncMessage;
+import cn.jisol.ngame.entity.GOwner;
 import cn.jisol.ngame.entity.action.GAction;
 import cn.jisol.ngame.ncall.NCall;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
@@ -20,6 +22,7 @@ import cn.jisol.ngame.sync.fps.NSyncFPSMethod;
 import cn.jisol.ngame.sync.fps.NSyncFPSMode;
 import org.springframework.stereotype.Component;
 
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SNGameAction extends NCallServiceImpl {
 
     //同步nSyncModes
-    private Map<String, NSyncFPSMode<GAction>> nSyncModes = new HashMap<>();
+    private Map<String, NSyncFPSMode<DSyncMessage>> nSyncModes = new HashMap<>();
 
     @Override
     public List<NCall> register() {
@@ -98,7 +101,7 @@ public class SNGameAction extends NCallServiceImpl {
     @NGameRPCMethod
     public void nGameSyncStart(DefaultNClient client){
 
-        NSyncFPSMode<GAction> nSyncMode = null;
+        NSyncFPSMode<DSyncMessage> nSyncMode = null;
         if(Objects.isNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid()))){
             nSyncMode = new NSyncFPSMode<>();
             nSyncMode.setIntervalTime(1000/15); //设置延迟时间
@@ -117,11 +120,25 @@ public class SNGameAction extends NCallServiceImpl {
      */
     @NGameRPCMethod
     public void nGameSyncEnd(DefaultNClient client){
-        NSyncFPSMode<GAction> nSyncMode = null;
+        NSyncFPSMode<DSyncMessage> nSyncMode = null;
         if(Objects.nonNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid())))
             nSyncMode.end();
 
         System.out.println("SNGameAction - nGameSyncEnd : 结束同步模式");
+    }
+
+    /**
+     * 向帧同步模式存储 权限
+     */
+    @NGameRPCMethod
+    public void nGameSyncAuth(DefaultNClient client,@NRPCParam("action") GOwner owner){
+
+        NSyncFPSMode<DSyncMessage> nSyncMode = null;
+
+        owner.setUserId(client.getUuid());
+
+        if(Objects.nonNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid())))
+            nSyncMode.addFPSInfo(String.format("%s",owner.getUid()),new DSyncMessage(DSyncMessage.D_SYNC_OWNER,owner));
     }
 
     /**
@@ -130,12 +147,13 @@ public class SNGameAction extends NCallServiceImpl {
     @NGameRPCMethod
     public void nGameSyncSave(DefaultNClient client,@NRPCParam("action") GAction action){
 
-        NSyncFPSMode<GAction> nSyncMode = null;
+        NSyncFPSMode<DSyncMessage> nSyncMode = null;
 
         action.setUserId(client.getUuid());
 
         if(Objects.nonNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid())))
-            nSyncMode.addFPSInfo(String.format("%s-%s",client.getUuid(),action.getUid()),action);
+            nSyncMode.addFPSInfo(String.format("%s-%s",client.getUuid(),action.getUid()),new DSyncMessage(DSyncMessage.D_SYNC_ACTION,action));
+//            nSyncMode.addFPSInfo(String.format("%s",action.getUid()),action);
 
     }
 
@@ -143,16 +161,33 @@ public class SNGameAction extends NCallServiceImpl {
      * 同步模式回调
      */
     @NSyncFPSMethod
-    public void nGameSyncCallBack(String uuid,NFPSInfo<GAction> nFPSInfo){
+    public void nGameSyncCallBack(String uuid,NFPSInfo<DSyncMessage> nFPSInfo){
 
 
         GameWebSocket.ROOMS.get(uuid).getClients().forEach(
                 (DefaultNClient client) -> {
 
-                    NFPSInfo<GAction> info = new NFPSInfo<>();
+                    NFPSInfo<DSyncMessage> info = new NFPSInfo<>();
+
                     info.setDs(new ArrayList<>(Arrays.asList(
-                            ArrayUtil.filter(nFPSInfo.getDs().toArray(new GAction[0]), (Filter<GAction>) v -> !client.getUuid().equals(v.getUserId()))
+                            ArrayUtil.filter(nFPSInfo.getDs().toArray(new DSyncMessage[0]), (Filter<DSyncMessage>) v -> {
+
+                                //数据筛选
+                                if (v.getType().equals(DSyncMessage.D_SYNC_ACTION))
+                                    return !client.getUuid().equals(((GAction)v.getMessage()).getUserId());
+
+                                if (v.getType().equals(DSyncMessage.D_SYNC_OWNER)){
+                                    GOwner owner =  ((GOwner)v.getMessage());
+                                    owner.setIm(client.getUuid().equals(owner.getUserId()));
+
+                                    return true;
+                                }
+
+                                return true;
+
+                            })
                     )));
+
                     info.setI(nFPSInfo.getI());
 
                     client.getCNGameAction().nGameSyncCallBack(info);

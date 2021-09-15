@@ -1,6 +1,7 @@
 package cn.jisol.ngame.game.action.client;
 
 import cn.jisol.ngame.client.NClient;
+import cn.jisol.ngame.dto.DSyncMessage;
 import cn.jisol.ngame.entity.action.GAction;
 import cn.jisol.ngame.proto.snake.GSnakeMessage;
 import cn.jisol.ngame.rpc.NGameRPCClass;
@@ -47,5 +48,5 @@ public interface CNGameAction {
      * 接收帧同步
      */
     @NGameRPCMethod
-    public void nGameSyncCallBack(NFPSInfo<GAction> nFPSInfo);
+    public void nGameSyncCallBack(NFPSInfo<DSyncMessage> nFPSInfo);
 }
