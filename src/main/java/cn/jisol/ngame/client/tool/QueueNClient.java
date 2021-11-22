@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public abstract class QueueNClient<M,S> extends NClient<M,S> {
+public abstract class QueueNClient<M ,S> extends NClient<M,S> {
 
     private Queue<S> sQueue;
     private Thread qThread;

@@ -1,4 +1,4 @@
-package cn.jisol.ngame.socket.websocket.encoders;
+package cn.jisol.ngame.network.websocket.encoders;
 
 import com.google.protobuf.AbstractMessage;
 

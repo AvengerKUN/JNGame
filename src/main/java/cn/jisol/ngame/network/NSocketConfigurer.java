@@ -1,4 +1,4 @@
-package cn.jisol.ngame.socket;
+package cn.jisol.ngame.network;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

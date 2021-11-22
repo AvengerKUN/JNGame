@@ -1,22 +1,15 @@
-package cn.jisol.ngame.socket.websocket.game;
+package cn.jisol.ngame.network.websocket.game;
 
-import cn.hutool.json.JSONUtil;
-import cn.jisol.ngame.client.NClient;
 import cn.jisol.ngame.client.defalut.DefaultNClient;
-import cn.jisol.ngame.game.action.client.CNGameAction;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
-import cn.jisol.ngame.proto.snake.GSnakeMessage.*;
 import cn.jisol.ngame.room.defalut.DefaultNRoom;
-import cn.jisol.ngame.socket.websocket.decoders.DefaultProtoBufDecoder;
-import cn.jisol.ngame.socket.websocket.encoders.DefaultProtoBufEncoder;
-import com.google.protobuf.Any;
-import com.google.protobuf.InvalidProtocolBufferException;
+import cn.jisol.ngame.network.websocket.decoders.DefaultProtoBufDecoder;
+import cn.jisol.ngame.network.websocket.encoders.DefaultProtoBufEncoder;
 import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 

@@ -1,7 +1,6 @@
-package cn.jisol.ngame.socket.websocket.decoders;
+package cn.jisol.ngame.network.websocket.decoders;
 
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass;
-import com.google.protobuf.AbstractMessage;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
