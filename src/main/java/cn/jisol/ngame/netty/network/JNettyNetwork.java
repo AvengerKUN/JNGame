@@ -1,24 +1,12 @@
 package cn.jisol.ngame.netty.network;
 
-import cn.jisol.ngame.netty.JNetty;
-import io.netty.channel.Channel;
+import cn.jisol.ngame.netty.JNettyApplication;
 
 public abstract class JNettyNetwork {
-    private JNetty netty;
-
-    public void setNetty(JNetty netty) {
-        this.netty = netty;
-    }
 
     /**
      * 启动服务
      */
-    public abstract boolean start();
+    public abstract boolean start(JNettyApplication application);
 
-    /**
-     * 监听关闭服务
-     */
-    public void clone(Channel channel){
-        netty.close(channel);
-    };
 }

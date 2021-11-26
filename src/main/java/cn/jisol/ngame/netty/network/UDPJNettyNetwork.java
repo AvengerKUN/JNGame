@@ -1,5 +1,6 @@
 package cn.jisol.ngame.netty.network;
 
+import cn.jisol.ngame.netty.JNettyApplication;
 import cn.jisol.ngame.netty.network.udp.UDPInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -8,7 +9,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import io.netty.handler.codec.MessageToMessageEncoder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,11 +16,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class UDPJNettyNetwork extends JNettyNetwork {
 
-    private int port = 1000;
-
+    private int port;
     private MessageToMessageDecoder[] decoders;
     private MessageToByteEncoder[] encoders;
 
@@ -29,7 +27,10 @@ public class UDPJNettyNetwork extends JNettyNetwork {
      * @return
      */
     @Override
-    public boolean start() {
+    public boolean start(JNettyApplication application) {
+
+        this.port = application.getPort();
+        this.decoders = application.getDecoders().toArray(new MessageToMessageDecoder[0]);
 
         //启动Netty UDP
         //配置事件<消费>管理者
@@ -53,7 +54,7 @@ public class UDPJNettyNetwork extends JNettyNetwork {
                     e.printStackTrace();
                 } finally {
                     group.shutdownGracefully();
-                    this.clone(channel);
+//                    this.clone(channel);
                 }
             })).start();
         } catch (Exception ignored) { return false; }

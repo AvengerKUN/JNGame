@@ -13,7 +13,9 @@ public class UDPBusiness extends SimpleChannelInboundHandler<UDPSession> {
 
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, UDPSession udpSession) {
-        System.out.println(udpSession.vData(String.class));;
+
+        System.out.println(udpSession.vData(String.class));
+
     }
 
 }
