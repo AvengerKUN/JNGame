@@ -1,14 +1,18 @@
 package cn.jisol.ngame.netty.network;
 
-import cn.jisol.ngame.netty.network.udp.UDPHandler;
+import cn.jisol.ngame.netty.network.udp.UDPInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.MessageToMessageDecoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -17,7 +21,10 @@ public class UDPJNettyNetwork extends JNettyNetwork {
 
     private int port = 1000;
 
-    /**
+    private MessageToMessageDecoder[] decoders;
+    private MessageToByteEncoder[] encoders;
+
+     /**
      * 启动UDP服务
      * @return
      */
@@ -32,7 +39,7 @@ public class UDPJNettyNetwork extends JNettyNetwork {
         bootstrap.group(group)
                 .channel(NioDatagramChannel.class) //UDP管道
                 .option(ChannelOption.SO_BROADCAST,true) //指定为广播模式 多人
-                .handler(new UDPHandler());
+                .handler(new UDPInitializer(this));
 
         //开启服务
         try {
