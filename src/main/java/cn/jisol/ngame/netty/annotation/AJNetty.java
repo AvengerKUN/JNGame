@@ -1,6 +1,9 @@
-package cn.jisol.ngame.netty;
+package cn.jisol.ngame.netty.annotation;
 
 import cn.jisol.ngame.netty.network.JNettyNetwork;
+import cn.jisol.ngame.netty.network.coder.JNMessageToMessageDecoder;
+import cn.jisol.ngame.netty.network.coder.JNMessageToMessageEncoder;
+import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
 import javax.websocket.Encoder;
@@ -22,5 +25,7 @@ public @interface AJNetty {
     //网络
     Class<? extends JNettyNetwork> network();
     //解码器
-    Class<? extends MessageToMessageDecoder>[] decoders() default {};
+    Class<? extends JNMessageToMessageDecoder>[] decoders() default {};
+    //编码器
+    Class<? extends JNMessageToMessageEncoder>[] encoders() default {};
 }

@@ -1,17 +1,16 @@
 package cn.jisol.ngame.network.netty.udp.encoders;
 
+import cn.jisol.ngame.netty.network.udp.coder.JNMessageToByteEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.util.CharsetUtil;
 
-import java.net.DatagramPacket;
-import java.nio.charset.StandardCharsets;
+public class DefaultProtoBufEncoder extends JNMessageToByteEncoder<String> {
 
-public class DefaultProtoBufEncoder extends MessageToByteEncoder<String> {
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, String message, ByteBuf out) throws Exception {
-        System.out.println("MessageToByteEncoder");
-//        this.write(channelHandlerContext,new DatagramPacket(Unpooled.copiedBuffer(message.getBytes(StandardCharsets.UTF_8))));
+    public ByteBuf nEncoder(ChannelHandlerContext channelHandlerContext, String data) {
+        return Unpooled.copiedBuffer(data , CharsetUtil.UTF_8);
     }
+
 }

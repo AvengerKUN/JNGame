@@ -1,6 +1,7 @@
-package cn.jisol.ngame.netty.network.session;
+package cn.jisol.ngame.netty.network.udp.entity;
 
-import io.netty.channel.socket.DatagramPacket;
+import cn.jisol.ngame.netty.network.udp.session.UDPSession;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,15 +10,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class UDPSession {
+@Builder
+public class UDPReceiveMessage {
 
-    private DatagramPacket target;
-    private List<Object> messages;
-
-    public UDPSession(DatagramPacket target){
-        this.target = target;
-        this.messages = new ArrayList<>();
-    }
+    private UDPSession receive; //接收者
+    private List<Object> messages; //消息
 
     public boolean addMessage(Object o){
         messages.add(o);

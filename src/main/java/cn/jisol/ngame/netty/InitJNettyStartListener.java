@@ -1,19 +1,22 @@
 package cn.jisol.ngame.netty;
 
 import cn.hutool.core.annotation.AnnotationUtil;
-import cn.hutool.core.lang.Editor;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ClassUtil;
+import cn.jisol.ngame.netty.annotation.AJNetty;
+import cn.jisol.ngame.netty.annotation.control.JNInit;
 import cn.jisol.ngame.netty.network.JNettyNetwork;
-import cn.jisol.ngame.netty.network.UDPJNettyNetwork;
-import io.netty.handler.codec.MessageToMessageDecoder;
+import cn.jisol.ngame.netty.network.coder.JNMessageToMessageDecoder;
+import cn.jisol.ngame.netty.network.coder.JNMessageToMessageEncoder;
+import cn.jisol.ngame.util.JAnnotationUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.boot.availability.ReadinessState;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 
@@ -53,8 +56,19 @@ public class InitJNettyStartListener implements ApplicationListener<Availability
                         application.setController(value.newInstance());
                         application.setNetwork(ajNetty.network().newInstance());
 
-                        for (Class<? extends MessageToMessageDecoder> decoder : ajNetty.decoders()) {
+                        //调用 Controller 的初始化
+                        for (Method method : JAnnotationUtil.findMethods(application.getController().getClass().getMethods(), JNInit.class)) {
+                            JAnnotationUtil.vRunMethod(application.getController(),method,new Object[]{
+                                    application.getNetwork()
+                            });
+                        }
+
+
+                        for (Class<? extends JNMessageToMessageDecoder> decoder : ajNetty.decoders()) {
                             application.addDecoder(decoder.newInstance());
+                        }
+                        for (Class<? extends JNMessageToMessageEncoder> encoder : ajNetty.encoders()) {
+                            application.addEncoder(encoder.newInstance());
                         }
 
                         //获取全局 JNetty 进行 执行 start方法

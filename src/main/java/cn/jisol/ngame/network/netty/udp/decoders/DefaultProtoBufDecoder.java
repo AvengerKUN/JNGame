@@ -1,18 +1,14 @@
 package cn.jisol.ngame.network.netty.udp.decoders;
 
-import cn.jisol.ngame.netty.network.session.UDPSession;
+import cn.jisol.ngame.netty.network.udp.coder.JNByteToMessageDecoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.socket.DatagramPacket;
-import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
-public class DefaultProtoBufDecoder extends MessageToMessageDecoder<UDPSession> {
+public class DefaultProtoBufDecoder extends JNByteToMessageDecoder<String> {
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, UDPSession message, List<Object> list) throws Exception {
-        message.addMessage(message.vData(ByteBuf.class).toString(StandardCharsets.UTF_8));
-        list.add(message);
+    public String nDecoder(ChannelHandlerContext channelHandlerContext, ByteBuf data) {
+        return data.toString(StandardCharsets.UTF_8);
     }
 }

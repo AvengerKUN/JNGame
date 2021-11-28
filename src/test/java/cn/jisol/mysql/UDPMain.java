@@ -20,14 +20,22 @@ public class UDPMain {
             Bootstrap b=new Bootstrap();
             b.group(group)
                     .channel(NioDatagramChannel.class)
+                    // 广播
                     .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new SimpleChannelInboundHandler<DatagramPacket>() {
+                    // 设置读缓冲区为2M
+                    .option(ChannelOption.SO_RCVBUF, 2048 * 1024)
+                    // 设置写缓冲区为1M
+                    .option(ChannelOption.SO_SNDBUF, 1024 * 1024)
+//                    .option(ChannelOption.SO_BROADCAST, true)
+                    .handler(new ChannelInitializer<NioDatagramChannel>() {
                         @Override
-                        protected void messageReceived(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket) throws Exception {
-
+                        protected void initChannel(NioDatagramChannel channel) throws Exception {
+                            ChannelPipeline pipeline = channel.pipeline();
+                            pipeline.addLast(new NioEventLoopGroup(), new UdpServerHandler());
                         }
                     });
-            Channel ch = b.bind(0).sync().channel();
+            Channel ch = b.bind(2315).sync().channel();
+            ch.closeFuture().sync();
             //向网段内的所有机器广播
             ch.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer(
                     "谚语字典查询?", CharsetUtil.UTF_8), new InetSocketAddress(
@@ -42,6 +50,19 @@ public class UDPMain {
             e.printStackTrace();
         }finally{
             group.shutdownGracefully();
+        }
+    }
+    public static class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
+
+
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            System.out.println("服务端接收到消息：");
+        }
+
+        @Override
+        protected void messageReceived(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket) throws Exception {
+
         }
     }
 }

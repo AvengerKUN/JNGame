@@ -1,7 +1,10 @@
 package cn.jisol.ngame.netty;
 
 import cn.jisol.ngame.netty.network.JNettyNetwork;
+import cn.jisol.ngame.netty.network.coder.JNMessageToMessageDecoder;
+import cn.jisol.ngame.netty.network.coder.JNMessageToMessageEncoder;
 import cn.jisol.ngame.network.netty.udp.decoders.DefaultProtoBufDecoder;
+import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +24,8 @@ public class JNettyApplication {
     private Object controller;
     private JNettyNetwork network;
 
-    private List<MessageToMessageDecoder> decoders;
+    private List<JNMessageToMessageDecoder> decoders;
+    private List<JNMessageToMessageEncoder> encoders;
 
     //启动
     public boolean start(){
@@ -31,10 +35,16 @@ public class JNettyApplication {
 
     }
 
-    public void addDecoder(MessageToMessageDecoder decoder){
+    public void addDecoder(JNMessageToMessageDecoder decoder){
         if(Objects.isNull(decoders))
             decoders = new LinkedList<>();
         decoders.add(decoder);
+    }
+
+    public void addEncoder(JNMessageToMessageEncoder encoder){
+        if(Objects.isNull(encoders))
+            encoders = new LinkedList<>();
+        encoders.add(encoder);
     }
 
 }

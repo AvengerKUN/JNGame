@@ -29,12 +29,14 @@ public class UDPInitializer extends ChannelInitializer<NioDatagramChannel> {
         for (ChannelHandler decoder : ngame.getDecoders()) {
             channel.pipeline().addLast(decoder);
         }
-//        //添加发送编码器
-//        for (ChannelHandler encoder : ngame.getEncoders()) {
-//            channel.pipeline().addLast(encoder);
-//        }
 
-        channel.pipeline().addLast(new UDPBusiness());
+        channel.pipeline().addLast(new UDPBusiness(this.ngame));
+
+        //添加发送编码器
+        for (ChannelHandler encoder : ngame.getEncoders()) {
+            channel.pipeline().addLast(encoder);
+        }
+
     }
 
 }
