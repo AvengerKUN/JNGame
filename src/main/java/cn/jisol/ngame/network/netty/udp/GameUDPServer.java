@@ -25,7 +25,7 @@ import cn.jisol.ngame.network.netty.udp.encoders.DefaultProtoBufEncoder;
         DefaultProtoBufEncoder.class
     }
 )
-public class GameUDP {
+public class GameUDPServer {
 
     @JNInit
     public void initNetwork(UDPJNettyNetwork network){
