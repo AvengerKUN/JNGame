@@ -1,10 +1,14 @@
 package cn.jisol.ngame.netty.network;
 
+import cn.hutool.core.date.DateTime;
 import cn.jisol.ngame.netty.JNettyApplication;
+import cn.jisol.ngame.netty.annotation.control.JNClose;
 import cn.jisol.ngame.netty.network.coder.JNMessageToMessageDecoder;
 import cn.jisol.ngame.netty.network.coder.JNMessageToMessageEncoder;
+import cn.jisol.ngame.netty.network.udp.session.UDPSession;
 import cn.jisol.ngame.netty.network.udp.session.UDPSessionGroup;
 import cn.jisol.ngame.netty.network.udp.UDPInitializer;
+import cn.jisol.ngame.util.JAnnotationUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -14,6 +18,9 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.lang.reflect.Method;
+import java.util.Date;
 
 
 @Getter
@@ -26,8 +33,10 @@ public class UDPJNettyNetwork extends JNettyNetwork {
     private JNettyApplication application;
     private final UDPSessionGroup clients = new UDPSessionGroup();
 
+    //是否开启活跃检测
     private boolean isOpenAlive = false;
     private int vAliveTime = 1000;
+    private int vAliveError = 500;
 
     /**
      * 启动UDP服务
@@ -54,16 +63,15 @@ public class UDPJNettyNetwork extends JNettyNetwork {
         //开启服务
         try {
             Channel channel = bootstrap.bind(this.port).sync().channel();
+            //初始化
+            this.init();
             System.out.println(String.format("启动UDP服务器成功 : [%s]",this.port));
             (new Thread(() -> {
                 //等待结束
                 try {
                     channel.closeFuture().sync();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
+                } catch (Exception ignored) {} finally {
                     group.shutdownGracefully();
-//                    this.clone(channel);
                 }
             })).start();
         } catch (Exception ignored) { return false; }
@@ -71,5 +79,45 @@ public class UDPJNettyNetwork extends JNettyNetwork {
         return true;
     }
 
+    public void init(){
+        this.rOpenAlive();
+    }
 
+    //活跃检测
+    public void rOpenAlive(){
+
+        (new Thread(() ->{
+
+            //检测最后活跃时间是否大于活跃限制
+            while (this.isOpenAlive){
+
+//                int erNum = 0;
+
+                for (UDPSession value : clients.values()) {
+                    long crTime = DateTime.now().getTime();
+                    long erTime = ((this.vAliveTime+this.vAliveError));
+
+                    if(value.lastAliveTime.getTime() + erTime < crTime ){
+//                        erNum++;
+                        //超出最大活跃时间(踢出组 并且通知 )
+                        clients.remove(value.getSid());
+                        //找到JNClose注解
+                        for (Method method : JAnnotationUtil.findMethods(application.getController().getClass().getMethods(), JNClose.class)) {
+                            JAnnotationUtil.vRunMethod(application.getController(),method,new Object[]{
+                                    value,clients
+                            });
+                        }
+                    }
+                }
+
+//                System.out.println(String.format("rOpenAlive - 活跃检测 : %s 踢出组",erNum));
+
+                try {
+                    Thread.sleep(this.vAliveTime);
+                } catch (InterruptedException ignored) {}
+            }
+
+        })).start();
+
+    }
 }

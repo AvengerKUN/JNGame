@@ -11,6 +11,7 @@ import lombok.Setter;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -22,6 +23,9 @@ public class UDPSession {
     private Channel server;
     private InetSocketAddress address;
     private Boolean isOpen;
+
+    //最后发送消息的时间
+    public Date lastAliveTime;
 
     public UDPSession(String sid,Channel server, InetSocketAddress address){
         this.sid = sid;

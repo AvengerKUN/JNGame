@@ -30,8 +30,11 @@ public class GameUDP {
     @JNInit
     public void initNetwork(UDPJNettyNetwork network){
         System.out.println("initNetwork");
+
+        //因UDP协议无法监听客户端是否在线 所以导致 onClose失效 这里需要吧心跳开启
         network.setOpenAlive(true);
-        network.setVAliveTime(1000/2);
+        network.setVAliveTime(2000);
+        network.setVAliveError(1000);
     }
 
     @JNOpen
@@ -47,6 +50,6 @@ public class GameUDP {
 
     @JNClose
     public void onClose(UDPSession session,UDPSessionGroup clients){
-        System.out.println(String.format("【%s】断开服务器 - 当前服务器在线人数:%s",session.getSid(),clients.size()));
+        System.out.println(String.format("【%s】离开服务器 - 当前服务器在线人数:%s",session.getSid(),clients.size()));
     }
 }

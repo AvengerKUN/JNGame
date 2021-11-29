@@ -1,5 +1,6 @@
 package cn.jisol.ngame.netty.network.udp;
 
+import cn.hutool.core.date.DateTime;
 import cn.jisol.ngame.netty.annotation.control.JNMessage;
 import cn.jisol.ngame.netty.annotation.control.JNOpen;
 import cn.jisol.ngame.netty.network.UDPJNettyNetwork;
@@ -62,6 +63,9 @@ public class UDPBusiness extends SimpleChannelInboundHandler<UDPReceiveMessage> 
             clients.put(session.getSid(),session);
             this.onOpen(message);
         }
+
+        //设置最后活跃时间
+        clients.get(session.getSid()).lastAliveTime = DateTime.now();
 
         //将消息推送到消息接收
         this.onMessage(message);
