@@ -91,14 +91,11 @@ public class UDPJNettyNetwork extends JNettyNetwork {
             //检测最后活跃时间是否大于活跃限制
             while (this.isOpenAlive){
 
-//                int erNum = 0;
-
                 for (UDPSession value : clients.values()) {
                     long crTime = DateTime.now().getTime();
                     long erTime = ((this.vAliveTime+this.vAliveError));
 
                     if(value.lastAliveTime.getTime() + erTime < crTime ){
-//                        erNum++;
                         //超出最大活跃时间(踢出组 并且通知 )
                         clients.remove(value.getSid());
                         //找到JNClose注解
@@ -109,8 +106,6 @@ public class UDPJNettyNetwork extends JNettyNetwork {
                         }
                     }
                 }
-
-//                System.out.println(String.format("rOpenAlive - 活跃检测 : %s 踢出组",erNum));
 
                 try {
                     Thread.sleep(this.vAliveTime);
