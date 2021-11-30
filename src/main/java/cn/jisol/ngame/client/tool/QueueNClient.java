@@ -7,18 +7,24 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public abstract class QueueNClient<M ,S> extends NClient<M,S> {
+/**
+ * 队列发送消息的客户端
+ * @param <M>
+ * @param <S>
+ * @param <C>
+ */
+
+public abstract class QueueNClient<M , S, C> extends NClient<M,S,C> {
 
     private Queue<S> sQueue;
     private Thread qThread;
 
-    public QueueNClient(Session session) {
-        super(session);
+    public QueueNClient(String uuid,C session) {
+        super(uuid,session);
         this.sQueue = new LinkedBlockingQueue<>();
     }
 
-    @Override
-    public void onSend(S o) {
+    public void onSendQueue(S o) {
         this.sQueue.add(o);
         //激活队列发送
         this.runQueueSends();
@@ -30,7 +36,7 @@ public abstract class QueueNClient<M ,S> extends NClient<M,S> {
         qThread = new Thread(() -> {
             S sMessage = null;
             while (Objects.nonNull((sMessage = sQueue.poll()))){
-                super.onSend(sMessage);
+                this.onSend(sMessage);
             }
         });
         qThread.start();

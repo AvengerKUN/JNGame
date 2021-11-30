@@ -1,14 +1,18 @@
 package cn.jisol.ngame.network.netty.udp.decoders;
 
 import cn.jisol.ngame.netty.network.udp.coder.JNByteToMessageDecoder;
+import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
+import com.google.protobuf.InvalidProtocolBufferException;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.nio.charset.StandardCharsets;
-
-public class DefaultProtoBufDecoder extends JNByteToMessageDecoder<String> {
+public class DefaultProtoBufDecoder extends JNByteToMessageDecoder<NGameMessage> {
     @Override
-    public String nDecoder(ChannelHandlerContext channelHandlerContext, ByteBuf data) {
-        return data.toString(StandardCharsets.UTF_8);
+    public NGameMessage nDecoder(ChannelHandlerContext channelHandlerContext, ByteBuf data) {
+        try {
+            return NGameMessage.parseFrom(data.array());
+        } catch (InvalidProtocolBufferException e) {
+            return NGameMessage.newBuilder().build();
+        }
     }
 }

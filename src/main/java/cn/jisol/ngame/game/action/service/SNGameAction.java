@@ -2,7 +2,7 @@ package cn.jisol.ngame.game.action.service;
 
 import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.ArrayUtil;
-import cn.jisol.ngame.client.defalut.DefaultNClient;
+import cn.jisol.ngame.client.nclient.SocketNClient;
 import cn.jisol.ngame.dto.DSyncMessage;
 import cn.jisol.ngame.entity.GOwner;
 import cn.jisol.ngame.entity.action.GAction;
@@ -40,7 +40,7 @@ public class SNGameAction extends NCallServiceImpl {
      * 推荐: 底层传输格式 ProtoBuf
      */
     @NGameRPCMethod
-    public void nGameProtoBuf(DefaultNClient client, GSnakeMessage.GSnakeHelloMessage message){
+    public void nGameProtoBuf(SocketNClient client, GSnakeMessage.GSnakeHelloMessage message){
         try {
 
             System.out.println(String.format("SNGameAction - nGameHello : %s", message.getValue()));
@@ -95,7 +95,7 @@ public class SNGameAction extends NCallServiceImpl {
      * 开始帧同步模式
      */
     @NGameRPCMethod
-    public void nGameSyncStart(DefaultNClient client){
+    public void nGameSyncStart(SocketNClient client){
 
         NSyncFPSMode<DSyncMessage> nSyncMode = null;
         if(Objects.isNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid()))){
@@ -115,7 +115,7 @@ public class SNGameAction extends NCallServiceImpl {
      * 结束帧同步模式
      */
     @NGameRPCMethod
-    public void nGameSyncEnd(DefaultNClient client){
+    public void nGameSyncEnd(SocketNClient client){
         NSyncFPSMode<DSyncMessage> nSyncMode = null;
         if(Objects.nonNull(nSyncMode = this.nSyncModes.get(client.getRoom().getUuid())))
             nSyncMode.end();
@@ -127,7 +127,7 @@ public class SNGameAction extends NCallServiceImpl {
      * 向帧同步模式存储 权限
      */
     @NGameRPCMethod
-    public void nGameSyncAuth(DefaultNClient client,@NRPCParam("action") GOwner owner){
+    public void nGameSyncAuth(SocketNClient client, @NRPCParam("action") GOwner owner){
 
         NSyncFPSMode<DSyncMessage> nSyncMode = null;
 
@@ -141,7 +141,7 @@ public class SNGameAction extends NCallServiceImpl {
      * 向帧同步模式存储
      */
     @NGameRPCMethod
-    public void nGameSyncSave(DefaultNClient client,@NRPCParam("action") GAction action){
+    public void nGameSyncSave(SocketNClient client, @NRPCParam("action") GAction action){
 
         NSyncFPSMode<DSyncMessage> nSyncMode = null;
 
@@ -161,7 +161,7 @@ public class SNGameAction extends NCallServiceImpl {
 
 
         GameWebSocket.ROOMS.get(uuid).getClients().forEach(
-                (DefaultNClient client) -> {
+                (SocketNClient client) -> {
 
                     NFPSInfo<DSyncMessage> info = new NFPSInfo<>();
 

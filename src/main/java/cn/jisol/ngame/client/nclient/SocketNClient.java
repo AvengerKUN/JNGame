@@ -1,4 +1,4 @@
-package cn.jisol.ngame.client.defalut;
+package cn.jisol.ngame.client.nclient;
 
 import cn.jisol.ngame.client.tool.QueueNClient;
 import cn.jisol.ngame.game.action.client.CNGameAction;
@@ -14,20 +14,19 @@ import javax.websocket.Session;
 
 @Setter
 @Getter
-public class DefaultNClient extends QueueNClient<NGameMessage,NGameMessage> {
+public class SocketNClient extends QueueNClient<NGameMessage,NGameMessage,Session> {
 
     @CNGameCActionValue
     public CNGameAction cNGameAction;
 
     private DefaultNRoom room;
 
-    public DefaultNClient(Session session) {
-        super(session);
+    public SocketNClient(Session session) {
+        super(session.getId(),session);
     }
 
-    public DefaultNClient(String userId,Session session) {
-        super(session);
-        this.setUuid(userId);
+    public SocketNClient(String userId,Session session) {
+        super(userId,session);
     }
 
     @Override
@@ -37,6 +36,12 @@ public class DefaultNClient extends QueueNClient<NGameMessage,NGameMessage> {
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onSend(NGameMessage o) {
+        if(this.getSession().isOpen())
+            this.getSession().getAsyncRemote().sendObject(o);
     }
 
 }

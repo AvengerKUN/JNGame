@@ -10,17 +10,24 @@ import javax.websocket.Session;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
+
+/**
+ * NGame主要客户端类
+ * @param <M>
+ * @param <S>
+ */
 @Getter
 @Setter
-public abstract class NClient<M,S> {
+public abstract class NClient<M,S,C> {
 
     private String uuid;
-    private Session session;
+    private C session;
 
-    public NClient(Session session){
-        this.uuid = session.getId();
+    public NClient(String uuid,C session){
+        this.uuid = uuid;
         this.session = session;
 
+        //将继承NClient中的Action注入
         for (Field field : this.getClass().getFields()){
             if((Objects.nonNull(AnnotationUtil.getAnnotation(field, CNGameCActionValue.class)))){
                 try {
@@ -34,8 +41,5 @@ public abstract class NClient<M,S> {
 
     public abstract void onMessage(M data);
 
-    public void onSend(S o){
-        if(session.isOpen())
-            session.getAsyncRemote().sendObject(o);
-    };
+    public abstract void onSend(S o);
 }

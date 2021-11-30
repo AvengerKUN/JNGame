@@ -11,6 +11,7 @@ import cn.jisol.ngame.netty.network.udp.session.UDPSession;
 import cn.jisol.ngame.netty.network.udp.session.UDPSessionGroup;
 import cn.jisol.ngame.network.netty.udp.decoders.DefaultProtoBufDecoder;
 import cn.jisol.ngame.network.netty.udp.encoders.DefaultProtoBufEncoder;
+import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 
 /**
  * 启动Netty UDP
@@ -43,9 +44,9 @@ public class GameUDPServer {
     }
 
     @JNMessage
-    public void onMessage(UDPSession session,String text){
-        System.out.println(text);
-        session.vSendMessage("你好");
+    public void onMessage(UDPSession session, NGameMessage message,String text){
+        System.out.println(String.format("【%s】接收到消息UID:%s",session.getSid(),message.getUid()));
+        session.vSendMessage(message);
     }
 
     @JNClose

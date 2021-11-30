@@ -22,7 +22,8 @@ public class UDPSession {
     private List<Object> messages;
     private Channel server;
     private InetSocketAddress address;
-    private Boolean isOpen;
+    //是否活跃
+    private Boolean isAlive;
 
     //最后发送消息的时间
     public Date lastAliveTime;
@@ -32,7 +33,7 @@ public class UDPSession {
         this.server = server;
         this.address = address;
         this.messages = new ArrayList<>();
-        this.isOpen = true;
+        this.isAlive = true;
     }
 
     /**

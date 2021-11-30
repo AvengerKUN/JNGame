@@ -1,6 +1,6 @@
 package cn.jisol.ngame.network.websocket.game;
 
-import cn.jisol.ngame.client.defalut.DefaultNClient;
+import cn.jisol.ngame.client.nclient.SocketNClient;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.room.defalut.DefaultNRoom;
 import cn.jisol.ngame.network.websocket.decoders.DefaultProtoBufDecoder;
@@ -36,7 +36,7 @@ public class GameWebSocket {
             ROOMS.put(room.getUuid(),room);
         }
 
-        DefaultNClient client = new DefaultNClient(uuid,session);
+        SocketNClient client = new SocketNClient(uuid,session);
         room.addClient(client);
         client.setRoom(room);
 

@@ -96,6 +96,8 @@ public class UDPJNettyNetwork extends JNettyNetwork {
                     long erTime = ((this.vAliveTime+this.vAliveError));
 
                     if(value.lastAliveTime.getTime() + erTime < crTime ){
+                        //设置不活跃
+                        value.setIsAlive(false);
                         //超出最大活跃时间(踢出组 并且通知 )
                         clients.remove(value.getSid());
                         //找到JNClose注解
