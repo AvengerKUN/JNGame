@@ -1,8 +1,6 @@
-package cn.jisol.ngame.game.action.client;
+package cn.jisol.ngame.game.action.nwebsokcet.client;
 
-import cn.jisol.ngame.client.NClient;
 import cn.jisol.ngame.dto.DSyncMessage;
-import cn.jisol.ngame.entity.action.GAction;
 import cn.jisol.ngame.proto.snake.GSnakeMessage;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
@@ -11,6 +9,10 @@ import cn.jisol.ngame.rpc.mode.uid.NUIDMode;
 import cn.jisol.ngame.sync.fps.NFPSInfo;
 
 import java.util.HashMap;
+
+/**
+ * 这是通知客户端的方法适用NGame中 (WebSocket UDP)
+ */
 
 @NGameRPCClass
 public interface CNGameAction {

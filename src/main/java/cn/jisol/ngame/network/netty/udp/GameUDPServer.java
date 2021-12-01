@@ -60,6 +60,9 @@ public class GameUDPServer {
         UDPClient client = null;
         if(Objects.isNull(client = CLIENTS.get(session.getSid()))) this.onOpen(session,clients);
 
+        //统一发送到客户端的onMessage中
+        client.onMessage(message);
+
         System.out.println(String.format("【%s】接收到消息UID:%s",session.getSid(),message.getUid()));
         session.vSendMessage(message);
     }

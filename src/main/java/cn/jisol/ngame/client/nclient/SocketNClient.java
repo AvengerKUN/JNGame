@@ -1,7 +1,7 @@
 package cn.jisol.ngame.client.nclient;
 
 import cn.jisol.ngame.client.tool.QueueNClient;
-import cn.jisol.ngame.game.action.client.CNGameAction;
+import cn.jisol.ngame.game.action.nwebsokcet.client.CNGameAction;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.room.defalut.DefaultNRoom;
 import cn.jisol.ngame.rpc.CNGameCActionValue;

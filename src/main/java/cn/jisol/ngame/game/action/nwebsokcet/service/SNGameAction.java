@@ -1,4 +1,4 @@
-package cn.jisol.ngame.game.action.service;
+package cn.jisol.ngame.game.action.nwebsokcet.service;
 
 import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.ArrayUtil;
@@ -22,7 +22,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
+
+/**
+ * 这是服务端的方法适用NGame中 (WebSocket UDP)
+ */
 @NGameRPCClass
 public class SNGameAction extends NCallServiceImpl {
 
