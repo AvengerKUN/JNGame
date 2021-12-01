@@ -61,7 +61,9 @@ public class NGameRPC {
         HashMap<Object, Object> message = new HashMap<>();
 
         if(nGameMessage.getMessage().getTypeUrl().length() == 0){
-            message = JSONUtil.toBean(nGameMessage.getMessage().getValue().toStringUtf8(),HashMap.class);
+            String msg = nGameMessage.getMessage().getValue().toStringUtf8();
+            if(Objects.nonNull(msg) && msg.length() > 0)
+                message = JSONUtil.toBean(msg,HashMap.class);
         }
 
 

@@ -26,6 +26,7 @@ import java.util.*;
 /**
  * 这是服务端的方法适用NGame中 (WebSocket UDP)
  */
+@Component
 @NGameRPCClass
 public class SNGameAction extends NCallServiceImpl {
 
