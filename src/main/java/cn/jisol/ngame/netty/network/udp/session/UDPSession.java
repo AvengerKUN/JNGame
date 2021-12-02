@@ -18,7 +18,8 @@ import java.util.List;
 @Setter
 public class UDPSession {
 
-    private String sid;
+    private String cId; //客户端ID
+    private String sId; //服务器ID
     private List<Object> messages;
     private Channel server;
     private InetSocketAddress address;
@@ -28,8 +29,9 @@ public class UDPSession {
     //最后发送消息的时间
     public Date lastAliveTime;
 
-    public UDPSession(String sid,Channel server, InetSocketAddress address){
-        this.sid = sid;
+    public UDPSession(String sId,String cId,Channel server, InetSocketAddress address){
+        this.sId = sId;
+        this.cId = cId;
         this.server = server;
         this.address = address;
         this.messages = new ArrayList<>();

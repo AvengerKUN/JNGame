@@ -99,7 +99,7 @@ public class UDPJNettyNetwork extends JNettyNetwork {
                         //设置不活跃
                         value.setIsAlive(false);
                         //超出最大活跃时间(踢出组 并且通知 )
-                        clients.remove(value.getSid());
+                        clients.remove(value.getCId());
                         //找到JNClose注解
                         for (Method method : JAnnotationUtil.findMethods(application.getController().getClass().getMethods(), JNClose.class)) {
                             JAnnotationUtil.vRunMethod(application.getController(),method,new Object[]{

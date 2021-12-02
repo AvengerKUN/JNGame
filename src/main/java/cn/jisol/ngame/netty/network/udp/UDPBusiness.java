@@ -58,14 +58,14 @@ public class UDPBusiness extends SimpleChannelInboundHandler<UDPReceiveMessage> 
         UDPSession session = message.getReceive();
 
         //查询clients 是否有这个连接 如果没有则 调用Open
-        if(Objects.isNull(clients.get(session.getSid()))){
+        if(Objects.isNull(clients.get(session.getCId()))){
             //将session 添加到 clients 中
-            clients.put(session.getSid(),session);
+            clients.put(session.getCId(),session);
             this.onOpen(message);
         }
 
         //设置最后活跃时间
-        clients.get(session.getSid()).lastAliveTime = DateTime.now();
+        clients.get(session.getCId()).lastAliveTime = DateTime.now();
 
         //将消息推送到消息接收
         this.onMessage(message);

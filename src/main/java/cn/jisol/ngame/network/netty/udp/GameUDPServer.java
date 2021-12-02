@@ -50,17 +50,17 @@ public class GameUDPServer {
     @JNOpen
     public void onOpen(UDPSession session,UDPSessionGroup clients){
         //将session添加到Clients中
-        CLIENTS.put(session.getSid(),new UDPClient(session));
-        System.out.println(String.format("【%s】连接服务器 - 当前服务器在线人数:%s",session.getSid(),clients.size()));
+        CLIENTS.put(session.getCId(),new UDPClient(session));
+        System.out.println(String.format("【%s】连接服务器 - 当前服务器在线人数:%s",session.getCId(),clients.size()));
     }
 
     @JNMessage
     public void onMessage(UDPSession session,UDPSessionGroup clients, NGameMessage message,String text){
         //查询clients中的client
         UDPClient client = null;
-        if(Objects.isNull(client = CLIENTS.get(session.getSid()))) this.onOpen(session,clients);
+        if(Objects.isNull(client = CLIENTS.get(session.getCId()))) this.onOpen(session,clients);
 
-        System.out.println(String.format("【%s】接收到消息UID:%s",session.getSid(),message.getUid()));
+        System.out.println(String.format("【%s】接收到消息UID:%s",session.getCId(),message.getUid()));
 
         //统一发送到客户端的onMessage中
         client.onMessage(message);
@@ -71,7 +71,7 @@ public class GameUDPServer {
     @JNClose
     public void onClose(UDPSession session,UDPSessionGroup clients){
         //移除Client
-        CLIENTS.remove(session.getSid());
-        System.out.println(String.format("【%s】离开服务器 - 当前服务器在线人数:%s",session.getSid(),clients.size()));
+        CLIENTS.remove(session.getCId());
+        System.out.println(String.format("【%s】离开服务器 - 当前服务器在线人数:%s",session.getCId(),clients.size()));
     }
 }

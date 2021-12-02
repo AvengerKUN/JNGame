@@ -9,7 +9,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class UDPClient extends QueueNClient<NGameMessage,NGameMessage, UDPSession> {
 
     public UDPClient(UDPSession session) {
-        super(session.getSid(),session);
+        super(session.getCId(),session);
     }
 
     public UDPClient(String userId,UDPSession session) {

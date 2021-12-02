@@ -21,13 +21,16 @@ public class DefaultUDPDecoder extends MessageToMessageDecoder<DatagramPacket> {
 
     private UDPReceiveMessage toMessage(Channel channel, DatagramPacket data){
 
-        String sid = String.format("%s-%s-%s-%s",
+        String sid = String.format("%s-%s",
+            data.recipient().getAddress(),data.recipient().getPort()
+        );
+        String cid = String.format("%s-%s-%s-%s",
             data.recipient().getAddress(),data.recipient().getPort(),
             data.sender().getAddress(),data.sender().getPort()
         );
 
         UDPReceiveMessage message = UDPReceiveMessage.builder()
-                .receive(new UDPSession(sid, channel, data.sender()))
+                .receive(new UDPSession(sid ,cid , channel, data.sender()))
                 .messages(new ArrayList<>())
                 .build();
         ByteBuf in = data.content();
