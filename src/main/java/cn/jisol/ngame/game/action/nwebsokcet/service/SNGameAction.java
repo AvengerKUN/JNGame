@@ -91,7 +91,7 @@ public class SNGameAction extends NCallServiceImpl {
     /**
      * RPC 传输测试 UID
      */
-    @NUIDMode("123456")
+    @NUIDMode(3)
     @NGameRPCMethod(mode = NRPCMode.UID)
     public void nGameUUIDMode(){System.out.println("SNGameAction - nGameUUIDMode");}
 

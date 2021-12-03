@@ -42,7 +42,7 @@ public interface CNGameAction {
     /**
      * RPC 传输测试 UID
      */
-    @NUIDMode("1")
+    @NUIDMode(2)
     @NGameRPCMethod(mode = NRPCMode.UID)
     public void nGameUUIDMode();
 

@@ -43,7 +43,7 @@ public class NGameRPC {
             for(Class<?> iClass : vRPC.keySet()){
                 for(Method iMethod : vRPC.get(iClass)){
                     NUIDMode uid = null;
-                    if(Objects.nonNull(uid = AnnotationUtil.getAnnotation(iMethod,NUIDMode.class)) && uid.value().equals(nGameMessage.getUid())){
+                    if(Objects.nonNull(uid = AnnotationUtil.getAnnotation(iMethod,NUIDMode.class)) && uid.value() == nGameMessage.getUid()){
                         rClass = iClass;
                         rMethod = iMethod;
                     }

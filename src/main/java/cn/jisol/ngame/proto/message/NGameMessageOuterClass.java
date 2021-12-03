@@ -43,16 +43,10 @@ public final class NGameMessageOuterClass {
         getEventBytes();
 
     /**
-     * <code>string uid = 3;</code>
+     * <code>int32 uid = 3;</code>
      * @return The uid.
      */
-    java.lang.String getUid();
-    /**
-     * <code>string uid = 3;</code>
-     * @return The bytes for uid.
-     */
-    com.google.protobuf.ByteString
-        getUidBytes();
+    int getUid();
 
     /**
      * <code>.google.protobuf.Any message = 4;</code>
@@ -84,7 +78,6 @@ public final class NGameMessageOuterClass {
     private NGameMessage() {
       action_ = "";
       event_ = "";
-      uid_ = "";
     }
 
     @java.lang.Override
@@ -129,10 +122,9 @@ public final class NGameMessageOuterClass {
               event_ = s;
               break;
             }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 24: {
 
-              uid_ = s;
+              uid_ = input.readInt32();
               break;
             }
             case 34: {
@@ -257,41 +249,14 @@ public final class NGameMessageOuterClass {
     }
 
     public static final int UID_FIELD_NUMBER = 3;
-    private volatile java.lang.Object uid_;
+    private int uid_;
     /**
-     * <code>string uid = 3;</code>
+     * <code>int32 uid = 3;</code>
      * @return The uid.
      */
     @java.lang.Override
-    public java.lang.String getUid() {
-      java.lang.Object ref = uid_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        uid_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string uid = 3;</code>
-     * @return The bytes for uid.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getUidBytes() {
-      java.lang.Object ref = uid_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        uid_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getUid() {
+      return uid_;
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 4;
@@ -340,8 +305,8 @@ public final class NGameMessageOuterClass {
       if (!getEventBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, event_);
       }
-      if (!getUidBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, uid_);
+      if (uid_ != 0) {
+        output.writeInt32(3, uid_);
       }
       if (message_ != null) {
         output.writeMessage(4, getMessage());
@@ -361,8 +326,9 @@ public final class NGameMessageOuterClass {
       if (!getEventBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, event_);
       }
-      if (!getUidBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, uid_);
+      if (uid_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, uid_);
       }
       if (message_ != null) {
         size += com.google.protobuf.CodedOutputStream
@@ -387,8 +353,8 @@ public final class NGameMessageOuterClass {
           .equals(other.getAction())) return false;
       if (!getEvent()
           .equals(other.getEvent())) return false;
-      if (!getUid()
-          .equals(other.getUid())) return false;
+      if (getUid()
+          != other.getUid()) return false;
       if (hasMessage() != other.hasMessage()) return false;
       if (hasMessage()) {
         if (!getMessage()
@@ -410,7 +376,7 @@ public final class NGameMessageOuterClass {
       hash = (37 * hash) + EVENT_FIELD_NUMBER;
       hash = (53 * hash) + getEvent().hashCode();
       hash = (37 * hash) + UID_FIELD_NUMBER;
-      hash = (53 * hash) + getUid().hashCode();
+      hash = (53 * hash) + getUid();
       if (hasMessage()) {
         hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
         hash = (53 * hash) + getMessage().hashCode();
@@ -552,7 +518,7 @@ public final class NGameMessageOuterClass {
 
         event_ = "";
 
-        uid_ = "";
+        uid_ = 0;
 
         if (messageBuilder_ == null) {
           message_ = null;
@@ -650,9 +616,8 @@ public final class NGameMessageOuterClass {
           event_ = other.event_;
           onChanged();
         }
-        if (!other.getUid().isEmpty()) {
-          uid_ = other.uid_;
-          onChanged();
+        if (other.getUid() != 0) {
+          setUid(other.getUid());
         }
         if (other.hasMessage()) {
           mergeMessage(other.getMessage());
@@ -838,78 +803,33 @@ public final class NGameMessageOuterClass {
         return this;
       }
 
-      private java.lang.Object uid_ = "";
+      private int uid_ ;
       /**
-       * <code>string uid = 3;</code>
+       * <code>int32 uid = 3;</code>
        * @return The uid.
        */
-      public java.lang.String getUid() {
-        java.lang.Object ref = uid_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          uid_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      @java.lang.Override
+      public int getUid() {
+        return uid_;
       }
       /**
-       * <code>string uid = 3;</code>
-       * @return The bytes for uid.
-       */
-      public com.google.protobuf.ByteString
-          getUidBytes() {
-        java.lang.Object ref = uid_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          uid_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string uid = 3;</code>
+       * <code>int32 uid = 3;</code>
        * @param value The uid to set.
        * @return This builder for chaining.
        */
-      public Builder setUid(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
+      public Builder setUid(int value) {
+        
         uid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string uid = 3;</code>
+       * <code>int32 uid = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearUid() {
         
-        uid_ = getDefaultInstance().getUid();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string uid = 3;</code>
-       * @param value The bytes for uid to set.
-       * @return This builder for chaining.
-       */
-      public Builder setUidBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        uid_ = value;
+        uid_ = 0;
         onChanged();
         return this;
       }
@@ -1101,7 +1021,7 @@ public final class NGameMessageOuterClass {
     java.lang.String[] descriptorData = {
       "\n\022NGameMessage.proto\032\031google/protobuf/an" +
       "y.proto\"a\n\014NGameMessage\022\016\n\006action\030\001 \001(\t\022" +
-      "\r\n\005event\030\002 \001(\t\022\013\n\003uid\030\003 \001(\t\022%\n\007message\030\004" +
+      "\r\n\005event\030\002 \001(\t\022\013\n\003uid\030\003 \001(\005\022%\n\007message\030\004" +
       " \001(\0132\024.google.protobuf.AnyB\036\n\034cn.jisol.n" +
       "game.proto.messageb\006proto3"
     };

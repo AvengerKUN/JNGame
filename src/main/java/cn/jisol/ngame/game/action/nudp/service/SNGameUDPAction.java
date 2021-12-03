@@ -23,7 +23,7 @@ public class SNGameUDPAction {
     //同步nSyncModes
     private Map<String, NSyncFPSMode<DSyncMessage>> nSyncModes = new HashMap<>();
 
-    @NUIDMode("nudp-1")
+    @NUIDMode(1)
     @NGameRPCMethod(mode = NRPCMode.UID)
     public void nUID(MVector3 vector3){
         System.out.println(String.format("SNGameUDPAction - nUID : X:%s Y:%s Z:%s",vector3.getX(),vector3.getY(),vector3.getZ()));
