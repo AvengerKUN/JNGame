@@ -17,7 +17,7 @@ $root.NGameMessage = (function() {
      * @interface INGameMessage
      * @property {string|null} [action] NGameMessage action
      * @property {string|null} [event] NGameMessage event
-     * @property {string|null} [uid] NGameMessage uid
+     * @property {number|null} [uid] NGameMessage uid
      * @property {google.protobuf.IAny|null} [message] NGameMessage message
      */
 
@@ -54,11 +54,11 @@ $root.NGameMessage = (function() {
 
     /**
      * NGameMessage uid.
-     * @member {string} uid
+     * @member {number} uid
      * @memberof NGameMessage
      * @instance
      */
-    NGameMessage.prototype.uid = "";
+    NGameMessage.prototype.uid = 0;
 
     /**
      * NGameMessage message.
@@ -97,7 +97,7 @@ $root.NGameMessage = (function() {
         if (message.event != null && Object.hasOwnProperty.call(message, "event"))
             writer.uint32(/* id 2, wireType 2 =*/18).string(message.event);
         if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
-            writer.uint32(/* id 3, wireType 2 =*/26).string(message.uid);
+            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.uid);
         if (message.message != null && Object.hasOwnProperty.call(message, "message"))
             $root.google.protobuf.Any.encode(message.message, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
@@ -141,7 +141,7 @@ $root.NGameMessage = (function() {
                 message.event = reader.string();
                 break;
             case 3:
-                message.uid = reader.string();
+                message.uid = reader.int32();
                 break;
             case 4:
                 message.message = $root.google.protobuf.Any.decode(reader, reader.uint32());
@@ -188,8 +188,8 @@ $root.NGameMessage = (function() {
             if (!$util.isString(message.event))
                 return "event: string expected";
         if (message.uid != null && message.hasOwnProperty("uid"))
-            if (!$util.isString(message.uid))
-                return "uid: string expected";
+            if (!$util.isInteger(message.uid))
+                return "uid: integer expected";
         if (message.message != null && message.hasOwnProperty("message")) {
             var error = $root.google.protobuf.Any.verify(message.message);
             if (error)
@@ -215,7 +215,7 @@ $root.NGameMessage = (function() {
         if (object.event != null)
             message.event = String(object.event);
         if (object.uid != null)
-            message.uid = String(object.uid);
+            message.uid = object.uid | 0;
         if (object.message != null) {
             if (typeof object.message !== "object")
                 throw TypeError(".NGameMessage.message: object expected");
@@ -240,7 +240,7 @@ $root.NGameMessage = (function() {
         if (options.defaults) {
             object.action = "";
             object.event = "";
-            object.uid = "";
+            object.uid = 0;
             object.message = null;
         }
         if (message.action != null && message.hasOwnProperty("action"))

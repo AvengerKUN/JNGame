@@ -89,7 +89,7 @@ export function NGameRPCFun(mode:NRPCMode = NRPCMode.DEFAULT) {
     }
 }
 
-export function NUIDMode(value:string){
+export function NUIDMode(value:number){
 
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
         

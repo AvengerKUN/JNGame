@@ -7,7 +7,7 @@ option java_package = "cn.jisol.ngame.proto.message";
 message NGameMessage {
   string action = 1;
   string event = 2;
-  string uid = 3;
+  int32 uid = 3;
   google.protobuf.Any message = 4;
 }
 

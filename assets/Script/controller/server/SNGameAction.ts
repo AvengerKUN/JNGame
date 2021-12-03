@@ -15,7 +15,7 @@ export default class SNGameAction {
     @NGameRPCFun()
     static nGameHello(){}
 
-    @NUIDMode("123456")
+    @NUIDMode(3)
     @NGameRPCFun(NRPCMode.UID)
     static nGameUUIDMode(){}
 

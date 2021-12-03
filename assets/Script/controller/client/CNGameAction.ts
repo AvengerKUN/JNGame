@@ -28,7 +28,7 @@ export class CNGameAction {
         console.log('接收服务器RPC[nGameHello]');
     }
     
-    @NUIDMode("1")
+    @NUIDMode(2)
     @NGameRPCFun(NRPCMode.UID)
     nGameUUIDMode(){
         console.log('接收服务器RPC[nGameUUIDMode]');

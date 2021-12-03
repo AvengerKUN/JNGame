@@ -9,7 +9,7 @@ export interface INGameMessage {
     event?: (string|null);
 
     /** NGameMessage uid */
-    uid?: (string|null);
+    uid?: (number|null);
 
     /** NGameMessage message */
     message?: (google.protobuf.IAny|null);
@@ -31,7 +31,7 @@ export class NGameMessage implements INGameMessage {
     public event: string;
 
     /** NGameMessage uid. */
-    public uid: string;
+    public uid: number;
 
     /** NGameMessage message. */
     public message?: (google.protobuf.IAny|null);
