@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-option java_package = "cn.jisol.ngame.proto.snake";
-
-message GSnakeHelloMessage{
-  string value = 1;
-}
