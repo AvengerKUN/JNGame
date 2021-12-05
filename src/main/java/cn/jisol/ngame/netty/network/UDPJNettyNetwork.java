@@ -1,6 +1,7 @@
 package cn.jisol.ngame.netty.network;
 
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.lang.UUID;
 import cn.jisol.ngame.netty.JNettyApplication;
 import cn.jisol.ngame.netty.annotation.control.JNClose;
 import cn.jisol.ngame.netty.network.coder.JNMessageToMessageDecoder;
@@ -32,6 +33,9 @@ public class UDPJNettyNetwork extends JNettyNetwork {
     private JNMessageToMessageEncoder[] encoders;
     private JNettyApplication application;
     private final UDPSessionGroup clients = new UDPSessionGroup();
+
+    //network Id 初始化成功 赋值唯一Id
+    private String sid;
 
     //是否开启活跃检测
     private boolean isOpenAlive = false;
@@ -80,6 +84,8 @@ public class UDPJNettyNetwork extends JNettyNetwork {
     }
 
     public void init(){
+        //修改sid 服务器唯一ID
+        this.sid = UUID.randomUUID().toString();
         this.rOpenAlive();
     }
 

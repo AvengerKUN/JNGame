@@ -1,5 +1,6 @@
 package cn.jisol.ngame.netty.network.udp.decoders;
 
+import cn.jisol.ngame.netty.network.UDPJNettyNetwork;
 import cn.jisol.ngame.netty.network.udp.entity.UDPReceiveMessage;
 import cn.jisol.ngame.netty.network.udp.session.UDPSession;
 import io.netty.buffer.ByteBuf;
@@ -11,7 +12,16 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UDP默认解码器 用于创建Client
+ */
 public class DefaultUDPDecoder extends MessageToMessageDecoder<DatagramPacket> {
+
+    private final UDPJNettyNetwork ngame;
+
+    public DefaultUDPDecoder(UDPJNettyNetwork ngame) {
+        this.ngame = ngame;
+    }
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket, List<Object> list) {
@@ -21,11 +31,11 @@ public class DefaultUDPDecoder extends MessageToMessageDecoder<DatagramPacket> {
 
     private UDPReceiveMessage toMessage(Channel channel, DatagramPacket data){
 
-        String sid = String.format("%s-%s",
-            data.recipient().getAddress(),data.recipient().getPort()
-        );
-        String cid = String.format("%s-%s-%s-%s",
-            data.recipient().getAddress(),data.recipient().getPort(),
+        //服务器ID
+        String sid = this.ngame.getSid();
+
+        String cid = String.format("%s-%s-%s",
+            sid,
             data.sender().getAddress(),data.sender().getPort()
         );
 

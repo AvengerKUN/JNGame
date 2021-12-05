@@ -2,8 +2,10 @@ package cn.jisol.ngame.netty;
 
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.jisol.ngame.netty.annotation.AJNetty;
 import cn.jisol.ngame.netty.annotation.control.JNInit;
+import cn.jisol.ngame.netty.annotation.control.JNInitSuccess;
 import cn.jisol.ngame.netty.network.JNettyNetwork;
 import cn.jisol.ngame.netty.network.coder.JNMessageToMessageDecoder;
 import cn.jisol.ngame.netty.network.coder.JNMessageToMessageEncoder;
@@ -53,7 +55,7 @@ public class InitJNettyStartListener implements ApplicationListener<Availability
 
                         //添加协议类 和 控制器
                         application.setPort(ajNetty.port());
-                        application.setController(value.newInstance());
+                        application.setController(SpringUtil.getBean(value));
                         application.setNetwork(ajNetty.network().newInstance());
 
                         //调用 Controller 的初始化
@@ -72,7 +74,15 @@ public class InitJNettyStartListener implements ApplicationListener<Availability
                         }
 
                         //获取全局 JNetty 进行 执行 start方法
-                        if(application.start()) nettys.add(application);
+                        if(application.start()) {
+                            //调用 Controller 的初始化成功
+                            for (Method method : JAnnotationUtil.findMethods(application.getController().getClass().getMethods(), JNInitSuccess.class)) {
+                                JAnnotationUtil.vRunMethod(application.getController(),method,new Object[]{
+                                        application,application.getNetwork()
+                                });
+                            }
+                            nettys.add(application);
+                        };
 
                     }
                 } catch (Exception e) {

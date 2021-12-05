@@ -24,7 +24,7 @@ public class UDPInitializer extends ChannelInitializer<NioDatagramChannel> {
     @Override
     protected void initChannel(NioDatagramChannel channel) throws Exception {
         //添加解码器
-        channel.pipeline().addLast(new DefaultUDPDecoder());
+        channel.pipeline().addLast(new DefaultUDPDecoder(this.ngame));
 
         for (ChannelHandler decoder : ngame.getDecoders()) {
             channel.pipeline().addLast(decoder);

@@ -2,24 +2,36 @@ package cn.jisol.ngame.game.action.nudp.service;
 
 import cn.jisol.ngame.client.nclient.UDPClient;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
+import cn.jisol.ngame.netty.InitJNettyStartListener;
+import cn.jisol.ngame.netty.network.udp.session.UDPSessionGroup;
 import cn.jisol.ngame.proto.mvector.MVector3OuterClass.*;
+import cn.jisol.ngame.proto.tools.AnyArrayOuterClass.*;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
 import cn.jisol.ngame.rpc.mode.NRPCMode;
 import cn.jisol.ngame.rpc.mode.uid.NUIDMode;
+import cn.jisol.ngame.sync.fps.NFPSInfo;
+import cn.jisol.ngame.sync.fps.NSyncFPSMethod;
 import cn.jisol.ngame.sync.fps.NSyncFPSMode;
+import com.google.protobuf.Any;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 @NGameRPCClass
+@Getter
+@Setter
 public class SNGameUDPAction extends NCallServiceImpl {
 
     //同步nSyncModes
     private Map<String, NSyncFPSMode<MVector3>> nSyncModes = new HashMap<>();
+
+    //服务器ID - 客户端列表
+    private Map<String, Map<String, UDPClient>> rooms = new HashMap<>();
 
     @NUIDMode(1)
     @NGameRPCMethod(mode = NRPCMode.UID)
@@ -32,6 +44,23 @@ public class SNGameUDPAction extends NCallServiceImpl {
         System.out.println(String.format("SNGameAction - nMethod : X:%s Y:%s Z:%s",vector3.getX(),vector3.getY(),vector3.getZ()));
     }
 
+
+    /**
+     * 将消息添加到 nSyncModes 中
+     * @param vector3
+     */
+    @NGameRPCMethod
+    public void addSyncInfo(MVector3 vector3,UDPClient client){
+
+        String uuid = client.getSession().getSId();
+
+        NSyncFPSMode<MVector3> nSyncMode = null;
+        if(Objects.nonNull(nSyncMode = this.nSyncModes.get(uuid))){
+            nSyncMode.addFPSInfo(vector3);
+        }
+
+    }
+
     /**
      * 开始帧同步模式
      */
@@ -42,6 +71,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
 
         NSyncFPSMode<MVector3> nSyncMode = null;
         if(Objects.isNull(nSyncMode = this.nSyncModes.get(uuid))){
+
             nSyncMode = new NSyncFPSMode<>();
             nSyncMode.setIntervalTime(1000/1); //设置延迟时间
             nSyncMode.setUuid(uuid);
@@ -53,6 +83,33 @@ public class SNGameUDPAction extends NCallServiceImpl {
         //开启同步
         nSyncMode.start();
         System.out.println("SNGameAction - nGameSyncStart : 开始同步模式");
+    }
+
+
+
+    /**
+     * 同步模式回调
+     */
+    @NSyncFPSMethod
+    public void nGameSyncCallBack(String uuid, NFPSInfo<MVector3> nFPSInfo){
+
+        Map<String, UDPClient> clients = this.rooms.get(uuid);
+
+        AnyArray.Builder anyArray = AnyArray.newBuilder();
+
+        for (int i = 0; i < nFPSInfo.getDs().size(); i++) {
+            anyArray.addMessage(i,Any.pack(nFPSInfo.getDs().get(i)));
+        }
+
+        AnyArray build = anyArray.build();
+
+        System.out.println("nGameSyncCallBack : "+build.getMessageCount());;
+
+        //发送封装好的 向所有client 调用 nGameSyncCallBack
+        for (UDPClient value : clients.values()) {
+            value.cNGameUDPAction.nGameSyncCallBack(build);
+        }
+
     }
 
 }
