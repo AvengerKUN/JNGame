@@ -1,12 +1,7 @@
 using Assets.Game.Script.ncontroller.service;
 using Assets.Game.Script.NGame.action;
 using Assets.Game.Script.NGame.protobuf;
-using DotNetty.Buffers;
-using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
 public class ActionSyncDemo : NGameAction
 {
@@ -19,8 +14,12 @@ public class ActionSyncDemo : NGameAction
         {
             //调用 SNGameUDPAction 服务器
             SNGameUDPAction sNGameUDPAction = this.ngame.GetRClass(typeof(SNGameUDPAction)) as SNGameUDPAction;
-            sNGameUDPAction.nMethod(actionPositionVerify.ToIMessage() as MVector3);
-            sNGameUDPAction.nUID(actionPositionVerify.ToIMessage() as MVector3);
+
+            //将修改的Position的数值添加到服务器
+            sNGameUDPAction.run("addSyncInfo",new object[] {
+                actionPositionVerify.ToIMessage() as MVector3
+            });
+
         };
 
         //向验证集添加Transform验证

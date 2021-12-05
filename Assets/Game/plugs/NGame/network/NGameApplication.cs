@@ -1,19 +1,13 @@
 using Assets.Game.plugs.NGame.tools;
-using Assets.Game.Script.ncontroller.service;
-using Assets.Game.Script.NGame.network.handler;
-using Castle.DynamicProxy;
-using DotNetty.Buffers;
-using DotNetty.Transport.Bootstrapping;
-using DotNetty.Transport.Channels;
-using DotNetty.Transport.Channels.Sockets;
+using Assets.Game.Script.NGame.protobuf;
+using Google.Protobuf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Threading;
 using UnityEngine;
-
 
 /**
  
@@ -26,38 +20,38 @@ public class NGameApplication : MonoBehaviour
     public string IP = null;
     public int Port = 1000;
 
-    private IEventLoopGroup group;
-    private Bootstrap bootstrap;
-    public IChannel channel;
-
-    private Queue<IByteBuffer> queue;
+    private Queue<byte[]> queue; //消息发送队列
     private bool IsRunQueue = false;
 
     //包含 NGameRPCClass 的 Attribute 组
-    public Dictionary<string, object> rClass = new Dictionary<string, object>();
+    public Dictionary<string, NGameRPCIntensifier> rClass = new Dictionary<string, NGameRPCIntensifier>();
     //包含所有方法
     public Dictionary<string, MethodInfo> rMethods = new Dictionary<string, MethodInfo>();
+    private IPEndPoint ipSend; //服务器IP
+    private IPEndPoint ipReceive; //自己的IP
+    private Socket socketReceive; //接收的数据类型
+    private Thread connectThread; //接收数据的线程
 
 
     // Start is called before the first frame update
     void Start()
     {
-
         this.InitNetwork();
         Type[] types = AttributeUtil.GetAllSystemAttributeClass(typeof(NGameRPCClass));
+
+        Debug.Log(string.Format("找到 NGameRPCClass 类 : {0}", types.Length));
 
         //初始化 types 中的 类 为RPC类
         foreach (Type t in types)
         {
-            object v = this.NewRPCClass(t);
-            rClass.Add(t.Name, v);
-            this.AddRPCMethod(t, v);
+
+            if (t.IsSubclassOf(typeof(NGameRPCIntensifier)))
+            {
+                NGameRPCIntensifier v = this.NewRPCClass(Activator.CreateInstance(t) as NGameRPCIntensifier);
+                rClass.Add(t.Name, v);
+                this.AddRPCMethod(t, v);
+            };
         }
-
-        //ProxyGenerator generator = new ProxyGenerator();
-        //SNGameUDPAction entity = generator.CreateClassProxy<SNGameUDPAction>(new NGameRPCIntensifier());
-
-        //entity.nMethod();
 
     }
 
@@ -71,37 +65,74 @@ public class NGameApplication : MonoBehaviour
         return null;
     }
 
-    async void InitNetwork()
+    void InitNetwork()
     {
 
-        //创建UDP 客户端
-        this.group = new MultithreadEventLoopGroup();
-        bootstrap = new Bootstrap();
 
-        bootstrap
-            .Group(group)
-            .ChannelFactory(() => new SocketDatagramChannel(AddressFamily.InterNetwork))
-            .Handler(new ActionChannelInitializer<IChannel>((channel) =>
-            {
-                Debug.Log("创建客户端成功");
-                //初始化UDP NGame
-                channel.Pipeline.AddLast(new InitNGameHandler());
-            }));
+        //定义连接的服务器ip和端口，可以是本机ip，局域网，互联网
+        ipSend = new IPEndPoint(IPAddress.Parse(this.IP), this.Port);
 
-        //开启UDP
-        this.channel = await bootstrap.BindAsync(0);
+        //定义服务端 进行接收 数据
+        //定义侦听端口,侦听任何IP
+        ipReceive = new IPEndPoint(IPAddress.Any, 0);
 
-        this.SendQueue(null);
+        //定义套接字类型,在主线程中定义
+        socketReceive = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        //服务端需要绑定ip
+        socketReceive.Bind(ipReceive);
+
+        //开启一个线程连接，必须的，否则主线程卡死
+        connectThread = new Thread(new ThreadStart(SocketReceive));
+        connectThread.Start();
+
+        Debug.Log("初始化 UDP Client 成功");
+
     }
 
-    private object NewRPCClass(Type type)
+    /// <summary>
+    /// 循环接收数据
+    /// </summary>
+    public void SocketReceive()
+    {
+        byte[] recvData;
+        byte[] buffer;
+        int recvLen;
+
+        //进入接收循环
+        while (true)
+        {
+            //对data清零
+            recvData = new byte[1024];
+            EndPoint endPoint = (ipReceive as EndPoint);
+            //获取客户端，获取客户端数据，用引用给客户端赋值
+            recvLen = socketReceive.ReceiveFrom(recvData, ref endPoint);
+
+            Debug.Log("接收到消息: " + recvLen); //打印信息
+
+            buffer = new byte[recvLen];
+            Array.Copy(recvData, buffer, recvLen);
+
+            this.onMessage(buffer);
+
+        }
+    }
+
+    void SocketSend(byte[] sends)
+    {
+        //发送给所有服务端
+        socketReceive.SendTo(sends, ipSend);
+    }
+
+    private NGameRPCIntensifier NewRPCClass(NGameRPCIntensifier type)
     {
 
         //通过RPC 增强器 初始化对象
-        ProxyGenerator generator = new ProxyGenerator();
-        object v = generator.CreateClassProxy(type,new NGameRPCIntensifier(this));
-        return v;
+        //ProxyGenerator generator = new ProxyGenerator();
+        //object v = generator.CreateClassProxy(type,new NGameRPCIntensifier(this));
+        //return v;
 
+        type.nGame = this;
+        return type;
     }
 
     private void AddRPCMethod(Type t,object v)
@@ -122,19 +153,19 @@ public class NGameApplication : MonoBehaviour
      * 队列发送消息 如果因为服务未启动 或者 不可写 则加入到队列中
      */
 
-    public void SendQueue(IByteBuffer buffer)
+    public void SendQueue(byte[] buffer)
     {
-        if (this.queue == null) this.queue = new Queue<IByteBuffer>();
+        if (this.queue == null) this.queue = new Queue<byte[]>();
         //加入队列
         if (buffer != null) this.queue.Enqueue(buffer);
 
 
-        if ((this.channel != null && this.channel.Open && this.channel.IsWritable) && !this.IsRunQueue)
+        if (this.socketReceive != null && !this.IsRunQueue)
         {
 
             //将队列运行状态设置TRUE
             this.IsRunQueue = true;
-            IByteBuffer send = null;
+            byte[] send = null;
 
 
             //将队列中的数据取出进行发送
@@ -142,8 +173,8 @@ public class NGameApplication : MonoBehaviour
             {
                 while ((send = this.queue.Dequeue()) != null)
                 {
-                    Debug.Log("向服务器发送数据:" + send.Array.Length);
-                    this.channel.WriteAndFlushAsync(new DatagramPacket(send, new IPEndPoint(IPAddress.Parse(this.IP), this.Port)));
+                    Debug.Log("向服务器发送数据:" + buffer.Length);
+                    this.SocketSend(send);
                 }
             }
             catch (Exception) { }
@@ -153,6 +184,90 @@ public class NGameApplication : MonoBehaviour
             this.IsRunQueue = false;
         }
 
+    }
+
+    //统一接收消息
+    public void onMessage(byte[] buffer)
+    {
+
+        //Debug.Log(string.Format("{0} - {1} - {2}", buffer.Length,buffer[0], buffer[buffer.Length - 1]));
+
+        //将byte 转 NGameMessage 对象
+        NGameMessage nGameMessage = NGameMessage.Parser.ParseFrom(buffer);
+
+        Debug.Log(string.Format("{0} - {1} - {2}", nGameMessage.Action, nGameMessage.Event, nGameMessage.Uid));
+
+        //RPC 调用器
+        MethodInfo method = null;
+
+        //找到调用的方法
+        if (nGameMessage.Uid != 0)
+        {
+            foreach (MethodInfo methodi in this.rMethods.Values)
+            {
+
+                //判断是否包含 NUIDMode 注解
+                if(methodi.GetCustomAttribute(typeof(NUIDMode)) != null)
+                {
+                    method = methodi;
+                }
+
+            }
+        }
+        else
+        {
+            string key = string.Format("{0}-{1}", nGameMessage.Action, nGameMessage.Event);
+
+            if (this.rMethods.ContainsKey(key))
+            {
+                method = this.rMethods[key];
+            }
+        }
+
+        //判断是否找到方法如果没有则返回
+        if (method == null) return;
+
+        //处理参数传入
+        ParameterInfo[] argsType = method.GetParameters();
+        object[] args = new object[argsType.Length];
+
+        //找到参数传入args
+        for (int i = 0; i < argsType.Length; i++)
+        {
+            //默认值为空
+            args[i] = null;
+
+            //判断参数是否属于Protobuf 的 IMessage
+            if (typeof(IMessage).IsAssignableFrom(argsType[i].ParameterType))
+            {
+
+                MethodInfo methodInfo = nGameMessage.Message.GetType().GetMethod("Unpack");
+                methodInfo = methodInfo.MakeGenericMethod(argsType[i].ParameterType);
+
+                args[i] = methodInfo.Invoke(nGameMessage.Message,new object[] { });
+
+            }
+        }
+
+
+        //找到这个方法的Object
+        method.Invoke(this.GetRClass(method.ReflectedType),args);
+        
+    }
+
+
+    //连接关闭
+    void OnApplicationQuit()
+    {
+        //关闭线程
+        if (connectThread != null)
+        {
+            connectThread.Interrupt();
+            connectThread.Abort();
+        }
+        //最后关闭socket
+        if (socketReceive != null)
+            socketReceive.Close();
     }
 
 }

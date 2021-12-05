@@ -1,27 +1,41 @@
 
 
+using Assets.Game.plugs.NGame.tools;
 using Assets.Game.Script.NGame.protobuf;
 using UnityEngine;
 
 namespace Assets.Game.Script.ncontroller.service
 {
     [NGameRPCClass]
-    public abstract class SNGameUDPAction
+    public class SNGameUDPAction : NGameRPCIntensifier
     {
         [NGameRPCMethod,NUIDMode(1)]
-        public virtual void nUID(MVector3 vector3)
+        public void nUID(MVector3 vector3)
         {
             Debug.Log("nUID");
         }
 
         [NGameRPCMethod]
-        public virtual void nMethod(MVector3 vector3)
+        public void nMethod(MVector3 vector3)
         {
             Debug.Log("nMethod");
         }
 
+        /**
+         * 将消息添加到 nSyncModes 中
+         * @param vector3
+         */
         [NGameRPCMethod]
-        public virtual void nGameSyncStart()
+        public void addSyncInfo(MVector3 vector3)
+        {
+            Debug.Log("addSyncInfo");
+        }
+
+        /**
+         * 开始帧同步模式
+         */
+        [NGameRPCMethod]
+        public void nGameSyncStart()
         {
             Debug.Log("nGameSyncStart");
         }

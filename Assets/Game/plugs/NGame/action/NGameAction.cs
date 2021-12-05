@@ -1,14 +1,5 @@
-﻿using DotNetty.Buffers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assets.Game.Script.NGame.protobuf;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Google.Protobuf;
-using System.Collections;
-using Google.Protobuf.WellKnownTypes;
 
 /**
  * 
@@ -55,12 +46,11 @@ namespace Assets.Game.Script.NGame.action
 
                     bool isUpdate = verify.Verify();
 
-                    Debug.Log("verify : " + isUpdate);
-
                     //如果值有修改则 调用 updateFun
                     if (isUpdate)
                     {
-                        if(verify.updateFun != null)
+
+                        if (verify.updateFun != null)
                         {
                             verify.updateFun();
                         }

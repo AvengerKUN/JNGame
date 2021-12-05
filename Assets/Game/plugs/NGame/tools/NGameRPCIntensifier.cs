@@ -1,60 +1,63 @@
 ﻿using Assets.Game.Script.NGame.protobuf;
-using Castle.DynamicProxy;
-using DotNetty.Buffers;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
 /**
  * NGame 增强器 用于 增强 RPC 对象
+ * 
+ * 因为unity 不支持 EMIT (AOP) 所以采用继承方式
+ * 
  */
+
 
 namespace Assets.Game.plugs.NGame.tools
 {
-    class NGameRPCIntensifier : StandardInterceptor
+    public class NGameRPCIntensifier
     {
-        private NGameApplication nGame;
 
-        public NGameRPCIntensifier(NGameApplication nGame)
+        public NGameApplication nGame;
+
+        /// <summary>
+        /// 通过增强器去调用方法
+        /// </summary>
+        public void run(String action, object[] args)
         {
-            this.nGame = nGame;
-        }
 
-        //protected override void PreProceed(IInvocation invocation)
-        //{
-        //    Debug.Log(string.Format("拦截器调用方法前，方法名是：{0}。", invocation.Method.Name));
-        //}
-
-        protected override void PerformProceed(IInvocation invocation)
-        {
+            MethodInfo method = this.GetType().GetMethod(action);
 
             //判断是否有NGameRPCMethod注解
-            if (invocation.Method.GetCustomAttribute(typeof(NGameRPCMethod)) == null){
-                base.PerformProceed(invocation);
+            if (method == null || method.GetCustomAttribute(typeof(NGameRPCMethod)) == null)
+            {
                 return;
             }
 
             Any message = null;
             NGameMessage nMessage = null;
             NUIDMode nUIDMode = null;
+
             //判断是否有NUIDMode
-            if ((nUIDMode = invocation.Method.GetCustomAttribute(typeof(NUIDMode)) as NUIDMode) != null)
+            if ((nUIDMode = method.GetCustomAttribute(typeof(NUIDMode)) as NUIDMode) != null)
             {
-                nMessage = new NGameMessage() {
+                nMessage = new NGameMessage()
+                {
                     Uid = nUIDMode.uuid
                 };
             }
             else
             {
-                nMessage = new NGameMessage() {
-                    Action = invocation.InvocationTarget.GetType().BaseType.Name,
-                    Event = invocation.Method.Name,
+                nMessage = new NGameMessage()
+                {
+                    Action = this.GetType().Name,
+                    Event = method.Name,
                 };
             }
 
 
-            foreach (object v in invocation.Arguments)
+            foreach (object v in args)
             {
 
                 if (typeof(IMessage).IsAssignableFrom(v.GetType()))
@@ -66,14 +69,11 @@ namespace Assets.Game.plugs.NGame.tools
 
             nMessage.Message = message;
 
-            this.nGame.SendQueue(Unpooled.WrappedBuffer(nMessage.ToByteArray()));
-            Debug.Log(string.Format("拦截器开始调用方法，类名: {0} 方法名是：{1}。", invocation.InvocationTarget.GetType().BaseType.Name, invocation.Method.Name));
-            base.PerformProceed(invocation);//此处会调用真正的方法 invocation.Proceed();
-        }
+            this.nGame.SendQueue(nMessage.ToByteArray());
+            Debug.Log(string.Format("拦截器开始调用方法，类名: {0} 方法名是：{1}。", this.GetType().Name, method.Name));
+            method.Invoke(this, args);//此处会调用真正的方法 invocation.Proceed();
 
-        //protected override void PostProceed(IInvocation invocation)
-        //{
-        //    Debug.Log(string.Format("拦截器调用方法后，方法名是：{0}。", invocation.Method.Name));
-        //}
+
+        }
     }
 }
