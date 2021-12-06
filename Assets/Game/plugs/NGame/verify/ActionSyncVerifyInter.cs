@@ -5,8 +5,9 @@ using System;
 public abstract class ActionSyncVerifyInter
 {
 
-    //遇到值改变时调用的委托
-    public Action updateFun;
+
+    //Action属性更新委托
+    public Action UpdateFun;
 
     //验证
     public abstract bool Verify();

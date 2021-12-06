@@ -2,9 +2,10 @@
 
 using Assets.Game.plugs.NGame.tools;
 using Assets.Game.Script.NGame.protobuf;
+using Assets.Game.Script.NGame.protobuf.NGameSyncMessage;
 using UnityEngine;
 
-namespace Assets.Game.Script.ncontroller.service
+namespace Assets.Game.Script.ngame.ncontroller.service
 {
     [NGameRPCClass]
     public class SNGameUDPAction : NGameRPCIntensifier
@@ -26,7 +27,7 @@ namespace Assets.Game.Script.ncontroller.service
          * @param vector3
          */
         [NGameRPCMethod]
-        public void addSyncInfo(MVector3 vector3)
+        public void addSyncInfo(NAction action)
         {
             Debug.Log("addSyncInfo");
         }

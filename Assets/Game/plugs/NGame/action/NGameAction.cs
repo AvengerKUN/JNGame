@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /**
@@ -14,17 +15,13 @@ namespace Assets.Game.Script.NGame.action
         //NGame 网络服务
         public NGameApplication ngame;
 
-        //时间+
-        private float checkTimeData = 0;
-        //服务器帧时间
-        private float timeServer = 1 / 1;
-
         //验证集
-        private List<ActionSyncVerifyInter> verifys = new List<ActionSyncVerifyInter>();
-
+        public List<ActionSyncVerifyInter> verifys = new List<ActionSyncVerifyInter>();
 
         public void Start()
         {
+            //将当前网络Action 添加到 Application中
+            this.ngame.nGameActions.Add(this);
             this.GStart();
         }
 
@@ -33,42 +30,6 @@ namespace Assets.Game.Script.NGame.action
         public void Update()
         {
             this.GUpdate();
-
-            float dt = Time.deltaTime;
-            this.checkTimeData += dt;
-
-            if(this.timeServer < this.checkTimeData)
-            {
-                this.checkTimeData = 0;
-
-                //调用验证集
-                verifys.ForEach(verify => {
-
-                    bool isUpdate = verify.Verify();
-
-                    //如果值有修改则 调用 updateFun
-                    if (isUpdate)
-                    {
-
-                        if (verify.updateFun != null)
-                        {
-                            verify.updateFun();
-                        }
-
-                        //NGameMessage message = new NGameMessage()
-                        //{
-                        //    Uid = "nudp-1",
-                        //    Message = Any.Pack(actionPositionVerify.ToIMessage())
-                        //};
-
-                        ////将消息发送到服务端
-                        //this.ngame.SendQueue(Unpooled.WrappedBuffer(message.ToByteArray()));
-                    }
-
-
-                });
-            }
-
         }
         public abstract void GUpdate();
 

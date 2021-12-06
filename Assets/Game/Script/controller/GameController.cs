@@ -1,6 +1,4 @@
-using Assets.Game.Script.ncontroller.service;
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Game.Script.ngame.ncontroller.service;
 using UnityEngine;
 
 

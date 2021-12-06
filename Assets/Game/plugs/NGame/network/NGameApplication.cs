@@ -1,4 +1,6 @@
+using Assets.Game.plugs.NGame.sync;
 using Assets.Game.plugs.NGame.tools;
+using Assets.Game.Script.NGame.action;
 using Assets.Game.Script.NGame.protobuf;
 using Google.Protobuf;
 using System;
@@ -27,6 +29,12 @@ public class NGameApplication : MonoBehaviour
     public Dictionary<string, NGameRPCIntensifier> rClass = new Dictionary<string, NGameRPCIntensifier>();
     //包含所有方法
     public Dictionary<string, MethodInfo> rMethods = new Dictionary<string, MethodInfo>();
+    //当前NGame管理的所有NGameAction网络类
+    public List<NGameAction> nGameActions = new List<NGameAction>();
+    //当前NGame管理的所有NGameSync同步类
+    public List<NGameSync> nNGameSyncs = new List<NGameSync>();
+
+
     private IPEndPoint ipSend; //服务器IP
     private IPEndPoint ipReceive; //自己的IP
     private Socket socketReceive; //接收的数据类型
@@ -65,6 +73,7 @@ public class NGameApplication : MonoBehaviour
         return null;
     }
 
+    //初始化网络
     void InitNetwork()
     {
 
@@ -190,12 +199,8 @@ public class NGameApplication : MonoBehaviour
     public void onMessage(byte[] buffer)
     {
 
-        //Debug.Log(string.Format("{0} - {1} - {2}", buffer.Length,buffer[0], buffer[buffer.Length - 1]));
-
         //将byte 转 NGameMessage 对象
         NGameMessage nGameMessage = NGameMessage.Parser.ParseFrom(buffer);
-
-        Debug.Log(string.Format("{0} - {1} - {2}", nGameMessage.Action, nGameMessage.Event, nGameMessage.Uid));
 
         //RPC 调用器
         MethodInfo method = null;
@@ -247,6 +252,14 @@ public class NGameApplication : MonoBehaviour
                 args[i] = methodInfo.Invoke(nGameMessage.Message,new object[] { });
 
             }
+
+            //判断参数是否需要NGameApplication 
+            if (typeof(NGameApplication).IsAssignableFrom(argsType[i].ParameterType))
+            {
+                args[i] = this;
+            }
+
+
         }
 
 
