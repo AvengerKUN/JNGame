@@ -3,7 +3,7 @@ package cn.jisol.ngame.rpc.action;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.json.JSONUtil;
 import cn.jisol.ngame.client.NClient;
-import cn.jisol.ngame.demo.proto.message.NGameMessageOuterClass.*;
+import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
 import cn.jisol.ngame.rpc.mode.uid.NUIDMode;

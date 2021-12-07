@@ -12,8 +12,9 @@ message MVector3 {
 message NAction {
 
   int32 uuid = 1;
-  MVector3 pos = 2;
-  MVector3 rot = 3;
+  int32 propId = 2;
+  MVector3 pos = 3;
+  MVector3 rot = 4;
 
 }
 

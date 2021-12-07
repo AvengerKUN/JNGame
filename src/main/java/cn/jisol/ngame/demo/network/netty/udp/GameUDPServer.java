@@ -10,7 +10,7 @@ import cn.jisol.ngame.netty.network.udp.session.UDPSession;
 import cn.jisol.ngame.netty.network.udp.session.UDPSessionGroup;
 import cn.jisol.ngame.demo.network.netty.udp.decoders.DefaultProtoBufDecoder;
 import cn.jisol.ngame.demo.network.netty.udp.encoders.DefaultProtoBufEncoder;
-import cn.jisol.ngame.demo.proto.message.NGameMessageOuterClass.*;
+import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

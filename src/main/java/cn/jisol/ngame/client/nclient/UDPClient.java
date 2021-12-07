@@ -3,7 +3,7 @@ package cn.jisol.ngame.client.nclient;
 import cn.jisol.ngame.client.tool.QueueNClient;
 import cn.jisol.ngame.demo.game.action.nudp.client.CNGameUDPAction;
 import cn.jisol.ngame.netty.network.udp.session.UDPSession;
-import cn.jisol.ngame.demo.proto.message.NGameMessageOuterClass.*;
+import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.rpc.CNGameCActionValue;
 import cn.jisol.ngame.rpc.NGameRPC;
 import com.google.protobuf.InvalidProtocolBufferException;

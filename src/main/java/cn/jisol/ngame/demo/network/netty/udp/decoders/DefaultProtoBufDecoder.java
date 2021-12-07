@@ -1,7 +1,7 @@
 package cn.jisol.ngame.demo.network.netty.udp.decoders;
 
 import cn.jisol.ngame.netty.network.udp.coder.JNByteToMessageDecoder;
-import cn.jisol.ngame.demo.proto.message.NGameMessageOuterClass.*;
+import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

@@ -1,7 +1,7 @@
 package cn.jisol.ngame.demo.network.websocket.game;
 
 import cn.jisol.ngame.client.nclient.SocketNClient;
-import cn.jisol.ngame.demo.proto.message.NGameMessageOuterClass.*;
+import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.room.defalut.DefaultNRoom;
 import cn.jisol.ngame.demo.network.websocket.decoders.DefaultProtoBufDecoder;
 import cn.jisol.ngame.demo.network.websocket.encoders.DefaultProtoBufEncoder;

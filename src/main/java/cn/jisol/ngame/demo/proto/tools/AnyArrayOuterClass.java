@@ -21,7 +21,7 @@ public final class AnyArrayOuterClass {
     /**
      * <code>repeated .google.protobuf.Any message = 1;</code>
      */
-    java.util.List<com.google.protobuf.Any>
+    java.util.List<com.google.protobuf.Any> 
         getMessageList();
     /**
      * <code>repeated .google.protobuf.Any message = 1;</code>
@@ -34,7 +34,7 @@ public final class AnyArrayOuterClass {
     /**
      * <code>repeated .google.protobuf.Any message = 1;</code>
      */
-    java.util.List<? extends com.google.protobuf.AnyOrBuilder>
+    java.util.List<? extends com.google.protobuf.AnyOrBuilder> 
         getMessageOrBuilderList();
     /**
      * <code>repeated .google.protobuf.Any message = 1;</code>
@@ -122,15 +122,15 @@ public final class AnyArrayOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return AnyArrayOuterClass.internal_static_AnyArray_descriptor;
+      return cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.internal_static_AnyArray_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return AnyArrayOuterClass.internal_static_AnyArray_fieldAccessorTable
+      return cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.internal_static_AnyArray_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              AnyArrayOuterClass.AnyArray.class, AnyArrayOuterClass.AnyArray.Builder.class);
+              cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray.class, cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray.Builder.class);
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 1;
@@ -144,7 +144,7 @@ public final class AnyArrayOuterClass {
     /**
      * <code>repeated .google.protobuf.Any message = 1;</code>
      */
-    public java.util.List<? extends com.google.protobuf.AnyOrBuilder>
+    public java.util.List<? extends com.google.protobuf.AnyOrBuilder> 
         getMessageOrBuilderList() {
       return message_;
     }
@@ -208,10 +208,10 @@ public final class AnyArrayOuterClass {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof AnyArrayOuterClass.AnyArray)) {
+      if (!(obj instanceof cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray)) {
         return super.equals(obj);
       }
-      AnyArrayOuterClass.AnyArray other = (AnyArrayOuterClass.AnyArray) obj;
+      cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray other = (cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray) obj;
 
       if (!getMessageList()
           .equals(other.getMessageList())) return false;
@@ -235,69 +235,69 @@ public final class AnyArrayOuterClass {
       return hash;
     }
 
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(byte[] data)
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(java.io.InputStream input)
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static AnyArrayOuterClass.AnyArray parseDelimitedFrom(java.io.InputStream input)
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static AnyArrayOuterClass.AnyArray parseDelimitedFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static AnyArrayOuterClass.AnyArray parseFrom(
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -310,7 +310,7 @@ public final class AnyArrayOuterClass {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(AnyArrayOuterClass.AnyArray prototype) {
+    public static Builder newBuilder(cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -331,21 +331,21 @@ public final class AnyArrayOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:AnyArray)
-        AnyArrayOuterClass.AnyArrayOrBuilder {
+        cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArrayOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return AnyArrayOuterClass.internal_static_AnyArray_descriptor;
+        return cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.internal_static_AnyArray_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return AnyArrayOuterClass.internal_static_AnyArray_fieldAccessorTable
+        return cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.internal_static_AnyArray_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                AnyArrayOuterClass.AnyArray.class, AnyArrayOuterClass.AnyArray.Builder.class);
+                cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray.class, cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray.Builder.class);
       }
 
-      // Construct using cn.jisol.ngame.demo.proto.message.tools.AnyArrayOuterClass.AnyArray.newBuilder()
+      // Construct using cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -376,17 +376,17 @@ public final class AnyArrayOuterClass {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return AnyArrayOuterClass.internal_static_AnyArray_descriptor;
+        return cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.internal_static_AnyArray_descriptor;
       }
 
       @java.lang.Override
-      public AnyArrayOuterClass.AnyArray getDefaultInstanceForType() {
-        return AnyArrayOuterClass.AnyArray.getDefaultInstance();
+      public cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray getDefaultInstanceForType() {
+        return cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray.getDefaultInstance();
       }
 
       @java.lang.Override
-      public AnyArrayOuterClass.AnyArray build() {
-        AnyArrayOuterClass.AnyArray result = buildPartial();
+      public cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray build() {
+        cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -394,8 +394,8 @@ public final class AnyArrayOuterClass {
       }
 
       @java.lang.Override
-      public AnyArrayOuterClass.AnyArray buildPartial() {
-        AnyArrayOuterClass.AnyArray result = new AnyArrayOuterClass.AnyArray(this);
+      public cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray buildPartial() {
+        cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray result = new cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray(this);
         int from_bitField0_ = bitField0_;
         if (messageBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
@@ -444,16 +444,16 @@ public final class AnyArrayOuterClass {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof AnyArrayOuterClass.AnyArray) {
-          return mergeFrom((AnyArrayOuterClass.AnyArray)other);
+        if (other instanceof cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray) {
+          return mergeFrom((cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(AnyArrayOuterClass.AnyArray other) {
-        if (other == AnyArrayOuterClass.AnyArray.getDefaultInstance()) return this;
+      public Builder mergeFrom(cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray other) {
+        if (other == cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray.getDefaultInstance()) return this;
         if (messageBuilder_ == null) {
           if (!other.message_.isEmpty()) {
             if (message_.isEmpty()) {
@@ -472,7 +472,7 @@ public final class AnyArrayOuterClass {
               messageBuilder_ = null;
               message_ = other.message_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              messageBuilder_ =
+              messageBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getMessageFieldBuilder() : null;
             } else {
@@ -495,11 +495,11 @@ public final class AnyArrayOuterClass {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        AnyArrayOuterClass.AnyArray parsedMessage = null;
+        cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (AnyArrayOuterClass.AnyArray) e.getUnfinishedMessage();
+          parsedMessage = (cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -705,7 +705,7 @@ public final class AnyArrayOuterClass {
       /**
        * <code>repeated .google.protobuf.Any message = 1;</code>
        */
-      public java.util.List<? extends com.google.protobuf.AnyOrBuilder>
+      public java.util.List<? extends com.google.protobuf.AnyOrBuilder> 
            getMessageOrBuilderList() {
         if (messageBuilder_ != null) {
           return messageBuilder_.getMessageOrBuilderList();
@@ -731,12 +731,12 @@ public final class AnyArrayOuterClass {
       /**
        * <code>repeated .google.protobuf.Any message = 1;</code>
        */
-      public java.util.List<com.google.protobuf.Any.Builder>
+      public java.util.List<com.google.protobuf.Any.Builder> 
            getMessageBuilderList() {
         return getMessageFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder>
+          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder> 
           getMessageFieldBuilder() {
         if (messageBuilder_ == null) {
           messageBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -766,12 +766,12 @@ public final class AnyArrayOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:AnyArray)
-    private static final AnyArrayOuterClass.AnyArray DEFAULT_INSTANCE;
+    private static final cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new AnyArrayOuterClass.AnyArray();
+      DEFAULT_INSTANCE = new cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray();
     }
 
-    public static AnyArrayOuterClass.AnyArray getDefaultInstance() {
+    public static cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -796,7 +796,7 @@ public final class AnyArrayOuterClass {
     }
 
     @java.lang.Override
-    public AnyArrayOuterClass.AnyArray getDefaultInstanceForType() {
+    public cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.AnyArray getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -804,7 +804,7 @@ public final class AnyArrayOuterClass {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_AnyArray_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_AnyArray_fieldAccessorTable;
 
@@ -818,8 +818,8 @@ public final class AnyArrayOuterClass {
     java.lang.String[] descriptorData = {
       "\n\016AnyArray.proto\032\031google/protobuf/any.pr" +
       "oto\"1\n\010AnyArray\022%\n\007message\030\001 \003(\0132\024.googl" +
-      "e.protobuf.AnyB$\n\"cn.jisol.ngame.demo.proto.m" +
-      "essage.toolsb\006proto3"
+      "e.protobuf.AnyB!\n\037cn.jisol.ngame.demo.pr" +
+      "oto.toolsb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

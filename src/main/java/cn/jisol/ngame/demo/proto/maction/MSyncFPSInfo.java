@@ -514,7 +514,7 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder setX(float value) {
-
+        
         x_ = value;
         onChanged();
         return this;
@@ -524,7 +524,7 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder clearX() {
-
+        
         x_ = 0F;
         onChanged();
         return this;
@@ -544,7 +544,7 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder setY(float value) {
-
+        
         y_ = value;
         onChanged();
         return this;
@@ -554,7 +554,7 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder clearY() {
-
+        
         y_ = 0F;
         onChanged();
         return this;
@@ -574,7 +574,7 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder setZ(float value) {
-
+        
         z_ = value;
         onChanged();
         return this;
@@ -584,7 +584,7 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder clearZ() {
-
+        
         z_ = 0F;
         onChanged();
         return this;
@@ -653,32 +653,38 @@ public final class MSyncFPSInfo {
     int getUuid();
 
     /**
-     * <code>.MVector3 pos = 2;</code>
+     * <code>int32 propId = 2;</code>
+     * @return The propId.
+     */
+    int getPropId();
+
+    /**
+     * <code>.MVector3 pos = 3;</code>
      * @return Whether the pos field is set.
      */
     boolean hasPos();
     /**
-     * <code>.MVector3 pos = 2;</code>
+     * <code>.MVector3 pos = 3;</code>
      * @return The pos.
      */
     cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 getPos();
     /**
-     * <code>.MVector3 pos = 2;</code>
+     * <code>.MVector3 pos = 3;</code>
      */
     cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder getPosOrBuilder();
 
     /**
-     * <code>.MVector3 rot = 3;</code>
+     * <code>.MVector3 rot = 4;</code>
      * @return Whether the rot field is set.
      */
     boolean hasRot();
     /**
-     * <code>.MVector3 rot = 3;</code>
+     * <code>.MVector3 rot = 4;</code>
      * @return The rot.
      */
     cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 getRot();
     /**
-     * <code>.MVector3 rot = 3;</code>
+     * <code>.MVector3 rot = 4;</code>
      */
     cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder getRotOrBuilder();
   }
@@ -732,7 +738,12 @@ public final class MSyncFPSInfo {
               uuid_ = input.readInt32();
               break;
             }
-            case 18: {
+            case 16: {
+
+              propId_ = input.readInt32();
+              break;
+            }
+            case 26: {
               cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder subBuilder = null;
               if (pos_ != null) {
                 subBuilder = pos_.toBuilder();
@@ -745,7 +756,7 @@ public final class MSyncFPSInfo {
 
               break;
             }
-            case 26: {
+            case 34: {
               cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder subBuilder = null;
               if (rot_ != null) {
                 subBuilder = rot_.toBuilder();
@@ -800,47 +811,57 @@ public final class MSyncFPSInfo {
       return uuid_;
     }
 
-    public static final int POS_FIELD_NUMBER = 2;
+    public static final int PROPID_FIELD_NUMBER = 2;
+    private int propId_;
+    /**
+     * <code>int32 propId = 2;</code>
+     * @return The propId.
+     */
+    public int getPropId() {
+      return propId_;
+    }
+
+    public static final int POS_FIELD_NUMBER = 3;
     private cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 pos_;
     /**
-     * <code>.MVector3 pos = 2;</code>
+     * <code>.MVector3 pos = 3;</code>
      * @return Whether the pos field is set.
      */
     public boolean hasPos() {
       return pos_ != null;
     }
     /**
-     * <code>.MVector3 pos = 2;</code>
+     * <code>.MVector3 pos = 3;</code>
      * @return The pos.
      */
     public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 getPos() {
       return pos_ == null ? cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.getDefaultInstance() : pos_;
     }
     /**
-     * <code>.MVector3 pos = 2;</code>
+     * <code>.MVector3 pos = 3;</code>
      */
     public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder getPosOrBuilder() {
       return getPos();
     }
 
-    public static final int ROT_FIELD_NUMBER = 3;
+    public static final int ROT_FIELD_NUMBER = 4;
     private cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 rot_;
     /**
-     * <code>.MVector3 rot = 3;</code>
+     * <code>.MVector3 rot = 4;</code>
      * @return Whether the rot field is set.
      */
     public boolean hasRot() {
       return rot_ != null;
     }
     /**
-     * <code>.MVector3 rot = 3;</code>
+     * <code>.MVector3 rot = 4;</code>
      * @return The rot.
      */
     public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 getRot() {
       return rot_ == null ? cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.getDefaultInstance() : rot_;
     }
     /**
-     * <code>.MVector3 rot = 3;</code>
+     * <code>.MVector3 rot = 4;</code>
      */
     public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder getRotOrBuilder() {
       return getRot();
@@ -863,11 +884,14 @@ public final class MSyncFPSInfo {
       if (uuid_ != 0) {
         output.writeInt32(1, uuid_);
       }
+      if (propId_ != 0) {
+        output.writeInt32(2, propId_);
+      }
       if (pos_ != null) {
-        output.writeMessage(2, getPos());
+        output.writeMessage(3, getPos());
       }
       if (rot_ != null) {
-        output.writeMessage(3, getRot());
+        output.writeMessage(4, getRot());
       }
       unknownFields.writeTo(output);
     }
@@ -882,13 +906,17 @@ public final class MSyncFPSInfo {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, uuid_);
       }
+      if (propId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, propId_);
+      }
       if (pos_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getPos());
+          .computeMessageSize(3, getPos());
       }
       if (rot_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getRot());
+          .computeMessageSize(4, getRot());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -907,6 +935,8 @@ public final class MSyncFPSInfo {
 
       if (getUuid()
           != other.getUuid()) return false;
+      if (getPropId()
+          != other.getPropId()) return false;
       if (hasPos() != other.hasPos()) return false;
       if (hasPos()) {
         if (!getPos()
@@ -930,6 +960,8 @@ public final class MSyncFPSInfo {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + UUID_FIELD_NUMBER;
       hash = (53 * hash) + getUuid();
+      hash = (37 * hash) + PROPID_FIELD_NUMBER;
+      hash = (53 * hash) + getPropId();
       if (hasPos()) {
         hash = (37 * hash) + POS_FIELD_NUMBER;
         hash = (53 * hash) + getPos().hashCode();
@@ -1073,6 +1105,8 @@ public final class MSyncFPSInfo {
         super.clear();
         uuid_ = 0;
 
+        propId_ = 0;
+
         if (posBuilder_ == null) {
           pos_ = null;
         } else {
@@ -1112,6 +1146,7 @@ public final class MSyncFPSInfo {
       public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.NAction buildPartial() {
         cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.NAction result = new cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.NAction(this);
         result.uuid_ = uuid_;
+        result.propId_ = propId_;
         if (posBuilder_ == null) {
           result.pos_ = pos_;
         } else {
@@ -1173,6 +1208,9 @@ public final class MSyncFPSInfo {
         if (other.getUuid() != 0) {
           setUuid(other.getUuid());
         }
+        if (other.getPropId() != 0) {
+          setPropId(other.getPropId());
+        }
         if (other.hasPos()) {
           mergePos(other.getPos());
         }
@@ -1222,7 +1260,7 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder setUuid(int value) {
-
+        
         uuid_ = value;
         onChanged();
         return this;
@@ -1232,8 +1270,38 @@ public final class MSyncFPSInfo {
        * @return This builder for chaining.
        */
       public Builder clearUuid() {
-
+        
         uuid_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int propId_ ;
+      /**
+       * <code>int32 propId = 2;</code>
+       * @return The propId.
+       */
+      public int getPropId() {
+        return propId_;
+      }
+      /**
+       * <code>int32 propId = 2;</code>
+       * @param value The propId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPropId(int value) {
+        
+        propId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 propId = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPropId() {
+        
+        propId_ = 0;
         onChanged();
         return this;
       }
@@ -1242,14 +1310,14 @@ public final class MSyncFPSInfo {
       private com.google.protobuf.SingleFieldBuilderV3<
           cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder> posBuilder_;
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        * @return Whether the pos field is set.
        */
       public boolean hasPos() {
         return posBuilder_ != null || pos_ != null;
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        * @return The pos.
        */
       public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 getPos() {
@@ -1260,7 +1328,7 @@ public final class MSyncFPSInfo {
         }
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        */
       public Builder setPos(cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 value) {
         if (posBuilder_ == null) {
@@ -1276,7 +1344,7 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        */
       public Builder setPos(
           cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder builderForValue) {
@@ -1290,7 +1358,7 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        */
       public Builder mergePos(cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 value) {
         if (posBuilder_ == null) {
@@ -1308,7 +1376,7 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        */
       public Builder clearPos() {
         if (posBuilder_ == null) {
@@ -1322,15 +1390,15 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        */
       public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder getPosBuilder() {
-
+        
         onChanged();
         return getPosFieldBuilder().getBuilder();
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        */
       public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder getPosOrBuilder() {
         if (posBuilder_ != null) {
@@ -1341,10 +1409,10 @@ public final class MSyncFPSInfo {
         }
       }
       /**
-       * <code>.MVector3 pos = 2;</code>
+       * <code>.MVector3 pos = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder>
+          cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder> 
           getPosFieldBuilder() {
         if (posBuilder_ == null) {
           posBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -1361,14 +1429,14 @@ public final class MSyncFPSInfo {
       private com.google.protobuf.SingleFieldBuilderV3<
           cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder> rotBuilder_;
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        * @return Whether the rot field is set.
        */
       public boolean hasRot() {
         return rotBuilder_ != null || rot_ != null;
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        * @return The rot.
        */
       public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 getRot() {
@@ -1379,7 +1447,7 @@ public final class MSyncFPSInfo {
         }
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        */
       public Builder setRot(cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 value) {
         if (rotBuilder_ == null) {
@@ -1395,7 +1463,7 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        */
       public Builder setRot(
           cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder builderForValue) {
@@ -1409,7 +1477,7 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        */
       public Builder mergeRot(cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3 value) {
         if (rotBuilder_ == null) {
@@ -1427,7 +1495,7 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        */
       public Builder clearRot() {
         if (rotBuilder_ == null) {
@@ -1441,15 +1509,15 @@ public final class MSyncFPSInfo {
         return this;
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        */
       public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder getRotBuilder() {
-
+        
         onChanged();
         return getRotFieldBuilder().getBuilder();
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        */
       public cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder getRotOrBuilder() {
         if (rotBuilder_ != null) {
@@ -1460,10 +1528,10 @@ public final class MSyncFPSInfo {
         }
       }
       /**
-       * <code>.MVector3 rot = 3;</code>
+       * <code>.MVector3 rot = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder>
+          cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3.Builder, cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.MVector3OrBuilder> 
           getRotFieldBuilder() {
         if (rotBuilder_ == null) {
           rotBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -1530,12 +1598,12 @@ public final class MSyncFPSInfo {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_MVector3_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_MVector3_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_NAction_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_NAction_fieldAccessorTable;
 
@@ -1548,10 +1616,11 @@ public final class MSyncFPSInfo {
   static {
     java.lang.String[] descriptorData = {
       "\n\022MSyncFPSInfo.proto\"+\n\010MVector3\022\t\n\001x\030\001 " +
-      "\001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"G\n\007NAction\022\014\n\004" +
-      "uuid\030\001 \001(\005\022\026\n\003pos\030\002 \001(\0132\t.MVector3\022\026\n\003ro" +
-      "t\030\003 \001(\0132\t.MVector3B/\n\034cn.jisol.ngame.pro" +
-      "to.maction\252\002\016NGame.protobufb\006proto3"
+      "\001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"W\n\007NAction\022\014\n\004" +
+      "uuid\030\001 \001(\005\022\016\n\006propId\030\002 \001(\005\022\026\n\003pos\030\003 \001(\0132" +
+      "\t.MVector3\022\026\n\003rot\030\004 \001(\0132\t.MVector3B4\n!cn" +
+      ".jisol.ngame.demo.proto.maction\252\002\016NGame." +
+      "protobufb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1568,7 +1637,7 @@ public final class MSyncFPSInfo {
     internal_static_NAction_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_NAction_descriptor,
-        new java.lang.String[] { "Uuid", "Pos", "Rot", });
+        new java.lang.String[] { "Uuid", "PropId", "Pos", "Rot", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
