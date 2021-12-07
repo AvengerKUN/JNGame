@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "cn.jisol.ngame.demo.proto.maction";
+option csharp_namespace = "NGame.protobuf";
+
+message MVector3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message NAction {
+
+  int32 uuid = 1;
+  MVector3 pos = 2;
+  MVector3 rot = 3;
+
+}
+
