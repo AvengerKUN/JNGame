@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
+namespace NGame.protobuf {
 
   /// <summary>Holder for reflection information generated from MSyncFPSInfo.proto</summary>
   public static partial class MSyncFPSInfoReflection {
@@ -25,15 +25,15 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChJNU3luY0ZQU0luZm8ucHJvdG8iKwoITVZlY3RvcjMSCQoBeBgBIAEoAhIJ",
-            "CgF5GAIgASgCEgkKAXoYAyABKAIiRwoHTkFjdGlvbhIMCgR1dWlkGAEgASgF",
-            "EhYKA3BvcxgCIAEoCzIJLk1WZWN0b3IzEhYKA3JvdBgDIAEoCzIJLk1WZWN0",
-            "b3IzQi8KHGNuLmppc29sLm5nYW1lLnByb3RvLm1hY3Rpb26qAg5OR2FtZS5w",
-            "cm90b2J1ZmIGcHJvdG8z"));
+            "CgF5GAIgASgCEgkKAXoYAyABKAIiVwoHTkFjdGlvbhIMCgR1dWlkGAEgASgF",
+            "Eg4KBnByb3BJZBgCIAEoBRIWCgNwb3MYAyABKAsyCS5NVmVjdG9yMxIWCgNy",
+            "b3QYBCABKAsyCS5NVmVjdG9yM0I0CiFjbi5qaXNvbC5uZ2FtZS5kZW1vLnBy",
+            "b3RvLm1hY3Rpb26qAg5OR2FtZS5wcm90b2J1ZmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3), global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.NAction), global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.NAction.Parser, new[]{ "Uuid", "Pos", "Rot" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::NGame.protobuf.MVector3), global::NGame.protobuf.MVector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::NGame.protobuf.NAction), global::NGame.protobuf.NAction.Parser, new[]{ "Uuid", "PropId", "Pos", "Rot" }, null, null, null, null)
           }));
     }
     #endregion
@@ -48,7 +48,7 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MSyncFPSInfoReflection.Descriptor.MessageTypes[0]; }
+      get { return global::NGame.protobuf.MSyncFPSInfoReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -233,7 +233,7 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MSyncFPSInfoReflection.Descriptor.MessageTypes[1]; }
+      get { return global::NGame.protobuf.MSyncFPSInfoReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -251,6 +251,7 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public NAction(NAction other) : this() {
       uuid_ = other.uuid_;
+      propId_ = other.propId_;
       pos_ = other.pos_ != null ? other.pos_.Clone() : null;
       rot_ = other.rot_ != null ? other.rot_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -272,11 +273,22 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
       }
     }
 
-    /// <summary>Field number for the "pos" field.</summary>
-    public const int PosFieldNumber = 2;
-    private global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3 pos_;
+    /// <summary>Field number for the "propId" field.</summary>
+    public const int PropIdFieldNumber = 2;
+    private int propId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3 Pos {
+    public int PropId {
+      get { return propId_; }
+      set {
+        propId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "pos" field.</summary>
+    public const int PosFieldNumber = 3;
+    private global::NGame.protobuf.MVector3 pos_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::NGame.protobuf.MVector3 Pos {
       get { return pos_; }
       set {
         pos_ = value;
@@ -284,10 +296,10 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
     }
 
     /// <summary>Field number for the "rot" field.</summary>
-    public const int RotFieldNumber = 3;
-    private global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3 rot_;
+    public const int RotFieldNumber = 4;
+    private global::NGame.protobuf.MVector3 rot_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3 Rot {
+    public global::NGame.protobuf.MVector3 Rot {
       get { return rot_; }
       set {
         rot_ = value;
@@ -308,6 +320,7 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
         return true;
       }
       if (Uuid != other.Uuid) return false;
+      if (PropId != other.PropId) return false;
       if (!object.Equals(Pos, other.Pos)) return false;
       if (!object.Equals(Rot, other.Rot)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -317,6 +330,7 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
     public override int GetHashCode() {
       int hash = 1;
       if (Uuid != 0) hash ^= Uuid.GetHashCode();
+      if (PropId != 0) hash ^= PropId.GetHashCode();
       if (pos_ != null) hash ^= Pos.GetHashCode();
       if (rot_ != null) hash ^= Rot.GetHashCode();
       if (_unknownFields != null) {
@@ -336,12 +350,16 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
         output.WriteRawTag(8);
         output.WriteInt32(Uuid);
       }
+      if (PropId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(PropId);
+      }
       if (pos_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(Pos);
       }
       if (rot_ != null) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteMessage(Rot);
       }
       if (_unknownFields != null) {
@@ -354,6 +372,9 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
       int size = 0;
       if (Uuid != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Uuid);
+      }
+      if (PropId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PropId);
       }
       if (pos_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pos);
@@ -375,15 +396,18 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
       if (other.Uuid != 0) {
         Uuid = other.Uuid;
       }
+      if (other.PropId != 0) {
+        PropId = other.PropId;
+      }
       if (other.pos_ != null) {
         if (pos_ == null) {
-          Pos = new global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3();
+          Pos = new global::NGame.protobuf.MVector3();
         }
         Pos.MergeFrom(other.Pos);
       }
       if (other.rot_ != null) {
         if (rot_ == null) {
-          Rot = new global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3();
+          Rot = new global::NGame.protobuf.MVector3();
         }
         Rot.MergeFrom(other.Rot);
       }
@@ -402,16 +426,20 @@ namespace Assets.Game.Script.NGame.protobuf.NGameSyncMessage {
             Uuid = input.ReadInt32();
             break;
           }
-          case 18: {
+          case 16: {
+            PropId = input.ReadInt32();
+            break;
+          }
+          case 26: {
             if (pos_ == null) {
-              Pos = new global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3();
+              Pos = new global::NGame.protobuf.MVector3();
             }
             input.ReadMessage(Pos);
             break;
           }
-          case 26: {
+          case 34: {
             if (rot_ == null) {
-              Rot = new global::Assets.Game.Script.NGame.protobuf.NGameSyncMessage.MVector3();
+              Rot = new global::NGame.protobuf.MVector3();
             }
             input.ReadMessage(Rot);
             break;

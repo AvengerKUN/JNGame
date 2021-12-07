@@ -2,7 +2,7 @@
 
 using Assets.Game.plugs.NGame.tools;
 using Assets.Game.Script.NGame.protobuf;
-using Assets.Game.Script.NGame.protobuf.NGameSyncMessage;
+using NGame.protobuf;
 using UnityEngine;
 
 namespace Assets.Game.Script.ngame.ncontroller.service

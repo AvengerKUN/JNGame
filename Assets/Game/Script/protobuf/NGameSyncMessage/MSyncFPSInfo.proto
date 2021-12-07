@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option java_package = "cn.jisol.ngame.proto.maction";
+option java_package = "cn.jisol.ngame.demo.proto.maction";
 option csharp_namespace = "NGame.protobuf";
 
 message MVector3 {
@@ -12,8 +12,9 @@ message MVector3 {
 message NAction {
 
   int32 uuid = 1;
-  MVector3 pos = 2;
-  MVector3 rot = 3;
+  int32 propId = 2;
+  MVector3 pos = 3;
+  MVector3 rot = 4;
 
 }
 

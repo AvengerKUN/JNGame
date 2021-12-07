@@ -1,7 +1,7 @@
 ﻿using Google.Protobuf;
 using UnityEngine;
 using Assets.Game.Script.NGame.protobuf;
-using Assets.Game.Script.NGame.protobuf.NGameSyncMessage;
+using NGame.protobuf;
 
 public class ActionPositionVerify : ActionSyncVerifyInter
 {
