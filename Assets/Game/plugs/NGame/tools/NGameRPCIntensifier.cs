@@ -70,7 +70,6 @@ namespace Assets.Game.plugs.NGame.tools
             nMessage.Message = message;
 
             this.nGame.SendQueue(nMessage.ToByteArray());
-            Debug.Log(string.Format("拦截器开始调用方法，类名: {0} 方法名是：{1}。", this.GetType().Name, method.Name));
             method.Invoke(this, args);//此处会调用真正的方法 invocation.Proceed();
 
 
