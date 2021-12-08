@@ -47,8 +47,8 @@ public class GameUDPServer {
     public void initNetwork(UDPJNettyNetwork network){
         //因UDP协议无法监听客户端是否在线 所以导致 onClose失效 这里需要吧心跳开启
         network.setOpenAlive(true);
-        network.setVAliveTime(2000);
-        network.setVAliveError(1000);
+        network.setVAliveTime(20000);
+        network.setVAliveError(10000);
     }
 
     /**
