@@ -15,7 +15,7 @@ namespace Assets.Game.plugs.NGame.sync
         //时间+
         private float checkTimeData = 0;
         //服务器帧时间
-        private float timeServer = 1 / 1;
+        public float timeServer = 1;
 
         public NGameApplication nGame;
 

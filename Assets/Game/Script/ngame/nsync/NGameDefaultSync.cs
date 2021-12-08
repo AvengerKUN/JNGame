@@ -60,8 +60,6 @@ namespace Assets.Game.Script.ngame.nsync
         /// </summary>
         public void SNTick(AnyArray nFPSInfo) {
 
-            Debug.Log(string.Format("SNTick {0}", nFPSInfo.Message.Count));
-
             //获取 NGame 中所有 ActionSync
             List<NGameAction> nGameActions = this.nGame.nGameActions.FindAll((action) => {
                 return typeof(ActionSync).IsAssignableFrom(action.GetType());
@@ -87,11 +85,26 @@ namespace Assets.Game.Script.ngame.nsync
                     }
                 }
 
+
                 ////没有ActionSync则生成
-                if (actionSync == null) actionSync = this.NCreateAction(nAction).GetComponent<ActionSync>();
+                if (actionSync == null) {
+                    actionSync = this.NCreateAction(nAction).GetComponent<ActionSync>();
+                    if (actionSync != null)
+                    {
+                        actionSync.ngame = this.nGame;
+                        actionSync.nProp = (ServerPropEnum)nAction.PropId;
+                        actionSync.nId = nAction.Uuid;
+                        actionSync.isLocalAction = false;
+                        actionSync.nGameSync = this;
+                    }
+                }
 
                 //找到则调用ActionSync SNTick 没有找到则调用 生成对象
-                if (actionSync != null) actionSync.SNTick(nAction);
+                if (actionSync != null)
+                {
+                    //执行同步帧
+                    actionSync.SNTick(nAction);
+                }
 
             }
 

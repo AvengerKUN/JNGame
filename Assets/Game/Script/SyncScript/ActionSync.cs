@@ -16,9 +16,17 @@ public class ActionSync : NGameAction
     [Header("当前关联网络Object")]
     public ServerPropEnum nProp;
 
+    /// <summary>
+    /// 用来判断是否是本地实体
+    /// </summary>
+    public bool isLocalAction;
+
 
     public override void GStart()
     {
+
+        //如果不是本地对象则不就行同步通讯
+        if (!this.isLocalAction) return;
 
         //创建一个唯一的UID
         StartCoroutine(
@@ -74,7 +82,7 @@ public class ActionSync : NGameAction
 
 
     //接收服务器帧通知 (仅限当前UUID的帧)
-    public void SNTick(NAction action)
+    public virtual void SNTick(NAction action)
     {
 
         Debug.Log(string.Format("SNTick: uuid:{0} PropId:{1} pos:{2}.{3}.{4}", action.Uuid, action.PropId, action.Pos.X, action.Pos.Y, action.Pos.Z));

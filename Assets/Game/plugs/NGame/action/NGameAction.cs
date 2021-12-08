@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Game.plugs.NGame.sync;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,9 @@ namespace Assets.Game.Script.NGame.action
     {
         //NGame 网络服务
         public NGameApplication ngame;
+
+        //同步类
+        public NGameSync nGameSync;
 
         //验证集
         public List<ActionSyncVerifyInter> verifys = new List<ActionSyncVerifyInter>();

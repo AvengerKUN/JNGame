@@ -900,7 +900,7 @@ GameObject:
   - component: {fileID: 8332411461905969487}
   - component: {fileID: 8332411461905969840}
   - component: {fileID: 8332411461905969841}
-  - component: {fileID: 8332411461905969486}
+  - component: {fileID: 3632413930737491929}
   m_Layer: 0
   m_Name: GamePlayer
   m_TagString: Untagged
@@ -966,7 +966,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   isGround: 0
---- !u!114 &8332411461905969486
+--- !u!114 &3632413930737491929
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -975,12 +975,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8332411461905969484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c84ff5e30f3cca49b28ee80652ff1bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 995895d16ae2bc44db81927b64473bca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ngame: {fileID: 0}
   nId: 0
-  nProp: 1
+  nProp: 0
+  isLocalAction: 0
 --- !u!1 &8332411461908338152
 GameObject:
   m_ObjectHideFlags: 0
