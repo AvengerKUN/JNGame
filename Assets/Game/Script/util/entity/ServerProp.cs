@@ -21,8 +21,8 @@ namespace Assets.Game.Script.util.entity
     public class ServerPropQuery
     {
         //预制体组
-        public static Dictionary<int, GameObject> itemPrefar = new Dictionary<int, GameObject>() {
-            { (int)ServerPropEnum.GamePlayer,Resources.Load<GameObject>("/Prefab/GamePlayer.prefab") }
+        public static Dictionary<int, GameObject> items = new Dictionary<int, GameObject>() {
+            { (int)ServerPropEnum.GamePlayer,Resources.Load<GameObject>("Prefab/nocontrol/GamePlayer") }
         };
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Assets.Game.Script.util.entity
         /// <returns></returns>
         public static GameObject QueryPrefar(ServerPropEnum prop)
         {
-            return itemPrefar[(int)prop];
+            return items[(int)prop];
         }
 
     }

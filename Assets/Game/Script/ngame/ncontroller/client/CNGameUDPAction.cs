@@ -2,6 +2,7 @@ using Assets.Game.plugs.NGame.sync;
 using Assets.Game.plugs.NGame.tools;
 using Assets.Game.Script.ngame.nsync;
 using Assets.Game.Script.NGame.protobuf;
+using Assets.Game.Script.plugs;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,7 +32,14 @@ public class CNGameUDPAction : NGameRPCIntensifier
         if (nGameDefaultSync == null) return;
 
         //找到则交给 NGameDefaultSync 管理 
-        nGameDefaultSync.SNTick(nFPSInfo);
+        //Loom.QueueOnMainThread(() => {
+        //    nGameDefaultSync.SNTick(nFPSInfo);
+        //});
+
+        UnityTask.Task(() =>
+        {
+            nGameDefaultSync.SNTick(nFPSInfo);
+        });
 
     }
 

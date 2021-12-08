@@ -1,6 +1,8 @@
 ﻿using Assets.Game.plugs.NGame.sync;
 using Assets.Game.Script.NGame.action;
 using Assets.Game.Script.NGame.protobuf;
+using Assets.Game.Script.plugs;
+using Assets.Game.Script.util.entity;
 using NGame.protobuf;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +15,13 @@ namespace Assets.Game.Script.ngame.nsync
     /// </summary>
     public class NGameDefaultSync : NGameSync
     {
+
+        /// <summary>
+        /// 同步世界
+        /// </summary>
+        [Header("同步世界节点 默认同步时动态添加在这个世界节点中")]
+        public GameObject SyncWorld;
+
         public override void GStart()
         {
         }
@@ -69,7 +78,8 @@ namespace Assets.Game.Script.ngame.nsync
                 //在已知的库中找到Action
                 foreach (ActionSync nGameAction in nGameActions)
                 {
-                    if (nGameAction.nId.Equals(nAction.Uuid))
+
+                    if (nGameAction.nId == nAction.Uuid)
                     {
                         //找到则赋值
                         actionSync = nGameAction;
@@ -77,10 +87,11 @@ namespace Assets.Game.Script.ngame.nsync
                     }
                 }
 
+                ////没有ActionSync则生成
+                if (actionSync == null) actionSync = this.NCreateAction(nAction).GetComponent<ActionSync>();
+
                 //找到则调用ActionSync SNTick 没有找到则调用 生成对象
                 if (actionSync != null) actionSync.SNTick(nAction);
-                else this.NCreateAction(nAction);
-
 
             }
 
@@ -89,9 +100,20 @@ namespace Assets.Game.Script.ngame.nsync
         /// <summary>
         /// 如果找不到Action则生成
         /// </summary>
-        public void NCreateAction(NAction nAction)
+        public GameObject NCreateAction(NAction nAction)
         {
-            Debug.Log("NCreateAction");
+
+            Debug.Log(string.Format("场景中没有{0} 进行生成.", nAction.Uuid));
+
+            GameObject nPrefar = null;
+
+            //获取预制体
+            if ((nPrefar = ServerPropQuery.QueryPrefar((ServerPropEnum)nAction.PropId)) == null) return null;
+
+            //生成GameObject
+            GameObject wObject = Instantiate(nPrefar, this.SyncWorld.transform);
+
+            return wObject;
         }
 
     }
