@@ -53,7 +53,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
 
         NSyncFPSMode<NAction> nSyncMode = null;
         if(Objects.nonNull(nSyncMode = this.nSyncModes.get(uuid))){
-            nSyncMode.addFPSInfo(action);
+            nSyncMode.addFPSInfo(String.valueOf(action.getUuid()),action);
         }
 
     }
@@ -70,7 +70,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
         if(Objects.isNull(nSyncMode = this.nSyncModes.get(uuid))){
 
             nSyncMode = new NSyncFPSMode<>();
-            nSyncMode.setIntervalTime(1000/1); //设置延迟时间
+            nSyncMode.setIntervalTime(1000/10); //设置延迟时间
             nSyncMode.setUuid(uuid);
             this.nSyncModes.put(uuid,nSyncMode);
             //添加同步功能
@@ -99,8 +99,6 @@ public class SNGameUDPAction extends NCallServiceImpl {
         }
 
         AnyArray build = anyArray.build();
-
-        System.out.println("nGameSyncCallBack : "+build.getMessageCount());;
 
         //发送封装好的 向所有client 调用 nGameSyncCallBack
         for (UDPClient value : clients.values()) {
