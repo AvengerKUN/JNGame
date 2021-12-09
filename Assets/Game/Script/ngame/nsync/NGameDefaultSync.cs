@@ -34,7 +34,7 @@ namespace Assets.Game.Script.ngame.nsync
         public override void NTick()
         {
             //获取所有需要同步的Action进行验证 验证集
-            foreach (NGameAction action in this.nGame.nGameActions)
+            foreach (NGameActor action in this.nGame.nGameActors)
             {
 
                 foreach (ActionSyncVerifyInter verify in action.verifys)
@@ -61,8 +61,8 @@ namespace Assets.Game.Script.ngame.nsync
         public void SNTick(AnyArray nFPSInfo) {
 
             //获取 NGame 中所有 ActionSync
-            List<NGameAction> nGameActions = this.nGame.nGameActions.FindAll((action) => {
-                return typeof(ActionSync).IsAssignableFrom(action.GetType());
+            List<NGameActor> nGameActions = this.nGame.nGameActors.FindAll((action) => {
+                return typeof(ActorSync).IsAssignableFrom(action.GetType());
             });
 
             //循环处理帧数据
@@ -72,9 +72,9 @@ namespace Assets.Game.Script.ngame.nsync
                 //将Message转换NAction
                 NAction nAction = nFPSInfo.Message[i].Unpack<NAction>();
 
-                ActionSync actionSync = null;
+                ActorSync actionSync = null;
                 //在已知的库中找到Action
-                foreach (ActionSync nGameAction in nGameActions)
+                foreach (ActorSync nGameAction in nGameActions)
                 {
 
                     if (nGameAction.nId == nAction.Uuid)
@@ -88,20 +88,24 @@ namespace Assets.Game.Script.ngame.nsync
 
                 ////没有ActionSync则生成
                 if (actionSync == null) {
-                    actionSync = this.NCreateAction(nAction).GetComponent<ActionSync>();
+                    actionSync = this.NCreateAction(nAction).GetComponent<ActorSync>();
                     if (actionSync != null)
                     {
                         actionSync.ngame = this.nGame;
                         actionSync.nProp = (ServerPropEnum)nAction.PropId;
                         actionSync.nId = nAction.Uuid;
-                        actionSync.isLocalAction = false;
+                        actionSync.isLocalActor = false;
                         actionSync.nGameSync = this;
                     }
+                    nGameActions.Add(actionSync);
                 }
 
-                //找到则调用ActionSync SNTick 没有找到则调用 生成对象
+                //找到则调用 ActionSync SNTick 没有找到则调用 生成对象
                 if (actionSync != null)
                 {
+
+                    Debug.Log("SNTick");
+
                     //执行同步帧
                     actionSync.SNTick(nAction);
                 }

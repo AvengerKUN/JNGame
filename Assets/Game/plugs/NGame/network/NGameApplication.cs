@@ -30,7 +30,7 @@ public class NGameApplication : MonoBehaviour
     //包含所有方法
     public Dictionary<string, MethodInfo> rMethods = new Dictionary<string, MethodInfo>();
     //当前NGame管理的所有NGameAction网络类
-    public List<NGameAction> nGameActions = new List<NGameAction>();
+    public List<NGameActor> nGameActors = new List<NGameActor>();
     //当前NGame管理的所有NGameSync同步类
     public List<NGameSync> nNGameSyncs = new List<NGameSync>();
 
@@ -152,7 +152,17 @@ public class NGameApplication : MonoBehaviour
         {
             if(method.GetCustomAttribute(typeof(NGameRPCMethod)) != null)
             {
-                rMethods.Add(string.Format("{0}-{1}", t.Name, method.Name), method);
+                NUIDMode uidMode = null;
+                //判断是否包含 NUIDMode 注解
+                if ((uidMode = method.GetCustomAttribute<NUIDMode>()) != null)
+                {
+                    rMethods.Add(uidMode.uuid.ToString(), method);
+                }
+                else
+                {
+                    rMethods.Add(string.Format("{0}-{1}", t.Name, method.Name), method);
+                }
+
             }
         }
 
@@ -206,27 +216,20 @@ public class NGameApplication : MonoBehaviour
         MethodInfo method = null;
 
         //找到调用的方法
+        string key = null;
+
         if (nGameMessage.Uid != 0)
         {
-            foreach (MethodInfo methodi in this.rMethods.Values)
-            {
-
-                //判断是否包含 NUIDMode 注解
-                if(methodi.GetCustomAttribute(typeof(NUIDMode)) != null)
-                {
-                    method = methodi;
-                }
-
-            }
+            key = nGameMessage.Uid.ToString();
         }
         else
         {
-            string key = string.Format("{0}-{1}", nGameMessage.Action, nGameMessage.Event);
+            key = string.Format("{0}-{1}", nGameMessage.Action, nGameMessage.Event);
+        }
 
-            if (this.rMethods.ContainsKey(key))
-            {
-                method = this.rMethods[key];
-            }
+        if (this.rMethods.ContainsKey(key))
+        {
+            method = this.rMethods[key];
         }
 
         //判断是否找到方法如果没有则返回

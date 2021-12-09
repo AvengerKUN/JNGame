@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.Game.Script.NGame.action
 {
-    public abstract class NGameAction : MonoBehaviour
+    public abstract class NGameActor : MonoBehaviour
     {
         //NGame 网络服务
         public NGameApplication ngame;
@@ -25,7 +25,7 @@ namespace Assets.Game.Script.NGame.action
         public void Start()
         {
             //将当前网络Action 添加到 Application中
-            this.ngame.nGameActions.Add(this);
+            this.ngame.nGameActors.Add(this);
             this.GStart();
         }
 

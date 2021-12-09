@@ -26,7 +26,7 @@ namespace Assets.Game.Script.ngame.ncontroller.service
          * 将消息添加到 nSyncModes 中
          * @param vector3
          */
-        [NGameRPCMethod]
+        [NGameRPCMethod, NUIDMode(ActionRPC.SNGAMEUDPACTION_ADDSYNCINFO)]
         public void addSyncInfo(NAction action)
         {
             Debug.Log("addSyncInfo");
@@ -35,7 +35,7 @@ namespace Assets.Game.Script.ngame.ncontroller.service
         /**
          * 开始帧同步模式
          */
-        [NGameRPCMethod]
+        [NGameRPCMethod, NUIDMode(ActionRPC.SNGAMEUDPACTION_NGAMESYNCSTART)]
         public void nGameSyncStart()
         {
             Debug.Log("nGameSyncStart");

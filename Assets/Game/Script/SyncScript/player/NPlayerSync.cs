@@ -8,14 +8,22 @@ using UnityEngine;
 
 namespace Assets.Game.Script.SyncScript.player
 {
-    class NPlayerSync : ActionSync
+    class NPlayerSync : ActorSync
     {
 
         private CharacterController controller;
 
-        //对方同步位置(不是本地生效)
+        //网络帧队列
+        private Queue<NAction> nTickQuery = new Queue<NAction>();
+        //本地网络帧时间
+        private float nTickTime = 0;
+
+        //同步位置(不是本地生效)
         private Vector3 nPos = Vector3.zero;
         private Vector3 nLPos = Vector3.zero;
+        //同步旋转(不是本地生效)
+        private Quaternion nRot = Quaternion.identity;
+        private Quaternion nLRot = Quaternion.identity;
         //移动当前时间
         private float nTime = 0;
 
@@ -28,6 +36,9 @@ namespace Assets.Game.Script.SyncScript.player
         {
             base.GUpdate();
 
+            //更新网络帧数
+            this.NUpdateTick();
+
             this.UpdateSync();
 
         }
@@ -37,25 +48,62 @@ namespace Assets.Game.Script.SyncScript.player
         /// </summary>
         public void UpdateSync()
         {
-            if (this.isLocalAction) return;
+            if (this.isLocalActor) return;
 
             this.nTime += Time.deltaTime;
             this.transform.position = Vector3.Lerp(nLPos, nPos, this.nTime / nGameSync.timeServer);
+
+            this.transform.rotation = Quaternion.Lerp(nLRot, nRot, this.nTime / nGameSync.timeServer);
+
+
+            if ((this.nTime / nGameSync.timeServer) >= 1) {
+                nLPos = nPos;
+                nLRot = nRot;
+            };
+
+        }
+
+        private void NUpdateTick()
+        {
+
+            this.nTickTime += Time.deltaTime;
+
+            if (this.nTickTime >= nGameSync.timeServer)
+            {
+                this.nTickTime -= nGameSync.timeServer;
+
+                NAction action = null;
+                //如果没有网络帧处理则返回
+                if (!(nTickQuery.Count > 0) || ((action = nTickQuery.Dequeue()) == null)) return;
+
+                this.nTime = 0;
+
+                //移动物体
+                if (action.Pos != null)
+                {
+                    this.nLPos = this.transform.position;
+                    nPos = new Vector3(action.Pos.X, action.Pos.Y, action.Pos.Z);
+                }
+
+                //旋转物体
+                if(action.Rot != null)
+                {
+                    this.nLRot = this.transform.rotation;
+                    nRot = Quaternion.Euler(action.Rot.X, action.Rot.Y, action.Rot.Z);
+                }
+
+                Debug.Log(nRot);
+
+            }
 
         }
 
         public override void SNTick(NAction action)
         {
             //如果是本地控制则不受同步
-            if (this.isLocalAction) return;
+            if (this.isLocalActor) return;
 
-            //如果没有 controller 则获取
-
-            base.SNTick(action);
-            //移动物体
-            this.nTime = 0;
-            this.nLPos = this.transform.position;
-            nPos = new Vector3(action.Pos.X, action.Pos.Y, action.Pos.Z);
+            this.nTickQuery.Enqueue(action);
 
         }
     }

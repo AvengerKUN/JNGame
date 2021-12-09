@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Assets.Game.Script.SyncScript
 {
 
-    class ActionSyncSimple : ActionSync
+    class ActorSyncSimple : ActorSync
     {
 
 

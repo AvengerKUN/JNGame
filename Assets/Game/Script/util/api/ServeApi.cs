@@ -13,7 +13,7 @@ namespace Assets.Game.Script.util.api
     {
 
         //正式服务器根路径
-        private static string baseUrl = "http://localhost:9190";
+        private static string baseUrl = "http://127.0.0.1:9190";
 
         public static string URL(string url)
         {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -127,6 +127,11 @@ NavMeshSettings:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8332411461905969487, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
   m_PrefabInstance: {fileID: 8332411461787753649}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &199843139 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+  m_PrefabInstance: {fileID: 2203883332299973925}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &600729242
 GameObject:
@@ -581,6 +586,7 @@ Transform:
   m_Children:
   - {fileID: 2014782685}
   - {fileID: 185396734}
+  - {fileID: 199843139}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -691,7 +697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IP: 127.0.0.1
   Port: 1000
-  nGameActions: []
+  nGameActors: []
   nNGameSyncs: []
 --- !u!4 &2025460752
 Transform:
@@ -919,6 +925,83 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2051917967}
   m_CullTransparentMesh: 1
+--- !u!1001 &2203883332299973925
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1776743997}
+    m_Modifications:
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 95.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 24.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 142.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151974, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151975, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: m_Name
+      value: Cube
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151980, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: nProp
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151980, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: ngame
+      value: 
+      objectReference: {fileID: 2025460751}
+    - target: {fileID: 2203883332227151980, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: nGameSync
+      value: 
+      objectReference: {fileID: 1754794339}
+    - target: {fileID: 2203883332227151980, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: isServerActor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151980, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: isServerAction
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
 --- !u!1001 &8332411461787753649
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -939,9 +1022,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1754794339}
     - target: {fileID: 3632413930737491929, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
+      propertyPath: isLocalActor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632413930737491929, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
       propertyPath: isLocalAction
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8332411460767213903, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 991360c58bfb76d4681c0fba351bf099, type: 2}
+    - target: {fileID: 8332411460864101251, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 991360c58bfb76d4681c0fba351bf099, type: 2}
+    - target: {fileID: 8332411461014390763, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 991360c58bfb76d4681c0fba351bf099, type: 2}
     - target: {fileID: 8332411461905969484, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
       propertyPath: m_Name
       value: GamePlayer

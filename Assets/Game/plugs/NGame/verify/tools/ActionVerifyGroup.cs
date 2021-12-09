@@ -33,8 +33,6 @@ namespace Assets.Game.plugs.NGame.verify.tools
 
             });
 
-            if (this.UpdateFun != null && isModify) this.UpdateFun();
-
             return isModify;
 
         }

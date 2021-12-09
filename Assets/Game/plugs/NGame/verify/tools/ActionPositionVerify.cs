@@ -3,12 +3,17 @@ using UnityEngine;
 using Assets.Game.Script.NGame.protobuf;
 using NGame.protobuf;
 
+/// <summary>
+/// 监听位置
+/// </summary>
 public class ActionPositionVerify : ActionSyncVerifyInter
 {
 
     //上一次的值
     public Vector3 position;
     public MonoBehaviour action;
+    //上一次验证的bool
+    public bool lastVerify;
 
     public ActionPositionVerify(MonoBehaviour action)
     {
@@ -43,6 +48,8 @@ public class ActionPositionVerify : ActionSyncVerifyInter
             //将变化的值覆盖transform
             this.position = this.action.transform.position;
         }
+
+        this.lastVerify = verify;
 
         return verify;
     }

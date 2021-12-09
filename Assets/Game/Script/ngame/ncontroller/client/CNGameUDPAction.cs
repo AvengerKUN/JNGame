@@ -1,5 +1,6 @@
 using Assets.Game.plugs.NGame.sync;
 using Assets.Game.plugs.NGame.tools;
+using Assets.Game.Script.ngame.ncontroller;
 using Assets.Game.Script.ngame.nsync;
 using Assets.Game.Script.NGame.protobuf;
 using Assets.Game.Script.plugs;
@@ -14,7 +15,7 @@ public class CNGameUDPAction : NGameRPCIntensifier
     /**
      * 接收帧同步
      */
-    [NGameRPCMethod]
+    [NGameRPCMethod, NUIDMode(ActionRPC.CNGAMEUDPACTION_NGAMESYNCCALLBACK)]
     public void nGameSyncCallBack(AnyArray nFPSInfo,NGameApplication nGame) {
 
         NGameDefaultSync nGameDefaultSync = null;
@@ -36,7 +37,7 @@ public class CNGameUDPAction : NGameRPCIntensifier
         //    nGameDefaultSync.SNTick(nFPSInfo);
         //});
 
-        UnityTask.Task(() =>
+        UnityTask.NextTask(() =>
         {
             nGameDefaultSync.SNTick(nFPSInfo);
         });

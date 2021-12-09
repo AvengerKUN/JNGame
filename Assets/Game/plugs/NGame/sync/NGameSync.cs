@@ -33,7 +33,7 @@ namespace Assets.Game.plugs.NGame.sync
             float dt = Time.deltaTime;
             this.checkTimeData += dt;
 
-            if (this.timeServer < this.checkTimeData)
+            if (this.timeServer <= this.checkTimeData)
             {
                 this.checkTimeData -= this.timeServer;
                 //调用网络帧
