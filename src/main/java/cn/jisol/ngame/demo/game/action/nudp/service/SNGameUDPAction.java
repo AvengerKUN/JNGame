@@ -1,6 +1,7 @@
 package cn.jisol.ngame.demo.game.action.nudp.service;
 
 import cn.jisol.ngame.client.nclient.UDPClient;
+import cn.jisol.ngame.demo.game.action.ActionRPC;
 import cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.*;
 import cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.*;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
@@ -46,14 +47,15 @@ public class SNGameUDPAction extends NCallServiceImpl {
      * 将消息添加到 nSyncModes 中
      * @param action
      */
-    @NGameRPCMethod
+    @NUIDMode(ActionRPC.SNGAMEUDPACTION_ADDSYNCINFO)
+    @NGameRPCMethod(mode = NRPCMode.UID)
     public void addSyncInfo(NAction action,UDPClient client){
 
         String uuid = client.getSession().getSId();
 
         NSyncFPSMode<NAction> nSyncMode = null;
         if(Objects.nonNull(nSyncMode = this.nSyncModes.get(uuid))){
-            nSyncMode.addFPSInfo(String.valueOf(action.getUuid()),action);
+            nSyncMode.addFPSInfo(action);
         }
 
     }
@@ -61,7 +63,8 @@ public class SNGameUDPAction extends NCallServiceImpl {
     /**
      * 开始帧同步模式
      */
-    @NGameRPCMethod
+    @NUIDMode(ActionRPC.SNGAMEUDPACTION_NGAMESYNCSTART)
+    @NGameRPCMethod(mode = NRPCMode.UID)
     public void nGameSyncStart(UDPClient client){
 
         String uuid = client.getSession().getSId();
@@ -70,7 +73,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
         if(Objects.isNull(nSyncMode = this.nSyncModes.get(uuid))){
 
             nSyncMode = new NSyncFPSMode<>();
-            nSyncMode.setIntervalTime(1000/10); //设置延迟时间
+            nSyncMode.setIntervalTime(100); //设置延迟时间
             nSyncMode.setUuid(uuid);
             this.nSyncModes.put(uuid,nSyncMode);
             //添加同步功能
