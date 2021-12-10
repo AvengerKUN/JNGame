@@ -59,7 +59,7 @@ namespace Assets.Game.Script.ngame.nsync
         /// <summary>
         /// 网络帧 处理
         /// </summary>
-        public void SNTick(AnyArray nFPSInfo) {
+        public void SNTick(DSyncInfos nFPSInfo) {
 
             //获取 NGame 中所有 ActionSync
             List<NGameActor> nGameActions = this.nGame.nGameActors.FindAll((action) => {
@@ -96,6 +96,7 @@ namespace Assets.Game.Script.ngame.nsync
                         actionSync.nProp = (ServerPropEnum)nAction.PropId;
                         actionSync.nId = nAction.Uuid;
                         actionSync.nSyncMode = NSyncMode.Other;
+                        actionSync.isOwner = false;
                         actionSync.nGameSync = this;
                     }
                     nGameActions.Add(actionSync);
@@ -111,6 +112,45 @@ namespace Assets.Game.Script.ngame.nsync
                     actionSync.SNTick(nAction);
                 }
 
+            }
+
+        }
+
+        /// <summary>
+        /// 统一更新Actor权限
+        /// </summary>
+        public void NUpdateActorOwner(DActorOwner owner)
+        {
+            Debug.Log("NUpdateActorOwner");
+
+            //获取 NGame 中所有 ActionSync
+            List<NGameActor> nGameActions = this.nGame.nGameActors.FindAll((action) => {
+                return typeof(ActorSync).IsAssignableFrom(action.GetType());
+            });
+
+            ActorSync actionSync = null;
+
+            //找到 Actor 然后修改权重
+            foreach (NGameActor actor in nGameActions)
+            {
+                actionSync = actor.GetComponent<ActorSync>();
+
+                if (actionSync != null && actionSync.nId == owner.Uuid)
+                    break;
+                else
+                    actionSync = null;
+
+            }
+
+            //如果场景找不到这个对象暂时不处理
+            if (actionSync == null) return;
+
+            if (owner.IsOwn)
+            {
+                actionSync.vOwnWeight = owner.Owner;
+            }
+            else {
+                actionSync.vOtherWeight = owner.Owner;
             }
 
         }

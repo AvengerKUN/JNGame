@@ -7,6 +7,7 @@ using Assets.Game.Script.util;
 using Assets.Game.Script.util.entity;
 using NGame.protobuf;
 using Assets.Game.Script.SyncScript;
+using Assets.Game.Script.plugs;
 
 public class ActorSync : NGameActor
 {
@@ -23,7 +24,24 @@ public class ActorSync : NGameActor
     /// <summary>
     /// 是否是这个物体的拥有者
     /// </summary>
-    private bool isOwner;
+    public bool isOwner;
+
+    /// <summary>
+    /// 其他客户端对这个实体的权重程度
+    /// </summary>
+    public int vOtherWeight;
+
+    /// <summary>
+    /// 自己对这个实体的权重程度
+    /// </summary>
+    public int vOwnWeight;
+
+    public const int MAX_WEIGHT = int.MaxValue;
+
+    /// <summary>
+    /// 缓存上一次的权重数
+    /// </summary>
+    public int vOwnWeightCache;
 
 
     public override void GStart()
@@ -33,7 +51,6 @@ public class ActorSync : NGameActor
         {
             //如果是客户端模式 ( 分配ID )
             case NSyncMode.Client:
-                this.isOwner = true;
                 //创建一个唯一的UID
                 StartCoroutine(
                     ServeApi.Get("/open/udp/next", (res) =>
@@ -41,6 +58,7 @@ public class ActorSync : NGameActor
 
                         if (this.nId == 0)
                         {
+                            this.isOwner = true;
                             NewsContext<int> news = JsonUtility.FromJson<NewsContext<int>>(res);
                             this.nId = news.data;
                             this.initActor();
@@ -62,6 +80,53 @@ public class ActorSync : NGameActor
                 break;
         }
 
+        if(this.nSyncMode == NSyncMode.Server)
+        {
+            this.InitWeight();
+        }
+
+
+    }
+
+    //初始化权重
+    public void InitWeight()
+    {
+        //如果对方权重为 0 则向 服务器要求获取权重
+        if (this.vOtherWeight <= 0)
+        {
+            this.GetActorOwner();
+        }
+    }
+
+    //获取权限
+    public void GetActorOwner()
+    {
+
+        //调用 SNGameUDPAction 服务器
+        SNGameUDPAction sNGameUDPAction = this.ngame.GetRClass(typeof(SNGameUDPAction)) as SNGameUDPAction;
+
+        if (sNGameUDPAction == null) { UnityTask.NextTask(this.GetActorOwner); return; };
+
+        DActorOwner owner = new DActorOwner()
+        {
+            Uuid = this.nId
+        };
+        //将修改的Position的数值添加到服务器
+        sNGameUDPAction.run("nGetActorOwner", new object[] {
+            owner
+        });
+
+        //临时将权限设置为最大
+        this.vOwnWeightCache = this.vOtherWeight;
+        this.vOwnWeight = ActorSync.MAX_WEIGHT;
+
+    }
+
+    //判断是否有控制权限
+    public bool isActorControl()
+    {
+        //如果这个实体拥有者是你 或者 权重你最大
+        return this.isOwner || (this.vOwnWeight > this.vOtherWeight);
     }
 
     public void initActor()
@@ -78,8 +143,9 @@ public class ActorSync : NGameActor
 
         vGroup.UpdateFun = () =>
         {
+
             //如果不是本地控制则不就行同步通讯
-            if (!(this.isOwner)) return;
+            if (!(this.isActorControl())) return;
 
             //调用 SNGameUDPAction 服务器
             SNGameUDPAction sNGameUDPAction = this.ngame.GetRClass(typeof(SNGameUDPAction)) as SNGameUDPAction;

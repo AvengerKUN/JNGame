@@ -8,9 +8,13 @@ namespace Assets.Game.Script.ngame.ncontroller
 {
     class ActionRPC
     {
-        public const int CNGAMEUDPACTION_NGAMESYNCCALLBACK = 1001;
+        public const int CNGameUDPAction_nGameSyncCallBack = 1001;
+        public const int CNGameUDPAction_nUpdateWeight = 1004;
 
-        public const int SNGAMEUDPACTION_ADDSYNCINFO = 1002;
-        public const int SNGAMEUDPACTION_NGAMESYNCSTART = 1003;
+        public const int SNGameUDPAction_addSyncInfo = 1002;
+        public const int SNGameUDPAction_nGameSyncStart = 1003;
+        public const int SNGameUDPAction_nGetActorOwner = 1005;
+
+
     }
 }

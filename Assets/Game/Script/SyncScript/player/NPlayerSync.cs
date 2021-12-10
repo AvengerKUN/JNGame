@@ -18,6 +18,9 @@ namespace Assets.Game.Script.SyncScript.player
         //本地网络帧时间
         private float nTickTime = 0;
 
+        //是否被服务器请求
+        private bool isNRequest;
+
         //同步位置(不是本地生效)
         private Vector3 nPos = Vector3.zero;
         private Vector3 nLPos = Vector3.zero;
@@ -37,9 +40,12 @@ namespace Assets.Game.Script.SyncScript.player
             base.GUpdate();
 
             //更新网络帧数
-            this.NUpdateTick();
+            if(isNRequest)
+            {
+                this.NUpdateTick();
+                this.UpdateSync();
+            }
 
-            this.UpdateSync();
 
         }
 
@@ -92,17 +98,17 @@ namespace Assets.Game.Script.SyncScript.player
                     nRot = Quaternion.Euler(action.Rot.X, action.Rot.Y, action.Rot.Z);
                 }
 
-                Debug.Log(nRot);
-
             }
 
         }
 
         public override void SNTick(NAction action)
         {
-            //如果是本地控制则不受同步
-            if (this.nSyncMode == NSyncMode.Client) return;
 
+            //如果是本地控制则不受同步
+            if (this.isActorControl()) return;
+
+            this.isNRequest = true;
             this.nTickQuery.Enqueue(action);
 
         }
