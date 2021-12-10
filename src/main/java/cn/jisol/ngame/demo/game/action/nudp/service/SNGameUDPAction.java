@@ -3,6 +3,8 @@ package cn.jisol.ngame.demo.game.action.nudp.service;
 import cn.jisol.ngame.client.nclient.UDPClient;
 import cn.jisol.ngame.demo.game.action.ActionRPC;
 import cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.*;
+import cn.jisol.ngame.demo.proto.sync.DActorOwnerOuterClass;
+import cn.jisol.ngame.demo.proto.sync.DSyncInfosOuterClass.*;
 import cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.*;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
 import cn.jisol.ngame.rpc.NGameRPCClass;
@@ -47,7 +49,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
      * 将消息添加到 nSyncModes 中
      * @param action
      */
-    @NUIDMode(ActionRPC.SNGAMEUDPACTION_ADDSYNCINFO)
+    @NUIDMode(ActionRPC.SNGameUDPAction_addSyncInfo)
     @NGameRPCMethod(mode = NRPCMode.UID)
     public void addSyncInfo(NAction action,UDPClient client){
 
@@ -63,7 +65,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
     /**
      * 开始帧同步模式
      */
-    @NUIDMode(ActionRPC.SNGAMEUDPACTION_NGAMESYNCSTART)
+    @NUIDMode(ActionRPC.SNGameUDPAction_nGameSyncStart)
     @NGameRPCMethod(mode = NRPCMode.UID)
     public void nGameSyncStart(UDPClient client){
 
@@ -95,17 +97,51 @@ public class SNGameUDPAction extends NCallServiceImpl {
 
         Map<String, UDPClient> clients = this.rooms.get(uuid);
 
-        AnyArray.Builder anyArray = AnyArray.newBuilder();
+        DSyncInfos.Builder infos = DSyncInfos.newBuilder();
 
         for (int i = 0; i < nFPSInfo.getDs().size(); i++) {
-            anyArray.addMessage(i,Any.pack(nFPSInfo.getDs().get(i)));
+            infos.addMessage(i,Any.pack(nFPSInfo.getDs().get(i)));
         }
 
-        AnyArray build = anyArray.build();
+        //设置帧索引
+        infos.setIndex(nFPSInfo.getI().intValue());
+
+        DSyncInfos build = infos.build();
 
         //发送封装好的 向所有client 调用 nGameSyncCallBack
         for (UDPClient value : clients.values()) {
             value.cNGameUDPAction.nGameSyncCallBack(build);
+        }
+
+    }
+
+
+    //为自己 更新某个 Actor 权限
+    @NUIDMode(ActionRPC.SNGameUDPAction_nGetActorOwner)
+    @NGameRPCMethod(mode = NRPCMode.UID)
+    public void nGetActorOwner(DActorOwnerOuterClass.DActorOwner owner,UDPClient client){
+
+        //获取同步
+        String sId = client.getSession().getSId();
+        NSyncFPSMode<NAction> nActionNSyncFPSMode = null;
+        if(Objects.isNull(nActionNSyncFPSMode = this.nSyncModes.get(sId))){
+            return;
+        }
+
+        System.out.println("SNGameUDPAction - nGetActorOwner");
+
+
+        //获取所有玩家
+        for (UDPClient value : this.rooms.get(sId).values()){
+
+            //写入权重值(判断是否是权限拥有者)
+            DActorOwnerOuterClass.DActorOwner.Builder builder = DActorOwnerOuterClass.DActorOwner.newBuilder()
+                    .setOwner(nActionNSyncFPSMode.getIndex())
+                    .setUuid(owner.getUuid())
+                    .setIsOwn(value.getUuid().equals(client.getUuid()));
+
+            //发送权限
+            value.cNGameUDPAction.nUpdateWeight(builder.build());
         }
 
     }

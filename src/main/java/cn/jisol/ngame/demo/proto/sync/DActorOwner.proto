@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "cn.jisol.ngame.demo.proto.sync";
+
+message DActorOwner {
+    int32 uuid = 1; //Actor UUID
+    int32 owner = 2; //Actor 权重
+    bool isOwn = 3; //是否是自己的权重
+}
+
