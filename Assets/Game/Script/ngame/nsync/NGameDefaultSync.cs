@@ -2,6 +2,7 @@
 using Assets.Game.Script.NGame.action;
 using Assets.Game.Script.NGame.protobuf;
 using Assets.Game.Script.plugs;
+using Assets.Game.Script.SyncScript;
 using Assets.Game.Script.util.entity;
 using NGame.protobuf;
 using System.Collections.Generic;
@@ -94,7 +95,7 @@ namespace Assets.Game.Script.ngame.nsync
                         actionSync.ngame = this.nGame;
                         actionSync.nProp = (ServerPropEnum)nAction.PropId;
                         actionSync.nId = nAction.Uuid;
-                        actionSync.isLocalActor = false;
+                        actionSync.nSyncMode = NSyncMode.Other;
                         actionSync.nGameSync = this;
                     }
                     nGameActions.Add(actionSync);

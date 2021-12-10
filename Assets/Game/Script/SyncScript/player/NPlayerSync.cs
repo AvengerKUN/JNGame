@@ -48,7 +48,7 @@ namespace Assets.Game.Script.SyncScript.player
         /// </summary>
         public void UpdateSync()
         {
-            if (this.isLocalActor) return;
+            if (this.nSyncMode == NSyncMode.Client) return;
 
             this.nTime += Time.deltaTime;
             this.transform.position = Vector3.Lerp(nLPos, nPos, this.nTime / nGameSync.timeServer);
@@ -101,7 +101,7 @@ namespace Assets.Game.Script.SyncScript.player
         public override void SNTick(NAction action)
         {
             //如果是本地控制则不受同步
-            if (this.isLocalActor) return;
+            if (this.nSyncMode == NSyncMode.Client) return;
 
             this.nTickQuery.Enqueue(action);
 

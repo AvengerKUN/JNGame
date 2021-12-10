@@ -993,6 +993,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1754794339}
     - target: {fileID: 2203883332227151980, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
+      propertyPath: nSyncMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203883332227151980, guid: 566a54eb8ec5bcc4ea1aa7e055cf48f6, type: 3}
       propertyPath: isServerActor
       value: 1
       objectReference: {fileID: 0}
@@ -1021,6 +1025,10 @@ PrefabInstance:
       propertyPath: nGameSync
       value: 
       objectReference: {fileID: 1754794339}
+    - target: {fileID: 3632413930737491929, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
+      propertyPath: nSyncMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3632413930737491929, guid: 4804ff61c84803e44b76b924ce309cb9, type: 3}
       propertyPath: isLocalActor
       value: 1
