@@ -1,11 +1,11 @@
 package cn.jisol.ngame.demo.game.action.nudp.service;
 
 import cn.jisol.ngame.client.nclient.UDPClient;
+import cn.jisol.ngame.demo.entity.udp.SActorOwner;
 import cn.jisol.ngame.demo.game.action.ActionRPC;
 import cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.*;
 import cn.jisol.ngame.demo.proto.sync.DActorOwnerOuterClass;
 import cn.jisol.ngame.demo.proto.sync.DSyncInfosOuterClass.*;
-import cn.jisol.ngame.demo.proto.tools.AnyArrayOuterClass.*;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
@@ -20,6 +20,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @NGameRPCClass
@@ -32,6 +33,10 @@ public class SNGameUDPAction extends NCallServiceImpl {
 
     //服务器ID - 客户端列表
     private Map<String, Map<String, UDPClient>> rooms = new HashMap<>();
+
+    //记录Actor的权限组(key = actorid)
+    private Map<String, SActorOwner> dActorOwners = new ConcurrentHashMap<>();
+
 
     @NUIDMode(1)
     @NGameRPCMethod(mode = NRPCMode.UID)
@@ -117,6 +122,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
 
 
     //为自己 更新某个 Actor 权限
+    //获取某个Actor的权限 如果 有人有这个权限则通知别人的
     @NUIDMode(ActionRPC.SNGameUDPAction_nGetActorOwner)
     @NGameRPCMethod(mode = NRPCMode.UID)
     public void nGetActorOwner(DActorOwnerOuterClass.DActorOwner owner,UDPClient client){
@@ -130,17 +136,33 @@ public class SNGameUDPAction extends NCallServiceImpl {
 
         System.out.println("SNGameUDPAction - nGetActorOwner");
 
+        SActorOwner sActorOwner = dActorOwners.get(String.valueOf(owner.getUuid()));
+
+        //找不到权重则创建一个
+        if(Objects.isNull(sActorOwner)){
+            sActorOwner = SActorOwner.builder()
+                    .client(client)
+                    .owner(
+                        DActorOwnerOuterClass.DActorOwner.newBuilder()
+                        .setOwner(nActionNSyncFPSMode.getIndex())
+                        .setUuid(owner.getUuid()).build()
+                    ).build();
+
+            //保存权重
+            dActorOwners.put(String.valueOf(owner.getUuid()),sActorOwner);
+        }
+
 
         //获取所有玩家
         for (UDPClient value : this.rooms.get(sId).values()){
 
             //写入权重值(判断是否是权限拥有者)
             DActorOwnerOuterClass.DActorOwner.Builder builder = DActorOwnerOuterClass.DActorOwner.newBuilder()
-                    .setOwner(nActionNSyncFPSMode.getIndex())
-                    .setUuid(owner.getUuid())
-                    .setIsOwn(value.getUuid().equals(client.getUuid()));
+                    .setOwner(sActorOwner.getOwner().getOwner())
+                    .setUuid(sActorOwner.getOwner().getUuid())
+                    .setIsOwn(value.getUuid().equals(sActorOwner.getClient().getUuid()));
 
-            //发送权限
+            //发送更新权限
             value.cNGameUDPAction.nUpdateWeight(builder.build());
         }
 

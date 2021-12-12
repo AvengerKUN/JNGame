@@ -3,6 +3,7 @@ package cn.jisol.ngame.demo.network.netty.udp;
 
 import cn.jisol.ngame.client.nclient.UDPClient;
 import cn.jisol.ngame.demo.game.action.nudp.service.SNGameUDPAction;
+import cn.jisol.ngame.demo.service.UDPDemoService;
 import cn.jisol.ngame.netty.annotation.AJNetty;
 import cn.jisol.ngame.netty.annotation.control.*;
 import cn.jisol.ngame.netty.network.UDPJNettyNetwork;
@@ -36,6 +37,8 @@ public class GameUDPServer {
 
     @Autowired
     SNGameUDPAction sNGameUDPAction;
+    @Autowired
+    UDPDemoService udpDemoService;
 
     //客户端列表
     public final Map<String, UDPClient> CLIENTS = new ConcurrentHashMap<>();
@@ -47,8 +50,8 @@ public class GameUDPServer {
     public void initNetwork(UDPJNettyNetwork network){
         //因UDP协议无法监听客户端是否在线 所以导致 onClose失效 这里需要吧心跳开启
         network.setOpenAlive(false);
-        network.setVAliveTime(20000);
-        network.setVAliveError(10000);
+        network.setVAliveTime(1000);
+        network.setVAliveError(1000);
     }
 
     /**
@@ -61,6 +64,9 @@ public class GameUDPServer {
 
         //将Clients 赋值给 SNGameUDPAction
         sNGameUDPAction.getRooms().put(sid,this.CLIENTS);
+
+        //启动帧同步
+        sNGameUDPAction.nGameSyncStart(new UDPClient(new UDPSession(sid,null,null,null)));
 
     }
 
@@ -87,8 +93,12 @@ public class GameUDPServer {
 
     @JNClose
     public void onClose(UDPSession session,UDPSessionGroup clients){
+
+        this.udpDemoService.delClientToActorOwner(CLIENTS.get(session.getCId()));
+
         //移除Client
         CLIENTS.remove(session.getCId());
         System.out.println(String.format("【%s】离开服务器 - 当前服务器在线人数:%s",session.getCId(),clients.size()));
+
     }
 }
