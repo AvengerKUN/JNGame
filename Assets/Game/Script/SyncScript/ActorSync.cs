@@ -126,7 +126,7 @@ public class ActorSync : NGameActor
     public bool isActorControl()
     {
         //如果这个实体拥有者是你 或者 权重你最大
-        return this.isOwner || (this.vOwnWeight > this.vOtherWeight);
+        return this.isOwner || this.vOwnWeight > this.vOtherWeight;
     }
 
     public void initActor()

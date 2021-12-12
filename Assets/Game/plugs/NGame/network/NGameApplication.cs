@@ -21,6 +21,7 @@ public class NGameApplication : MonoBehaviour
 
     public string IP = null;
     public int Port = 1000;
+    public int aliveTime = 1000; //心跳时间
 
     private Queue<byte[]> queue; //消息发送队列
     private bool IsRunQueue = false;
@@ -39,6 +40,7 @@ public class NGameApplication : MonoBehaviour
     private IPEndPoint ipReceive; //自己的IP
     private Socket socketReceive; //接收的数据类型
     private Thread connectThread; //接收数据的线程
+    private Timer aliveTimer; //心跳请求线程
 
 
     // Start is called before the first frame update
@@ -73,6 +75,7 @@ public class NGameApplication : MonoBehaviour
         return null;
     }
 
+
     //初始化网络
     void InitNetwork()
     {
@@ -93,9 +96,23 @@ public class NGameApplication : MonoBehaviour
         //开启一个线程连接，必须的，否则主线程卡死
         connectThread = new Thread(new ThreadStart(SocketReceive));
         connectThread.Start();
+        //心跳请求
+        //aliveThread = new Thread(new ThreadStart(UDPAlive));
+        //aliveThread.Start();
+        aliveTimer = new Timer(new TimerCallback((o) => { this.UDPAlive(); }),this,0,this.aliveTime);
 
         Debug.Log("初始化 UDP Client 成功");
 
+    }
+
+
+    /// <summary>
+    /// 向服务器发送心跳请求
+    /// </summary>
+    public void UDPAlive()
+    {
+        //向服务器发送空数据
+        this.SendQueue((new NGameMessage()).ToByteArray());
     }
 
     /// <summary>
@@ -280,6 +297,7 @@ public class NGameApplication : MonoBehaviour
         {
             connectThread.Interrupt();
             connectThread.Abort();
+            aliveTimer.Dispose();
         }
         //最后关闭socket
         if (socketReceive != null)

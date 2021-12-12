@@ -697,6 +697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IP: 127.0.0.1
   Port: 1000
+  aliveTime: 1000
   nGameActors: []
   nNGameSyncs: []
 --- !u!4 &2025460752

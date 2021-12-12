@@ -145,11 +145,13 @@ namespace Assets.Game.Script.ngame.nsync
             //如果场景找不到这个对象暂时不处理
             if (actionSync == null) return;
 
+            //赋值权重
             if (owner.IsOwn)
             {
                 actionSync.vOwnWeight = owner.Owner;
             }
             else {
+                actionSync.vOwnWeight = 0;
                 actionSync.vOtherWeight = owner.Owner;
             }
 
