@@ -153,8 +153,46 @@ public class SNGameUDPAction extends NCallServiceImpl {
         }
 
 
-        //获取所有玩家
-        for (UDPClient value : this.rooms.get(sId).values()){
+        //通知所有玩家ActorOwner
+        this.sActorOwnerNotice(this.rooms.get(sId).values(),sActorOwner);
+
+    }
+
+
+    //为自己 更新某个 Actor 权限
+    //强制获取某个Actor的权限
+    @NUIDMode(ActionRPC.SNGameUDPAction_nGetForceActorOwner)
+    @NGameRPCMethod(mode = NRPCMode.UID)
+    public void nGetForceActorOwner(DActorOwnerOuterClass.DActorOwner owner,UDPClient client){
+        //获取同步
+        String sId = client.getSession().getSId();
+        NSyncFPSMode<NAction> nActionNSyncFPSMode = null;
+        if(Objects.isNull(nActionNSyncFPSMode = this.nSyncModes.get(sId))){
+            return;
+        }
+
+        //创建权重
+        SActorOwner sActorOwner = SActorOwner.builder()
+                .owner(
+                        DActorOwnerOuterClass.DActorOwner.newBuilder()
+                                .setOwner(nActionNSyncFPSMode.getIndex())
+                                .setUuid(owner.getUuid())
+                                .build()
+                )
+                .client(client)
+                .build();
+
+        //保存权重
+        dActorOwners.put(String.valueOf(owner.getUuid()),sActorOwner);
+
+        //通知
+        this.sActorOwnerNotice(this.rooms.get(sId).values(),sActorOwner);
+    }
+
+    //权重通知
+    public void sActorOwnerNotice(Collection<UDPClient> values, SActorOwner sActorOwner){
+
+        for (UDPClient value : values){
 
             //写入权重值(判断是否是权限拥有者)
             DActorOwnerOuterClass.DActorOwner.Builder builder = DActorOwnerOuterClass.DActorOwner.newBuilder()
@@ -167,5 +205,6 @@ public class SNGameUDPAction extends NCallServiceImpl {
         }
 
     }
+
 
 }

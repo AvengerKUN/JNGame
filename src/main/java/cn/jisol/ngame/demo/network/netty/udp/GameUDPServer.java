@@ -49,7 +49,7 @@ public class GameUDPServer {
     @JNInit
     public void initNetwork(UDPJNettyNetwork network){
         //因UDP协议无法监听客户端是否在线 所以导致 onClose失效 这里需要吧心跳开启
-        network.setOpenAlive(false);
+        network.setOpenAlive(true);
         network.setVAliveTime(1000);
         network.setVAliveError(1000);
     }

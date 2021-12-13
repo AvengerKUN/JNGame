@@ -8,5 +8,6 @@ public class ActionRPC {
     public static final int SNGameUDPAction_addSyncInfo = 1002;
     public static final int SNGameUDPAction_nGameSyncStart = 1003;
     public static final int SNGameUDPAction_nGetActorOwner = 1005;
+    public static final int SNGameUDPAction_nGetForceActorOwner = 1006;
 
 }
