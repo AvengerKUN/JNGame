@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets.Game.Script.SyncScript.player
 {
-    class NPlayerSync : ActorSync
+    public class NPlayerSync : ActorSync
     {
 
         private CharacterController controller;

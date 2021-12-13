@@ -13,7 +13,7 @@ namespace Assets.Game.Script.util.entity
     {
         None, //无
         GamePlayer, //玩家
-        Cube, //方块
+        Sphere, //球体
     }
 
     /// <summary>
@@ -24,7 +24,7 @@ namespace Assets.Game.Script.util.entity
         //预制体组
         public static Dictionary<int, GameObject> items = new Dictionary<int, GameObject>() {
             { (int)ServerPropEnum.GamePlayer,Resources.Load<GameObject>("Prefab/remote/GamePlayer") },
-            { (int)ServerPropEnum.Cube,Resources.Load<GameObject>("Prefab/server/Cube") }
+            { (int)ServerPropEnum.Sphere,Resources.Load<GameObject>("Prefab/server/Sphere") }
         };
 
         /// <summary>

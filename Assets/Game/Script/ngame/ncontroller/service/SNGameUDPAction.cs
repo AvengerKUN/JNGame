@@ -50,5 +50,15 @@ namespace Assets.Game.Script.ngame.ncontroller.service
             Debug.Log("nGetActorOwner");
         }
 
+        /// <summary>
+        /// 强制获取Actor权限
+        /// </summary>
+        /// <param name="owner"></param>
+        [NGameRPCMethod, NUIDMode(ActionRPC.SNGameUDPAction_nGetForceActorOwner)]
+        public void nGetForceActorOwner(DActorOwner owner)
+        {
+            Debug.Log("nGetForceActorOwner");
+        }
+
     }
 }

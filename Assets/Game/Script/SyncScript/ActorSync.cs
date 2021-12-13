@@ -22,7 +22,7 @@ public class ActorSync : NGameActor
     public NSyncMode nSyncMode;
 
     /// <summary>
-    /// 是否是这个物体的拥有者
+    /// 是否是这个物体永久的拥有者
     /// </summary>
     public bool isOwner;
 
@@ -111,13 +111,38 @@ public class ActorSync : NGameActor
         {
             Uuid = this.nId
         };
-        //将修改的Position的数值添加到服务器
+        //获取Actor权限
         sNGameUDPAction.run("nGetActorOwner", new object[] {
             owner
         });
 
         //临时将权限设置为最大
-        this.vOwnWeightCache = this.vOtherWeight;
+        //this.vOwnWeightCache = this.vOwnWeight;
+        this.vOwnWeight = ActorSync.MAX_WEIGHT;
+
+    }
+
+    //强制获取权限
+    public void GetForceActorOwner() {
+
+        //调用 SNGameUDPAction 服务器
+        SNGameUDPAction sNGameUDPAction = this.ngame.GetRClass(typeof(SNGameUDPAction)) as SNGameUDPAction;
+
+        //如果有权限则不继续执行
+        if (sNGameUDPAction == null || this.isActorControl()) return;
+
+        DActorOwner owner = new DActorOwner()
+        {
+            Uuid = this.nId
+        };
+
+        //强制获得Actor权限
+        sNGameUDPAction.run("nGetForceActorOwner", new object[] {
+            owner
+        });
+
+        //临时将权限设置为最大
+        //this.vOwnWeightCache = this.vOwnWeight;
         this.vOwnWeight = ActorSync.MAX_WEIGHT;
 
     }
@@ -125,8 +150,15 @@ public class ActorSync : NGameActor
     //判断是否有控制权限
     public bool isActorControl()
     {
-        //如果这个实体拥有者是你 或者 权重你最大
-        return this.isOwner || this.vOwnWeight > this.vOtherWeight;
+        bool owner = this.isOwner;
+
+        //如果模式是 Server 则权重生效
+        if (!owner && nSyncMode.Equals(NSyncMode.Server))
+        {
+            owner = this.vOwnWeight > this.vOtherWeight;
+        }
+
+        return owner;
     }
 
     public void initActor()

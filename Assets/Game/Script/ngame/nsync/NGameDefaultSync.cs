@@ -105,9 +105,6 @@ namespace Assets.Game.Script.ngame.nsync
                 //找到则调用 ActionSync SNTick 没有找到则调用 生成对象
                 if (actionSync != null)
                 {
-
-                    Debug.Log("SNTick");
-
                     //执行同步帧
                     actionSync.SNTick(nAction);
                 }

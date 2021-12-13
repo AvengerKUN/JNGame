@@ -14,6 +14,7 @@ namespace Assets.Game.Script.ngame.ncontroller
         public const int SNGameUDPAction_addSyncInfo = 1002;
         public const int SNGameUDPAction_nGameSyncStart = 1003;
         public const int SNGameUDPAction_nGetActorOwner = 1005;
+        public const int SNGameUDPAction_nGetForceActorOwner = 1006;
 
 
     }
