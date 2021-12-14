@@ -40,12 +40,25 @@ namespace Assets.Game.Script.SyncScript.player
             base.GUpdate();
 
             //更新网络帧数
-            if(isNRequest)
+            if(isNRequest && !this.isActorControl())
             {
                 this.NUpdateTick();
                 this.UpdateSync();
             }
-
+            else
+            {
+                //重新初始
+                if (this.isNRequest)
+                {
+                    this.isNRequest = false;
+                    //清空队列数据
+                    if (nTickQuery.Count > 0) nTickQuery.Clear();
+                    nPos = Vector3.zero;
+                    nLPos = Vector3.zero;
+                    nRot = Quaternion.identity;
+                    nLRot = Quaternion.identity;
+                }
+            }
 
         }
 
@@ -54,8 +67,6 @@ namespace Assets.Game.Script.SyncScript.player
         /// </summary>
         public void UpdateSync()
         {
-            if (this.nSyncMode == NSyncMode.Client) return;
-
             this.nTime += Time.deltaTime;
             this.transform.position = Vector3.Lerp(nLPos, nPos, this.nTime / nGameSync.timeServer);
 
@@ -71,6 +82,7 @@ namespace Assets.Game.Script.SyncScript.player
 
         private void NUpdateTick()
         {
+
 
             this.nTickTime += Time.deltaTime;
 

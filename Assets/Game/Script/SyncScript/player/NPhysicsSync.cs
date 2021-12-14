@@ -1,4 +1,5 @@
 ﻿using Assets.Game.Script.plugs;
+using System.Threading;
 using UnityEngine;
 
 namespace Assets.Game.Script.SyncScript.player
@@ -10,18 +11,21 @@ namespace Assets.Game.Script.SyncScript.player
     {
 
         private Rigidbody rigidbody;
-        private bool lastActorControl = true;
-
-        [Header("控制物理的对象")]
-        public GameObject physics;
-
+        private bool isControl;
 
         public override void GStart()
         {
-            if (physics != null)
-            {
-                this.rigidbody = physics.GetComponent<Rigidbody>();
-            }
+
+            this.rigidbody = this.GetComponent<Rigidbody>();
+
+            //rigidbody.isKinematic = true;
+
+            //Timer timer = new Timer(new TimerCallback((o) => {
+            //    UnityTask.NextTask(() => {
+            //        rigidbody.isKinematic = false;
+            //    });
+            //}), this, 0, 2000);
+
             base.GStart();
         }
 
@@ -29,28 +33,21 @@ namespace Assets.Game.Script.SyncScript.player
         {
 
 
-            if (physics != null)
+            if (rigidbody != null)
             {
-                if (this.isActorControl() != lastActorControl)
-                {
-                    lastActorControl = this.isActorControl();
-
-                    if (lastActorControl) {
-
-                    }
-                    else
-                    {
-                        physics.SetActive(false);
-                    }
-
-                }
+                rigidbody.isKinematic = !this.isActorControl();
+                //if (rigidbody.isKinematic)
+                //{
+                //    transform.Translate(new Vector3() { x = 0.001f, y = 0, z = 0 });
+                //}
             }
-
-            if (lastActorControl) {
-                //更新物理位置
-                this.transform.position = this.physics.transform.position;
-                this.transform.rotation = this.physics.transform.rotation;
-            }
+            //if (rigidbody != null)
+            //{
+            //    rigidbody.isKinematic = !isControl;
+            //    if (rigidbody.isKinematic) {
+            //        transform.Translate(new Vector3() { x=0.001f,y=0,z=0});
+            //    }
+            //}
 
             base.GUpdate();
         }
@@ -70,6 +67,9 @@ namespace Assets.Game.Script.SyncScript.player
 
             //调用强制获取权限 将Actor占为己有
             this.GetForceActorOwner();
+
+            //isControl = true;
+
         }
 
 
