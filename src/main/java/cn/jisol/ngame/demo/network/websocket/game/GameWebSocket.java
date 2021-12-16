@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
+/**
+ * Cocos 状态帧同步的测试类
+ */
 @ServerEndpoint(
     value = "/game/{roomId}/{uuid}",
     encoders = {DefaultProtoBufEncoder.class},
@@ -69,7 +73,6 @@ public class GameWebSocket {
 
     @OnError
     public void onError(Session session, Throwable t){
-        t.printStackTrace();
     }
 
 }

@@ -19,8 +19,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+
 /**
  * 启动Netty UDP
+ *
+ * Unity 状态帧同步的测试类
+ *
  */
 @AJNetty(
     port = 1000,
@@ -66,7 +71,7 @@ public class GameUDPServer {
         sNGameUDPAction.getRooms().put(sid,this.CLIENTS);
 
         //启动帧同步
-        sNGameUDPAction.nGameSyncStart(new UDPClient(new UDPSession(sid,null,null,null)));
+//        sNGameUDPAction.nGameSyncStart(new UDPClient(new UDPSession(sid,null,null,null)));
 
     }
 
