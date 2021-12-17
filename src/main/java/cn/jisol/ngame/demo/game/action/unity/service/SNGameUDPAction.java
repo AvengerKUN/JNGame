@@ -1,6 +1,6 @@
-package cn.jisol.ngame.demo.game.action.nudp.service;
+package cn.jisol.ngame.demo.game.action.unity.service;
 
-import cn.jisol.ngame.client.nclient.UDPClient;
+import cn.jisol.ngame.demo.client.UnityNClient;
 import cn.jisol.ngame.demo.entity.udp.SActorOwner;
 import cn.jisol.ngame.demo.game.action.ActionRPC;
 import cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo.*;
@@ -32,7 +32,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
     private Map<String, NSyncFPSMode<NAction>> nSyncModes = new HashMap<>();
 
     //服务器ID - 客户端列表
-    private Map<String, Map<String, UDPClient>> rooms = new HashMap<>();
+    private Map<String, Map<String, UnityNClient>> rooms = new HashMap<>();
 
     //记录Actor的权限组(key = actorid)
     private Map<String, SActorOwner> dActorOwners = new ConcurrentHashMap<>();
@@ -56,7 +56,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
      */
     @NUIDMode(ActionRPC.SNGameUDPAction_addSyncInfo)
     @NGameRPCMethod(mode = NRPCMode.UID)
-    public void addSyncInfo(NAction action,UDPClient client){
+    public void addSyncInfo(NAction action, UnityNClient client){
 
         String uuid = client.getSession().getSId();
 
@@ -72,7 +72,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
      */
     @NUIDMode(ActionRPC.SNGameUDPAction_nGameSyncStart)
     @NGameRPCMethod(mode = NRPCMode.UID)
-    public void nGameSyncStart(UDPClient client){
+    public void nGameSyncStart(UnityNClient client){
 
         String uuid = client.getSession().getSId();
 
@@ -100,7 +100,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
     @NSyncFPSMethod
     public void nGameSyncCallBack(String uuid, NFPSInfo<NAction> nFPSInfo){
 
-        Map<String, UDPClient> clients = this.rooms.get(uuid);
+        Map<String, UnityNClient> clients = this.rooms.get(uuid);
 
         DSyncInfos.Builder infos = DSyncInfos.newBuilder();
 
@@ -114,7 +114,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
         DSyncInfos build = infos.build();
 
         //发送封装好的 向所有client 调用 nGameSyncCallBack
-        for (UDPClient value : clients.values()) {
+        for (UnityNClient value : clients.values()) {
             value.cNGameUDPAction.nGameSyncCallBack(build);
         }
 
@@ -125,7 +125,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
     //获取某个Actor的权限 如果 有人有这个权限则通知别人的
     @NUIDMode(ActionRPC.SNGameUDPAction_nGetActorOwner)
     @NGameRPCMethod(mode = NRPCMode.UID)
-    public void nGetActorOwner(DActorOwnerOuterClass.DActorOwner owner,UDPClient client){
+    public void nGetActorOwner(DActorOwnerOuterClass.DActorOwner owner, UnityNClient client){
 
         //获取同步
         String sId = client.getSession().getSId();
@@ -163,7 +163,7 @@ public class SNGameUDPAction extends NCallServiceImpl {
     //强制获取某个Actor的权限
     @NUIDMode(ActionRPC.SNGameUDPAction_nGetForceActorOwner)
     @NGameRPCMethod(mode = NRPCMode.UID)
-    public void nGetForceActorOwner(DActorOwnerOuterClass.DActorOwner owner,UDPClient client){
+    public void nGetForceActorOwner(DActorOwnerOuterClass.DActorOwner owner, UnityNClient client){
         //获取同步
         String sId = client.getSession().getSId();
         NSyncFPSMode<NAction> nActionNSyncFPSMode = null;
@@ -190,9 +190,9 @@ public class SNGameUDPAction extends NCallServiceImpl {
     }
 
     //权重通知
-    public void sActorOwnerNotice(Collection<UDPClient> values, SActorOwner sActorOwner){
+    public void sActorOwnerNotice(Collection<UnityNClient> values, SActorOwner sActorOwner){
 
-        for (UDPClient value : values){
+        for (UnityNClient value : values){
 
             //写入权重值(判断是否是权限拥有者)
             DActorOwnerOuterClass.DActorOwner.Builder builder = DActorOwnerOuterClass.DActorOwner.newBuilder()

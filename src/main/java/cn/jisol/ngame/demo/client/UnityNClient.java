@@ -1,24 +1,28 @@
-package cn.jisol.ngame.client.nclient;
+package cn.jisol.ngame.demo.client;
 
 import cn.jisol.ngame.client.tool.QueueNClient;
-import cn.jisol.ngame.demo.game.action.nudp.client.CNGameUDPAction;
+import cn.jisol.ngame.demo.game.action.unity.client.CNGameUDPAction;
 import cn.jisol.ngame.netty.network.udp.session.UDPSession;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.rpc.CNGameCActionValue;
 import cn.jisol.ngame.rpc.NGameRPC;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class UDPClient extends QueueNClient<NGameMessage,NGameMessage, UDPSession> {
+/**
+ * Demo Unity 状态帧同步 的客户类
+ */
+
+public class UnityNClient extends QueueNClient<NGameMessage,NGameMessage, UDPSession> {
 
     @CNGameCActionValue
     public CNGameUDPAction cNGameUDPAction;
 
 
-    public UDPClient(UDPSession session) {
+    public UnityNClient(UDPSession session) {
         super(session.getCId(),session);
     }
 
-    public UDPClient(String userId,UDPSession session) {
+    public UnityNClient(String userId, UDPSession session) {
         super(userId,session);
     }
 

@@ -1,8 +1,8 @@
 package cn.jisol.ngame.demo.network.netty.udp;
 
 
-import cn.jisol.ngame.client.nclient.UDPClient;
-import cn.jisol.ngame.demo.game.action.nudp.service.SNGameUDPAction;
+import cn.jisol.ngame.demo.client.UnityNClient;
+import cn.jisol.ngame.demo.game.action.unity.service.SNGameUDPAction;
 import cn.jisol.ngame.demo.service.UDPDemoService;
 import cn.jisol.ngame.netty.annotation.AJNetty;
 import cn.jisol.ngame.netty.annotation.control.*;
@@ -46,7 +46,7 @@ public class GameUDPServer {
     UDPDemoService udpDemoService;
 
     //客户端列表
-    public final Map<String, UDPClient> CLIENTS = new ConcurrentHashMap<>();
+    public final Map<String, UnityNClient> CLIENTS = new ConcurrentHashMap<>();
 
     /**
      * 初始化开始 - 用于修改Network信息
@@ -71,21 +71,21 @@ public class GameUDPServer {
         sNGameUDPAction.getRooms().put(sid,this.CLIENTS);
 
         //启动帧同步
-//        sNGameUDPAction.nGameSyncStart(new UDPClient(new UDPSession(sid,null,null,null)));
+//        sNGameUDPAction.nGameSyncStart(new UnityNClient(new UDPSession(sid,null,null,null)));
 
     }
 
     @JNOpen
     public void onOpen(UDPSession session,UDPSessionGroup clients){
         //将session添加到Clients中
-        CLIENTS.put(session.getCId(),new UDPClient(session));
+        CLIENTS.put(session.getCId(),new UnityNClient(session));
         System.out.println(String.format("【%s】连接服务器 - 当前服务器在线人数:%s",session.getCId(),clients.size()));
     }
 
     @JNMessage
     public void onMessage(UDPSession session,UDPSessionGroup clients, NGameMessage message,String text){
         //查询clients中的client
-        UDPClient client = null;
+        UnityNClient client = null;
         if(Objects.isNull(client = CLIENTS.get(session.getCId()))) this.onOpen(session,clients);
 
 //        System.out.println(String.format("【%s】接收到消息UID:%s action:%s event:%s",session.getCId(),message.getUid(),message.getAction(),message.getEvent()));

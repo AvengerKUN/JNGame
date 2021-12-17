@@ -1,16 +1,13 @@
 package cn.jisol.ngame.demo.service;
 
-import cn.jisol.ngame.client.nclient.UDPClient;
+import cn.jisol.ngame.demo.client.UnityNClient;
 import cn.jisol.ngame.demo.entity.udp.SActorOwner;
-import cn.jisol.ngame.demo.game.action.nudp.service.SNGameUDPAction;
-import cn.jisol.ngame.netty.network.udp.session.UDPSession;
+import cn.jisol.ngame.demo.game.action.unity.service.SNGameUDPAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class UDPDemoService {
@@ -19,7 +16,7 @@ public class UDPDemoService {
     SNGameUDPAction sNGameUDPAction;
 
     //删除某个用户的所有Actor权重
-    public void delClientToActorOwner(UDPClient client){
+    public void delClientToActorOwner(UnityNClient client){
 
         Map<String, SActorOwner> dActorOwners = sNGameUDPAction.getDActorOwners();
         Iterator<SActorOwner> values = dActorOwners.values().iterator();

@@ -1,10 +1,12 @@
 package cn.jisol.ngame.demo.network.websocket.game;
 
-import cn.jisol.ngame.client.nclient.SocketNClient;
+import cn.jisol.ngame.demo.client.CocosNClient;
+import cn.jisol.ngame.demo.game.action.cocos.frame.service.SNCocosFrameAction;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.room.defalut.DefaultNRoom;
 import cn.jisol.ngame.demo.network.websocket.decoders.DefaultProtoBufDecoder;
 import cn.jisol.ngame.demo.network.websocket.encoders.DefaultProtoBufEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
@@ -40,7 +42,7 @@ public class GameWebSocket {
             ROOMS.put(room.getUuid(),room);
         }
 
-        SocketNClient client = new SocketNClient(uuid,session);
+        CocosNClient client = new CocosNClient(uuid,session);
         room.addClient(client);
         client.setRoom(room);
 

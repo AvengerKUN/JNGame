@@ -1,4 +1,4 @@
-package cn.jisol.ngame.demo.game.action.nwebsokcet.client;
+package cn.jisol.ngame.demo.game.action.cocos.client;
 
 import cn.jisol.ngame.demo.dto.DSyncMessage;
 import cn.jisol.ngame.demo.proto.snake.GSnakeMessage;

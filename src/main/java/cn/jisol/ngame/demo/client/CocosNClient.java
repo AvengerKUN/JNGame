@@ -1,7 +1,7 @@
-package cn.jisol.ngame.client.nclient;
+package cn.jisol.ngame.demo.client;
 
 import cn.jisol.ngame.client.tool.QueueNClient;
-import cn.jisol.ngame.demo.game.action.nwebsokcet.client.CNGameAction;
+import cn.jisol.ngame.demo.game.action.cocos.client.CNGameAction;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.room.defalut.DefaultNRoom;
 import cn.jisol.ngame.rpc.CNGameCActionValue;
@@ -12,20 +12,23 @@ import lombok.Setter;
 
 import javax.websocket.Session;
 
+/**
+ * Demo Cocos 状态帧同步 的客户类
+ */
 @Setter
 @Getter
-public class SocketNClient extends QueueNClient<NGameMessage,NGameMessage,Session> {
+public class CocosNClient extends QueueNClient<NGameMessage,NGameMessage,Session> {
 
     @CNGameCActionValue
     public CNGameAction cNGameAction;
 
     private DefaultNRoom room;
 
-    public SocketNClient(Session session) {
+    public CocosNClient(Session session) {
         super(session.getId(),session);
     }
 
-    public SocketNClient(String userId,Session session) {
+    public CocosNClient(String userId, Session session) {
         super(userId,session);
     }
 

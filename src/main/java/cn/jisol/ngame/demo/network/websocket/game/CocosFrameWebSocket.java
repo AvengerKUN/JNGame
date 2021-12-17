@@ -1,9 +1,13 @@
 package cn.jisol.ngame.demo.network.websocket.game;
 
-import cn.jisol.ngame.client.nclient.SocketNClient;
+import cn.jisol.ngame.demo.client.CocosFrameNClient;
+import cn.jisol.ngame.demo.client.CocosNClient;
+import cn.jisol.ngame.demo.game.action.cocos.frame.service.SNCocosFrameAction;
 import cn.jisol.ngame.demo.network.websocket.decoders.DefaultProtoBufDecoder;
 import cn.jisol.ngame.demo.network.websocket.encoders.DefaultProtoBufEncoder;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass;
+import cn.jisol.ngame.spring.SpringBeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
@@ -25,18 +29,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CocosFrameWebSocket {
 
     //客户端列表
-    public static final Map<String, SocketNClient> CLIENTS = new ConcurrentHashMap<>();
+    public static final Map<String, CocosFrameNClient> CLIENTS = new ConcurrentHashMap<>();
 
     @OnOpen
     public void onOpen(Session session){
 
         String uuid = session.getPathParameters().get("uuid");
 
+        //如果是第一个玩家加入游戏则开启同步
+        if (CLIENTS.values().size() <= 0){
+            SNCocosFrameAction snCocosFrameAction = SpringBeanUtils.getBean(SNCocosFrameAction.class);
+            snCocosFrameAction.clients = CLIENTS;
+            snCocosFrameAction.nGameSyncStart();
+        }
+
+
         //创建客户端对象
-        SocketNClient client = null;
+        CocosFrameNClient client = null;
 
         if(Objects.isNull(CLIENTS.get(uuid))){
-            client = new SocketNClient(uuid,session);
+            client = new CocosFrameNClient(uuid,session);
             System.out.println(String.format("%s 连接 Cocos 帧同步 WebSocket服务器成功",client.getUuid()));
             CLIENTS.put(uuid,client);
         }
@@ -49,7 +61,7 @@ public class CocosFrameWebSocket {
         String uuid = session.getPathParameters().get("uuid");
 
         //找到用户
-        SocketNClient client = null;
+        CocosFrameNClient client = null;
         if(Objects.nonNull(client = CLIENTS.get(uuid))){
             //调用客户端消息统一接收
             client.onMessage(message);
