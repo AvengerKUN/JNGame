@@ -33,7 +33,7 @@ export default class NGameApplication extends cc.Component {
     static uIdMethods = {};
 
     //NGameApplication 列表
-    static applications:Map<string,NGameApplication> = new Map();
+    static applications:Map<String,NGameApplication> = new Map();
 
 
     onLoad(){
@@ -116,7 +116,7 @@ export default class NGameApplication extends cc.Component {
         console.log(this.socket.readyState);
 
         //如果未连接成功则返回
-        if(this.socket.readyState !== 1) return;
+        if(this.socket.readyState !== 1 || this.messages.length > 0) return;
 
         //发送消息
         while(message = this.messages.shift()){
