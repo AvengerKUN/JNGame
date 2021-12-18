@@ -1,7 +1,15 @@
 # JNGame
 
 #### 介绍
-NGame 是一个Java网络游戏服务器框架 实现基础功能 可以让使用者更方便的编写业务 
+NGame 是一个Java网络游戏服务器框架  
+拥有RPC调用方式 使用 WebSocket UDP 成熟 注解API 立即启动各种服务器  
+
+NGame还有 各种游戏引擎同步DEMO (cocos,unity)   
+和 各种同步案例(帧同步,状态同步,状态帧同步)  
+
+持续更新中...  
+
+遇到问题请联系QQ:2858626794  
 
 #### 软件架构
 master - JNGame 服务端代码 (包含NGame核心代码和各个Demo的服务端)
