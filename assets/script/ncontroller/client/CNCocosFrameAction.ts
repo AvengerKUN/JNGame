@@ -11,7 +11,7 @@ export class CNCocosFrameAction {
      * 接收帧同步
      */
     @NGameRPCFun()
-    nGameSyncCallBack(nFPSInfo:NFrameInfo){
+    nGameSyncInputCallBack(nFPSInfo:NFrameInfo){
 
         let nSyncWorld:NGameSyncWorld = null;
         if(!(nSyncWorld = CNCocosFrameAction.nSyncWorld)) return;

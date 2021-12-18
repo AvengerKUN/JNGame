@@ -130,7 +130,7 @@ export function NGameRPCFun(mode:NRPCMode = NRPCMode.DEFAULT) {
 
     
         descriptor.value = function (...args) {
-    
+
             //调用方法接收返回值
             const result = original.call(this, ...args);
 

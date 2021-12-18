@@ -109,14 +109,12 @@ export default class NGameApplication extends cc.Component {
 
     //发送消息
     send(message:NGameMessage = null){
-        
+
         //将消息添加到队列中
         if(message) this.messages.push(message);
 
-        console.log(this.socket.readyState);
-
         //如果未连接成功则返回
-        if(this.socket.readyState !== 1 || this.messages.length > 0) return;
+        if(this.socket.readyState !== 1 || this.messages.length <= 0) return;
 
         //发送消息
         while(message = this.messages.shift()){
