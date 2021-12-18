@@ -195,6 +195,16 @@ master - JNGame 服务端代码 (包含NGame核心代码和各个Demo的服务�
             public Map<String, CocosFrameNClient> clients = null;
             
             /**
+             * 向帧同步添加输入
+             * @param inputs 输入
+             */
+            @NGameRPCMethod
+            public void nGameFrameInput(@NRPCParam("inputs") List<Object> inputs){
+                if(Objects.isNull(nSyncFPSMode)) return;
+                nSyncFPSMode.addFPSInfos(inputs); //向当前帧添加输入
+            }
+            
+            /**
              * 启动帧同步
              */
             public void nGameSyncStart(){
