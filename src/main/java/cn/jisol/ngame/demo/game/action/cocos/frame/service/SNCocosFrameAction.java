@@ -55,7 +55,7 @@ public class SNCocosFrameAction extends NCallServiceImpl {
 
         //创建帧同步对象
         nSyncFPSMode = new NSyncFPSMode<>();
-        nSyncFPSMode.setIntervalTime(1000/10); //设置同步帧
+        nSyncFPSMode.setIntervalTime(1000/20); //设置同步帧
         //添加同步功能
         addRegister(nSyncFPSMode);
 
