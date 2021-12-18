@@ -5,7 +5,7 @@ NGame 是一个Java网络游戏服务器框架 基于 Spring Boot 编写 完美�
 拥有RPC调用方式 使用 WebSocket UDP 成熟 注解API 立即启动各种服务器  
 
 NGame还有 各种游戏引擎同步DEMO (cocos,unity)   
-和 各种同步案例(帧同步,状态同步,状态帧同步)  
+和 各种同步案例(帧同步,状态帧同步)  
 
 持续更新中...  
 
