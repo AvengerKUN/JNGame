@@ -180,7 +180,7 @@
       "array": [
         0,
         0,
-        360.2665679743265,
+        343.80316160834764,
         0,
         0,
         0,
@@ -1293,7 +1293,7 @@
     "nGameSyncWorld": {
       "__id__": 33
     },
-    "nId": -1,
+    "nId": 1001,
     "_id": "31RPh7IgBGL6viKaesxZTy"
   },
   {
@@ -1304,8 +1304,9 @@
       "__id__": 34
     },
     "_enabled": true,
-    "nSyncTime": 100,
+    "nSyncTime": 50,
     "nMaxFrameBan": 5,
+    "nDivideFrame": 3,
     "_id": "1fYKXg+R9K2Z7B/U4ImnZu"
   },
   {

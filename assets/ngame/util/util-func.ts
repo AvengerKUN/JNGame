@@ -15,3 +15,9 @@ export const uGetFunArgs = (func) => {
         return arg;
     });
 }
+
+export const uWait = (dt) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve,dt)
+    })
+}

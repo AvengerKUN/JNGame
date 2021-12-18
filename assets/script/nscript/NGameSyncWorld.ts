@@ -1,3 +1,4 @@
+import { newReededRandom } from "../../ngame/util/util-ngame";
 import NGameSyncComponent from "../ncomponent/NGameSyncComponent";
 import { CNCocosFrameAction } from "../ncontroller/client/CNCocosFrameAction";
 import SNCocosFrameAction from "../ncontroller/service/SNCocosFrameAction";
@@ -20,10 +21,14 @@ const {ccclass, property} = cc._decorator;
 export default class NGameSyncWorld extends cc.Component {
 
     @property({displayName:'同步时间 (和服务器保持一致)',type:cc.Integer})
-    nSyncTime:Number = 1000/10;
+    nSyncTime:number = 1000/10;
 
     @property({displayName:'大于多少帧进行追帧',type:cc.Integer})
-    nMaxFrameBan:Number = 5;
+    nMaxFrameBan:number = 6;
+
+    //分帧数
+    @property({displayName:'将服务器帧数进行平分',type:cc.Integer})
+    nDivideFrame:number = 6;
 
     //帧队列
     nFrameQueue:NFrameInfo[] = [];
@@ -32,6 +37,12 @@ export default class NGameSyncWorld extends cc.Component {
 
     //需要同步的Actor
     nSyncActors:NGameSyncComponent<NSyncInput>[] = [];
+
+    //初始化随机
+    randSyncNumber:Function = newReededRandom(1);
+
+    //是否处理帧
+    isRunFrame:boolean = false;
 
     // //缓存帧
     // nFrameCacheQueue:NFrameInfo[] = [];
@@ -61,6 +72,7 @@ export default class NGameSyncWorld extends cc.Component {
         this.nSyncActors.forEach(nGameSync => {
 
             let actor:NInputMessage = new NInputMessage();
+
             actor.nId = nGameSync.nId;
             actor.input = nGameSync.input;
 
@@ -83,8 +95,16 @@ export default class NGameSyncWorld extends cc.Component {
      */
     addFrame(frame:NFrameInfo){
         console.log(frame);
-        this.nFrameQueue.push(frame)
-        this.useFrame();
+
+        //将服务器帧数进行平分
+        let frames:NFrameInfo[] = [...Array(this.nDivideFrame)].map((item,index) => {
+            return index === 0 ? frame : new NFrameInfo();
+        })
+        this.nFrameQueue = this.nFrameQueue.concat(frames)
+
+        //如果没有处理帧则激活帧
+        if(!this.isRunFrame)
+            this.useFrame();
     }
 
     /**
@@ -92,32 +112,57 @@ export default class NGameSyncWorld extends cc.Component {
      */
     useFrame(){
 
+        this.isRunFrame = true;
+        
+        let dt:number = this.nSyncTime / this.nDivideFrame;
+
         //取出帧
         let frame:NFrameInfo = this.nFrameQueue.shift();
-        this.nLocalFrame = frame.i;
+
+        if(!frame) {
+            this.isRunFrame = false;
+            return;
+        };
+        
+        this.nLocalFrame = frame.i || this.nLocalFrame;
+
+        //循环调用通知结束上一帧
+        this.nSyncActors.forEach(actor => {
+            if(actor.inputExecute)
+                actor.nFrameStep(actor.inputExecute);
+        });
 
         //循环处理帧数据
         this.nSyncActors.forEach(actor => {
-            //初始默认输入
-            let input:NSyncInput = actor.initInput();
 
             //找到帧数据中的actor输入
-            frame.ds.forEach(frame => {
-                if(frame.nId === actor.nId) input = frame.input;
+            (frame.ds || []).forEach(frame => {
+                if(frame.nId === actor.nId) {
+                    //将帧操作添加到指定控制的Actor中
+                    actor.unInputSyncs.push(frame.input);
+                }
             });
             
-            //更新
-            actor.nUpdate(this.nSyncTime,input);
+            //更新 并且在未处理输入中取出操作 如果没有则初始化一个操作
+            actor.nUpdate(
+                dt,actor.vNextInputSync(),this.nSyncTime //获取下一帧操作
+            );
         })
         //执行物理帧
         const physics:any = cc.director.getPhysicsManager();
         physics.enabled = true;
-        physics.update(this.nSyncTime);
-        physics.FIXED_TIME_STEP = this.nSyncTime;
+        physics.update(dt / 1000);
+        physics.FIXED_TIME_STEP = dt / 1000;
         physics.enabled = false;
 
         //大于nMaxFrameBan 进行 追帧
-        if(this.nFrameQueue.length > this.nMaxFrameBan) this.useFrame();
+        if(this.nFrameQueue.length > this.nMaxFrameBan) {
+            this.useFrame()
+        }else if(this.nFrameQueue.length > 0) { //正常继续执行
+            setTimeout(this.useFrame.bind(this),dt)
+        }else{
+            this.isRunFrame = false;
+        }
 
     }
 

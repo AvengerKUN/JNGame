@@ -23,7 +23,10 @@ export default abstract class NGameSyncComponent<InputSync extends NSyncInput> e
      */
     unInputSyncs:Array<InputSync> = [];
 
-    //当前输入数据
+    //当前input执行
+    inputExecute:InputSync = null;
+
+    //当前输入
     public input:InputSync = null;
 
     public getInput():InputSync{
@@ -31,18 +34,31 @@ export default abstract class NGameSyncComponent<InputSync extends NSyncInput> e
         return this.input;
     }
 
-    abstract initInput():InputSync;
 
     onLoad(){
         //添加同步Actor
         this.nGameSyncWorld.nSyncActors.push(this);
     }
 
+    //初始化输入对象
+    abstract initInput():InputSync;
+
     /**
      * 同步逻辑帧
      * @param dt 同步间隔时间
      */
-    abstract nUpdate(dt:Number,input:InputSync);
+    abstract nUpdate(dt:number,input:InputSync,nt:number);
+
+    //当前帧结束
+    abstract nFrameStep(input:InputSync);
+
+    //获取下一帧输入
+    vNextInputSync(){
+        this.inputExecute = this.unInputSyncs.length ? this.unInputSyncs.shift() : this.initInput();
+        return this.inputExecute;
+    }
+
+    
 
     //定时保存操作 到 服务器
 

@@ -14,11 +14,10 @@ export default class Main extends cc.Component {
 
     onLoad () {
 
-        cc.director.getCollisionManager().enabled = true;
         let manager = cc.director.getPhysicsManager();
-        manager.enabled = true;
+        manager.enabled = true; //开启物理
         manager.enabledAccumulator = true;
-        manager.FIXED_TIME_STEP = 1/30;
+        // manager.FIXED_TIME_STEP = 1/30;
         manager.gravity = cc.v2(0, -630);
 
     }

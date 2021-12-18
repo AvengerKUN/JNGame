@@ -19,6 +19,6 @@ export class NInputMessage {
 
 //帧数据实体
 export class NFrameInfo {
-    i:Number = 0;
+    i:Number = null;
     ds:Array<NInputMessage> = null;
 }
