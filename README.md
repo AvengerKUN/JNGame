@@ -16,10 +16,10 @@ master - JNGame 服务端代码 (包含NGame核心代码和各个Demo的服务�
 
 ##### --- cocos ---
 1.cocos - cocos 游戏引擎案例 - 状态帧同步 (物理权限交接) - [大致完成]  
-2.cocos-frame - cocos 游戏引擎案例 - 帧同步 - [计划编写]
+2.cocos-frame - cocos 游戏引擎案例 - 帧同步 - [完成 50%]
 
 ##### --- unity ---
-1.unity - unity 游戏引擎案例 - 状态帧同步 (物理权限交接) - [完成 50%]  
+1.unity - unity 游戏引擎案例 - 状态帧同步 (物理权限交接) - [完成 60%]  
 2.unity-frame - unity 游戏引擎案例 - 帧同步 - [计划编写]
 
 ##### --- UE4 [暂时没有想法去实现] ---
