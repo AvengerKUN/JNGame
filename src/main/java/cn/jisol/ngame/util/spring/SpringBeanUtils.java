@@ -1,4 +1,4 @@
-package cn.jisol.ngame.spring;
+package cn.jisol.ngame.util.spring;
 
 import org.springframework.context.ApplicationContext;
 

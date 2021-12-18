@@ -1,13 +1,11 @@
 package cn.jisol.ngame.demo.network.websocket.game;
 
 import cn.jisol.ngame.demo.client.CocosFrameNClient;
-import cn.jisol.ngame.demo.client.CocosNClient;
 import cn.jisol.ngame.demo.game.action.cocos.frame.service.SNCocosFrameAction;
 import cn.jisol.ngame.demo.network.websocket.decoders.DefaultProtoBufDecoder;
 import cn.jisol.ngame.demo.network.websocket.encoders.DefaultProtoBufEncoder;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass;
-import cn.jisol.ngame.spring.SpringBeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.jisol.ngame.util.spring.SpringBeanUtils;
 import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;

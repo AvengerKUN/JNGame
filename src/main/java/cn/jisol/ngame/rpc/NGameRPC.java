@@ -6,7 +6,7 @@ import cn.hutool.json.JSONUtil;
 import cn.jisol.ngame.client.NClient;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass.*;
 import cn.jisol.ngame.rpc.mode.uid.NUIDMode;
-import cn.jisol.ngame.spring.SpringBeanUtils;
+import cn.jisol.ngame.util.spring.SpringBeanUtils;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import org.springframework.util.StringUtils;
