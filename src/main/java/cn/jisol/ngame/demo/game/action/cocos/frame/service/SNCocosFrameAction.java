@@ -6,11 +6,13 @@ import cn.jisol.ngame.demo.proto.maction.MSyncFPSInfo;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
 import cn.jisol.ngame.rpc.NGameRPCClass;
 import cn.jisol.ngame.rpc.NGameRPCMethod;
+import cn.jisol.ngame.rpc.NRPCParam;
 import cn.jisol.ngame.sync.fps.NFPSInfo;
 import cn.jisol.ngame.sync.fps.NSyncFPSMethod;
 import cn.jisol.ngame.sync.fps.NSyncFPSMode;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +34,16 @@ public class SNCocosFrameAction extends NCallServiceImpl {
     @NGameRPCMethod
     public void nHelloWorld(CocosFrameNClient client){
         System.out.println(String.format("%s客户端 - nHelloWorld",client.getUuid()));
+    }
+
+    /**
+     * 向帧同步添加输入
+     * @param inputs 输入
+     */
+    @NGameRPCMethod
+    public void nGameFrameInput(@NRPCParam("inputs") List<Object> inputs){
+        if(Objects.isNull(nSyncFPSMode)) return;
+        nSyncFPSMode.addFPSInfos(inputs);
     }
 
     /**
@@ -64,7 +76,7 @@ public class SNCocosFrameAction extends NCallServiceImpl {
 
         //向所有客户端 发送帧数据
         clients.values().forEach(client -> {
-            client.getCnCocosFrameAction().nGameSyncCallBack(nFPSInfo);
+            client.getCnCocosFrameAction().nGameSyncInputCallBack(nFPSInfo);
         });
 
     }

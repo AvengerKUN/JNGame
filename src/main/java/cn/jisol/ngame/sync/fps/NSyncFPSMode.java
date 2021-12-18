@@ -109,6 +109,15 @@ public class NSyncFPSMode<D> implements NSyncMode {
         return true;
 
     }
+
+    //将数据插入到最新帧
+    public boolean addFPSInfos(List<D> info){
+
+        if(!this.isExecute || Objects.isNull(dataList) || dataList.size() < 1) return false;
+        dataList.get(dataList.size() - 1).addInfos(info);
+        return true;
+
+    }
     //将数据插入到最新帧 唯一存储 用于限制 客户端重复提交
     public boolean addFPSInfo(String key,D info){
 

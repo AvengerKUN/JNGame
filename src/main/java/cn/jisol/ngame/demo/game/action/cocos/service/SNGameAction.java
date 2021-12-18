@@ -4,7 +4,6 @@ import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.ArrayUtil;
 import cn.jisol.ngame.demo.client.CocosNClient;
 import cn.jisol.ngame.demo.dto.DSyncMessage;
-import cn.jisol.ngame.demo.entity.GOwner;
 import cn.jisol.ngame.demo.entity.action.GAction;
 import cn.jisol.ngame.ncall.NCall;
 import cn.jisol.ngame.ncall.NCallServiceImpl;
@@ -19,6 +18,7 @@ import cn.jisol.ngame.sync.fps.NFPSInfo;
 import cn.jisol.ngame.sync.fps.NSyncFPSMethod;
 import cn.jisol.ngame.sync.fps.NSyncFPSMode;
 import org.springframework.stereotype.Component;
+import cn.jisol.ngame.demo.entity.GOwner;
 
 import java.util.*;
 
