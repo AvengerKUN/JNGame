@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SNCocosFrameAction extends NCallServiceImpl {
 
     //同步nSyncModes
-    NSyncFPSMode<Object> nSyncFPSMode = null;
+    public NSyncFPSMode<Object> nSyncFPSMode = null;
 
     //客户端列表
     public Map<String, CocosFrameNClient> clients = null;
@@ -55,7 +55,7 @@ public class SNCocosFrameAction extends NCallServiceImpl {
 
         //创建帧同步对象
         nSyncFPSMode = new NSyncFPSMode<>();
-        nSyncFPSMode.setIntervalTime(1000/20); //设置同步帧
+        nSyncFPSMode.setIntervalTime(66); //设置同步帧
         //添加同步功能
         addRegister(nSyncFPSMode);
 

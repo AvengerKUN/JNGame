@@ -101,6 +101,17 @@ public class NSyncFPSMode<D> implements NSyncMode {
 
     }
 
+    //获取指定开始到结束的帧
+    public List<NFPSInfo<D>> vGetFrame(Integer start, Integer end){
+
+        //默认值
+        if(Objects.isNull(start)) start = 0;
+        if(Objects.isNull(end)) end = this.dataList.size() - 1;
+
+        return this.dataList.subList(start,end);
+
+    }
+
     //将数据插入到最新帧
     public boolean addFPSInfo(D info){
 

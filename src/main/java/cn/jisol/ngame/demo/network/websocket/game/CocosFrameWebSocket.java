@@ -71,6 +71,13 @@ public class CocosFrameWebSocket {
     public void onClose(Session session){
         String uuid = session.getPathParameters().get("uuid");
         CLIENTS.remove(uuid);
+
+        //如果没有玩家则关闭帧同步
+        if(CLIENTS.size() <= 0) {
+            SNCocosFrameAction snCocosFrameAction = SpringBeanUtils.getBean(SNCocosFrameAction.class);
+            snCocosFrameAction.nSyncFPSMode.end();
+            snCocosFrameAction.nSyncFPSMode = null;
+        }
     }
 
     @OnError
