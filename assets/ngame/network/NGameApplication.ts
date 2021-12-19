@@ -14,11 +14,11 @@ const {ccclass, property} = cc._decorator;
 export default class NGameApplication extends cc.Component {
 
     @property({displayName:'WebSocket链接',type:cc.String})
-    ws:String = "";
+    ws:string = "";
 
     //NGame ID
     @property({displayName:'NGame ID',type:cc.String})
-    nId:String = "default";
+    nId:string = "default";
 
     //WebSocket 对象
     socket:WebSocket = null;

@@ -1,4 +1,5 @@
 import { newReededRandom } from "../../ngame/util/util-ngame";
+import { JGet } from "../axios";
 import NGameSyncComponent from "../ncomponent/NGameSyncComponent";
 import { CNCocosFrameAction } from "../ncontroller/client/CNCocosFrameAction";
 import SNCocosFrameAction from "../ncontroller/service/SNCocosFrameAction";
@@ -32,8 +33,12 @@ export default class NGameSyncWorld extends cc.Component {
 
     //帧队列
     nFrameQueue:NFrameInfo[] = [];
+
+    //未列入的帧 (帧(index),帧数据)
+    nNoFrame:Map<number,NFrameInfo[]> = new Map();
+
     //本地同步帧
-    nLocalFrame:Number = 0;
+    nLocalFrame:number = -1;
 
     //需要同步的Actor
     nSyncActors:NGameSyncComponent<NSyncInput>[] = [];
@@ -43,6 +48,10 @@ export default class NGameSyncWorld extends cc.Component {
 
     //是否处理帧
     isRunFrame:boolean = false;
+
+    //是否正在获取服务器帧
+    isGetServerFrame:boolean = false;
+    
 
     // //缓存帧
     // nFrameCacheQueue:NFrameInfo[] = [];
@@ -96,6 +105,26 @@ export default class NGameSyncWorld extends cc.Component {
     addFrame(frame:NFrameInfo){
         console.log(frame);
 
+        //我需要的下一帧
+        let nextIndex:number = this.nLocalFrame + 1;
+
+        //判断接受的帧是否下一帧 如果不是则加入未列入
+        if(frame.i !== nextIndex){
+            this.nNoFrame[frame.i] = frame;
+
+            //在未列入中拿到需要的帧
+            if(!(frame = this.nNoFrame[nextIndex])){
+                if(!this.isGetServerFrame) this.vGetServerFrame();
+                return;
+            }
+        }
+        
+        
+        //删除未列入
+        this.nNoFrame.delete(frame.i);
+
+        this.nLocalFrame = frame.i;
+        
         //将服务器帧数进行平分
         let frames:NFrameInfo[] = [...Array(this.nDivideFrame)].map((item,index) => {
             return index === 0 ? frame : new NFrameInfo();
@@ -105,6 +134,39 @@ export default class NGameSyncWorld extends cc.Component {
         //如果没有处理帧则激活帧
         if(!this.isRunFrame)
             this.useFrame();
+
+        //判断未列入中是否有下一帧如果有则再次执行
+        this.nNoFrame[nextIndex + 1] && this.addFrame(this.nNoFrame[nextIndex + 1])
+    }
+
+    /**
+     * 向服务器获取之前的帧
+     */
+    async vGetServerFrame(){
+
+        this.isGetServerFrame = true;
+
+        console.log("upServerFrame");
+
+        //如果客户端未开始跑 帧则获取全部帧
+        if(this.nLocalFrame === -1){
+
+            //向服务器获取帧
+            let frames:[] = (await JGet("/open/cocos-frame",{})).data;
+
+            console.log(frames);
+
+            if(frames){
+                //将获取到的帧添加进去
+                frames.forEach(frame => {
+                    this.addFrame(frame);
+                })
+            }
+            
+        }
+
+        this.isGetServerFrame = false;
+        
     }
 
     /**
@@ -123,8 +185,6 @@ export default class NGameSyncWorld extends cc.Component {
             this.isRunFrame = false;
             return;
         };
-        
-        this.nLocalFrame = frame.i || this.nLocalFrame;
 
         //循环调用通知结束上一帧
         this.nSyncActors.forEach(actor => {
@@ -151,15 +211,16 @@ export default class NGameSyncWorld extends cc.Component {
         //执行物理帧
         const physics:any = cc.director.getPhysicsManager();
         physics.enabled = true;
-        physics.update(dt / 1000);
         physics.FIXED_TIME_STEP = dt / 1000;
+        physics.update(dt / 1000);
         physics.enabled = false;
 
         //大于nMaxFrameBan 进行 追帧
         if(this.nFrameQueue.length > this.nMaxFrameBan) {
-            this.useFrame()
+            console.log("this.useFrame");
+            setTimeout(this.useFrame.bind(this));
         }else if(this.nFrameQueue.length > 0) { //正常继续执行
-            setTimeout(this.useFrame.bind(this),dt)
+            setTimeout(this.useFrame.bind(this),dt);
         }else{
             this.isRunFrame = false;
         }

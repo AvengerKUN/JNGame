@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.24.0",
     "protobufjs": "^6.11.2"
   },
   "devDependencies": {},

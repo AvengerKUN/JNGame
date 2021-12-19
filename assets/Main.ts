@@ -16,6 +16,7 @@ export default class Main extends cc.Component {
 
         let manager = cc.director.getPhysicsManager();
         manager.enabled = true; //开启物理
+        manager.enabled = false;
         manager.enabledAccumulator = true;
         // manager.FIXED_TIME_STEP = 1/30;
         manager.gravity = cc.v2(0, -630);
