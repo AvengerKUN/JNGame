@@ -146,8 +146,6 @@ export default class NGameSyncWorld extends cc.Component {
 
         this.isGetServerFrame = true;
 
-        console.log("upServerFrame");
-
         //如果客户端未开始跑 帧则获取全部帧
         if(this.nLocalFrame === -1){
 
@@ -217,8 +215,7 @@ export default class NGameSyncWorld extends cc.Component {
 
         //大于nMaxFrameBan 进行 追帧
         if(this.nFrameQueue.length > this.nMaxFrameBan) {
-            console.log("this.useFrame");
-            setTimeout(this.useFrame.bind(this));
+            setTimeout(this.useFrame.bind(this),0);
         }else if(this.nFrameQueue.length > 0) { //正常继续执行
             setTimeout(this.useFrame.bind(this),dt);
         }else{
