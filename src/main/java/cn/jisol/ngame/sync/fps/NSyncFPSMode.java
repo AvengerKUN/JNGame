@@ -8,7 +8,9 @@ import lombok.Setter;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 同步帧 - 一般用于同步操作
@@ -27,7 +29,7 @@ public class NSyncFPSMode<D> implements NSyncMode {
     //是否执行
     private Boolean isExecute = false;
     //数据列表
-    private LinkedList<NFPSInfo<D>> dataList = null;
+    private CopyOnWriteArrayList<NFPSInfo<D>> dataList = null;
     //当前帧
     private Integer index = null;
     //当前临时帧数据
@@ -56,7 +58,7 @@ public class NSyncFPSMode<D> implements NSyncMode {
         if (Objects.nonNull(thread) && thread.isAlive()) return;
 
         isExecute = true;
-        dataList = new LinkedList<>();
+        dataList = new CopyOnWriteArrayList<>();
         index = 0;
 
         thread = new Thread(() -> {
