@@ -68,6 +68,8 @@ public class NSyncFPSMode<D> implements NSyncMode {
             nFPSInfos = new NFPSInfo<D>();
             //临时Map帧
             nFPSInfoMap = new ConcurrentHashMap<>();
+            //上一帧
+            NFPSInfo<D> lastFPSInfos = null;
 
             while (isExecute){
                 nFPSInfos.setI(index++);
@@ -81,19 +83,19 @@ public class NSyncFPSMode<D> implements NSyncMode {
                     nFPSInfos.addInfos(nFPSInfoMap.values());
                 }
                 //重新赋值
+                lastFPSInfos = nFPSInfos;
                 nFPSInfos = new NFPSInfo<D>();
                 nFPSInfoMap = new ConcurrentHashMap<>();
-
-                dataList.add(nFPSInfos);
+                dataList.add(lastFPSInfos);
 
                 //调用方法
-                methods.forEach(method -> {
+                for (int i = 0; i < methods.size(); i++) {
                     try {
-                        method.invoke(this.nCallService,this.uuid,nFPSInfos);
+                        methods.get(i).invoke(this.nCallService,this.uuid,lastFPSInfos);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                });
+                }
 
             }
 
