@@ -115,14 +115,16 @@ export default class NGameSyncWorld extends cc.Component {
             this.nNoFrame[frame.i] = frame;
 
             //在未列入中拿到需要的帧
-            if(!(frame = this.nNoFrame[nextIndex])){
-                //如果未列中没有则 向服务器请求
-                if(!this.isGetServerFrame) this.vGetServerFrame(this.nLocalFrame);
+            let noFrame = null;
+            if(!(noFrame = this.nNoFrame[nextIndex])){
+                //如果未列中没有则 并且要的帧数低于服务器帧数 向服务器请求
+                if(!this.isGetServerFrame && nextIndex < frame.i) this.vGetServerFrame(this.nLocalFrame);
                 return;
+            }else{
+                //转正
+                frame = noFrame;
             }
         }
-        
-        console.log(frame);
         
         //删除未列入
         this.nNoFrame.delete(frame.i);
@@ -148,7 +150,6 @@ export default class NGameSyncWorld extends cc.Component {
 
         //向服务器获取帧
         let frames:[] = (await JGet("/open/cocos-frame",{start,end})).data;
-        console.log(frames);
         if(frames){
             //将获取到的帧添加进去
             frames.forEach(frame => {

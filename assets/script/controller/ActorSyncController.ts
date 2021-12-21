@@ -143,39 +143,43 @@ export default class ActorSyncController extends NGameSyncComponent<ActorSyncInp
     //处理帧输入数据
     upInputMove(dt: number,input: ActorSyncInput,nt:number){
 
-        // //插值
-        // let move = (function (){
-        //     console.log(this.iNodeMoveTime / nt);
-        //     if(this.iNodeMoveTime / nt < 1){
-        //         this.node.position = this.node.position.lerp(this.iNodeMove,Math.min(this.iNodeMoveTime / nt,1),this.lastNodePos);
-        //     }else{
-        //         this.iNodeMove = null;
-        //     }
-        // }).bind(this)
+        //插值
+        let move = (function (){
+            console.log(this.iNodeMoveTime / nt);
+            if(this.iNodeMoveTime / nt < 1){
+                this.node.position = this.node.position.lerp(this.iNodeMove,Math.min(this.iNodeMoveTime / nt,1),this.lastNodePos);
+            }else{
+                this.iNodeMove = null;
+            }
+        }).bind(this)
 
-        // //没有输入
-        // if(input.x == null || input.y == null) {
+        //没有输入
+        if(input.x == null || input.y == null) {
 
-        //     //如果需要插值则插值
-        //     if(!this.iNodeMove) return;
+            //如果需要插值则插值
+            if(!this.iNodeMove) return;
 
-        //     this.iNodeMoveTime += dt;
-        //     move();
+            this.iNodeMoveTime += dt;
+            move();
 
-        //     return
-        // };
+            return
+        };
 
-        // if(this.iNodeMove) this.node.position = this.iNodeMove;
-        // //移动
-        // this.lastNodePos = this.node.position;
-        // //覆盖移动位置
-        // this.iNodeMove = new cc.Vec3(this.node.x + input.x,this.node.y + input.y);
-        // //覆盖移动时间
-        // this.iNodeMoveTime = dt;
+        if(this.iNodeMove) this.node.position = this.iNodeMove;
+        //移动
+        this.lastNodePos = this.node.position;
+        //覆盖移动位置
+        this.iNodeMove = new cc.Vec3(this.node.x + input.x,this.node.y + input.y);
+        //覆盖移动时间
+        this.iNodeMoveTime = dt;
         
-        // move();
+        move();
 
-        this.node.position = cc.v3(this.node.x + input.x,this.node.y + input.y);
+        // if(input.x == null || input.y == null) {
+        //     return;
+        // }
+        // this.node.position = cc.v3(this.node.x + input.x,this.node.y + input.y);
+        // console.log("this.node.position"+this.node.position);
 
     }
 

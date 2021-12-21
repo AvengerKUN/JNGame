@@ -16,6 +16,9 @@ export class CNCocosFrameAction {
         let nSyncWorld:NGameSyncWorld = null;
         if(!(nSyncWorld = CNCocosFrameAction.nSyncWorld)) return;
 
+        //添加帧
+        // setTimeout(() => {
+        // },1000)
         nSyncWorld.addFrame(nFPSInfo);
     }
 
