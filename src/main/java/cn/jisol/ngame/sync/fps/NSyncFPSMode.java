@@ -33,7 +33,8 @@ public class NSyncFPSMode<D> implements NSyncMode {
     //当前帧
     private Integer index = null;
     //当前临时帧数据
-    private Map<String,D> fInfos = null;
+    private Map<String,D> nFPSInfoMap = null;
+    private NFPSInfo<D> nFPSInfos = null;
 
     @Override
     public void init(NCallService nCallService) {
@@ -62,32 +63,38 @@ public class NSyncFPSMode<D> implements NSyncMode {
         index = 0;
 
         thread = new Thread(() -> {
-            NFPSInfo<D> nFPSInfo;
+
+            //临时帧
+            nFPSInfos = new NFPSInfo<D>();
+            //临时Map帧
+            nFPSInfoMap = new ConcurrentHashMap<>();
 
             while (isExecute){
-                nFPSInfo = new NFPSInfo<D>();
-                nFPSInfo.setI(index);
-                dataList.add(nFPSInfo);
+                nFPSInfos.setI(index++);
 
                 try {
                     Thread.sleep(intervalTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                }catch (Exception e){}
 
-                if(Objects.nonNull(this.fInfos)) dataList.get(dataList.size() - 1).addInfos(this.fInfos.values());
-                this.fInfos = null;
+                //添加Map中的帧
+                if(Objects.nonNull(nFPSInfos)){
+                    nFPSInfos.addInfos(nFPSInfoMap.values());
+                }
+                //重新赋值
+                nFPSInfos = new NFPSInfo<D>();
+                nFPSInfoMap = new ConcurrentHashMap<>();
+
+                dataList.add(nFPSInfos);
 
                 //调用方法
                 methods.forEach(method -> {
                     try {
-                        method.invoke(this.nCallService,this.uuid,dataList.get(dataList.size() - 1));
+                        method.invoke(this.nCallService,this.uuid,nFPSInfos);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
 
-                index++;
             }
 
         });
@@ -110,33 +117,28 @@ public class NSyncFPSMode<D> implements NSyncMode {
         if(Objects.isNull(start)) start = 0;
         if(Objects.isNull(end)) end = this.dataList.size() - 1;
 
-        return this.dataList.subList(start,end);
+        return new CopyOnWriteArrayList<>(this.dataList.subList(start, end));
 
     }
 
     //将数据插入到最新帧
     public boolean addFPSInfo(D info){
-
-        if(!this.isExecute || Objects.isNull(dataList) || dataList.size() < 1) return false;
-        dataList.get(dataList.size() - 1).addInfo(info);
+        if(!this.isExecute || Objects.isNull(this.nFPSInfos)) return false;
+        nFPSInfos.addInfo(info);
         return true;
 
     }
 
     //将数据插入到最新帧
     public boolean addFPSInfos(List<D> info){
-
-        if(!this.isExecute || Objects.isNull(dataList) || dataList.size() < 1) return false;
-        dataList.get(dataList.size() - 1).addInfos(info);
+        if(!this.isExecute || Objects.isNull(this.nFPSInfos)) return false;
+        nFPSInfos.addInfos(info);
         return true;
-
     }
     //将数据插入到最新帧 唯一存储 用于限制 客户端重复提交
     public boolean addFPSInfo(String key,D info){
-
-        if(!this.isExecute || Objects.isNull(dataList) || dataList.size() < 1) return false;
-        if(Objects.isNull(this.fInfos)) this.fInfos = new ConcurrentHashMap<>();
-        this.fInfos.put(key,info);
+        if(!this.isExecute || Objects.isNull(this.nFPSInfoMap)) return false;
+        this.nFPSInfoMap.put(key,info);
         return true;
     }
 }
