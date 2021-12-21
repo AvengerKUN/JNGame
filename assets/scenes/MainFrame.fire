@@ -91,6 +91,9 @@
       },
       {
         "__id__": 41
+      },
+      {
+        "__id__": 42
       }
     ],
     "_prefab": null,
@@ -180,7 +183,7 @@
       "array": [
         0,
         0,
-        235.55890982936734,
+        367.1837799818049,
         0,
         0,
         0,
@@ -1162,8 +1165,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
+      "width": 20,
+      "height": 20
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1197,7 +1200,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "06FhP1J4pKybxDWuI/6LPA"
+    "_id": "1cV5bLROlGjatFwLYodJLU"
   },
   {
     "__type__": "cc.Sprite",
@@ -1229,7 +1232,7 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": null,
-    "_id": "a0ofNOyo5PwbLOUzQnMNmW"
+    "_id": "4525VD+JFBlIgqAby29CpP"
   },
   {
     "__type__": "cc.RigidBody",
@@ -1254,7 +1257,7 @@
     "enabledContactListener": false,
     "bullet": false,
     "awakeOnLoad": true,
-    "_id": "4ewKdtBAJL4LhjUiv9Z/yE"
+    "_id": "e4+Ak2HJNFMqR9xdvyIyOK"
   },
   {
     "__type__": "cc.PhysicsCircleCollider",
@@ -1275,8 +1278,8 @@
       "x": 0,
       "y": 0
     },
-    "_radius": 48.8,
-    "_id": "45AzTsPNVC56YpnhFy8jxX"
+    "_radius": 10.1,
+    "_id": "49o4cgqetG5JQWD+kn7WEz"
   },
   {
     "__type__": "a967cnk0UNGuL12G4M+6AWy",
@@ -1289,8 +1292,8 @@
     "nGameSyncWorld": {
       "__id__": 33
     },
-    "nId": 1001,
-    "_id": "31RPh7IgBGL6viKaesxZTy"
+    "nId": 1002,
+    "_id": "23i05CokVGJoC7kf9MqqB3"
   },
   {
     "__type__": "8b79dNVNARK75QHbt5zu/19",
@@ -1302,7 +1305,7 @@
     "_enabled": true,
     "nSyncTime": 66,
     "nMaxFrameBan": 5,
-    "nDivideFrame": 4,
+    "nDivideFrame": 3,
     "_id": "1fYKXg+R9K2Z7B/U4ImnZu"
   },
   {
@@ -1570,5 +1573,25 @@
     },
     "_enabled": true,
     "_id": "a9UB6Mk8tG0K4dRpX6XB9K"
+  },
+  {
+    "__type__": "2a3bfmEEvFFdacVbEORdqbK",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "nGameSyncWorld": {
+      "__id__": 33
+    },
+    "nId": 1001,
+    "iGenObject": {
+      "__uuid__": "3cebf067-33c8-45bb-b63c-36b5fb5fe60e"
+    },
+    "iGenWorld": {
+      "__id__": 7
+    },
+    "_id": "04hGVO2tVFZ5Nlz3TbXUuX"
   }
 ]

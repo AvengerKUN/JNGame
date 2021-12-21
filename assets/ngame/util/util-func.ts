@@ -10,7 +10,7 @@ export const uGetFunArgs = (func) => {
         args = func.toString().match(/function\s.*?\(([^)]*)\)/)[1];
     }catch{
         try{
-            args = func.toString().match(/function\(([^)]*)\)/)
+            args = func.toString().match(/function\(([^)]*)\)/)[1];
         }catch{}
     }
     // 用逗号来分隔参数(arguments string).

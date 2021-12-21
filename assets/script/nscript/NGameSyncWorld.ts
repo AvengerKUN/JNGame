@@ -1,4 +1,4 @@
-import { newReededRandom } from "../../ngame/util/util-ngame";
+import { newNextId, newReededRandom } from "../../ngame/util/util-ngame";
 import { JGet } from "../axios";
 import NGameSyncComponent from "../ncomponent/NGameSyncComponent";
 import { CNCocosFrameAction } from "../ncontroller/client/CNCocosFrameAction";
@@ -11,6 +11,7 @@ import SNCocosFrameAction from "../ncontroller/service/SNCocosFrameAction";
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { NFrameInfo, NInputMessage, NSyncInput } from "../nenity/NFrameInfo";
+import {uWait} from '../../ngame/util/util-func'
 
 const {ccclass, property} = cc._decorator;
 
@@ -29,7 +30,7 @@ export default class NGameSyncWorld extends cc.Component {
 
     //分帧数
     @property({displayName:'将服务器帧数进行平分',type:cc.Integer})
-    nDivideFrame:number = 6;
+    nDivideFrame:number = 3;
 
     //帧队列
     nFrameQueue:NFrameInfo[] = [];
@@ -44,10 +45,10 @@ export default class NGameSyncWorld extends cc.Component {
     nSyncActors:NGameSyncComponent<NSyncInput>[] = [];
 
     //初始化随机
-    randSyncNumber:Function = newReededRandom(1);
+    randSyncNumber:Function = newReededRandom(200);
 
-    //是否处理帧
-    isRunFrame:boolean = false;
+    //初始化NextId
+    nextSyncNumber:Function = newNextId(1000);
 
     //是否正在获取服务器帧
     isGetServerFrame:boolean = false;
@@ -63,6 +64,8 @@ export default class NGameSyncWorld extends cc.Component {
         //开始同步操作
         this.nStartSyncInput();
 
+        //激活消费帧
+        this.nUseFrame().then();
     }
 
     //开始同步操作
@@ -103,7 +106,6 @@ export default class NGameSyncWorld extends cc.Component {
      * @param frame 帧数据
      */
     addFrame(frame:NFrameInfo){
-        console.log(frame);
 
         //我需要的下一帧
         let nextIndex:number = this.nLocalFrame + 1;
@@ -114,11 +116,13 @@ export default class NGameSyncWorld extends cc.Component {
 
             //在未列入中拿到需要的帧
             if(!(frame = this.nNoFrame[nextIndex])){
-                if(!this.isGetServerFrame) this.vGetServerFrame();
+                //如果未列中没有则 向服务器请求
+                if(!this.isGetServerFrame) this.vGetServerFrame(this.nLocalFrame);
                 return;
             }
         }
         
+        console.log(frame);
         
         //删除未列入
         this.nNoFrame.delete(frame.i);
@@ -131,10 +135,6 @@ export default class NGameSyncWorld extends cc.Component {
         })
         this.nFrameQueue = this.nFrameQueue.concat(frames)
 
-        //如果没有处理帧则激活帧
-        if(!this.isRunFrame)
-            this.useFrame();
-
         //判断未列入中是否有下一帧如果有则再次执行
         this.nNoFrame[nextIndex + 1] && this.addFrame(this.nNoFrame[nextIndex + 1])
     }
@@ -142,25 +142,18 @@ export default class NGameSyncWorld extends cc.Component {
     /**
      * 向服务器获取之前的帧
      */
-    async vGetServerFrame(){
+    async vGetServerFrame(start = null,end = null){
 
         this.isGetServerFrame = true;
 
-        //如果客户端未开始跑 帧则获取全部帧
-        if(this.nLocalFrame === -1){
-
-            //向服务器获取帧
-            let frames:[] = (await JGet("/open/cocos-frame",{})).data;
-
-            console.log(frames);
-
-            if(frames){
-                //将获取到的帧添加进去
-                frames.forEach(frame => {
-                    this.addFrame(frame);
-                })
-            }
-            
+        //向服务器获取帧
+        let frames:[] = (await JGet("/open/cocos-frame",{start,end})).data;
+        console.log(frames);
+        if(frames){
+            //将获取到的帧添加进去
+            frames.forEach(frame => {
+                this.addFrame(frame);
+            })
         }
 
         this.isGetServerFrame = false;
@@ -170,57 +163,71 @@ export default class NGameSyncWorld extends cc.Component {
     /**
      * 消费帧
      */
-    useFrame(){
+    async nUseFrame(){
 
-        this.isRunFrame = true;
-        
         let dt:number = this.nSyncTime / this.nDivideFrame;
+
+        let loop:number = dt;
 
         //取出帧
         let frame:NFrameInfo = this.nFrameQueue.shift();
 
-        if(!frame) {
-            this.isRunFrame = false;
-            return;
-        };
+        if(frame) {
 
-        //循环调用通知结束上一帧
-        this.nSyncActors.forEach(actor => {
-            if(actor.inputExecute)
-                actor.nFrameStep(actor.inputExecute);
-        });
-
-        //循环处理帧数据
-        this.nSyncActors.forEach(actor => {
-
-            //找到帧数据中的actor输入
-            (frame.ds || []).forEach(frame => {
-                if(frame.nId === actor.nId) {
-                    //将帧操作添加到指定控制的Actor中
-                    actor.unInputSyncs.push(frame.input);
-                }
+            //循环调用通知结束上一帧
+            this.nSyncActors.forEach(actor => {
+                if(actor.inputExecute)
+                    actor.nFrameStep(actor.inputExecute);
             });
-            
-            //更新 并且在未处理输入中取出操作 如果没有则初始化一个操作
-            actor.nUpdate(
-                dt,actor.vNextInputSync(),this.nSyncTime //获取下一帧操作
-            );
-        })
-        //执行物理帧
-        const physics:any = cc.director.getPhysicsManager();
-        physics.enabled = true;
-        physics.FIXED_TIME_STEP = dt / 1000;
-        physics.update(dt / 1000);
-        physics.enabled = false;
 
-        //大于nMaxFrameBan 进行 追帧
-        if(this.nFrameQueue.length > this.nMaxFrameBan) {
-            setTimeout(this.useFrame.bind(this),0);
-        }else if(this.nFrameQueue.length > 0) { //正常继续执行
-            setTimeout(this.useFrame.bind(this),dt);
+            //循环处理帧数据
+            this.nSyncActors.forEach(actor => {
+
+                //找到帧数据中的actor输入
+                (frame.ds || []).forEach(frame => {
+                    if(frame.nId === actor.nId) {
+                        //将帧操作添加到指定控制的Actor中
+                        actor.unInputSyncs.push(frame.input);
+                    }
+                });
+                
+                //更新 并且在未处理输入中取出操作 如果没有则初始化一个操作
+                actor.nUpdate(
+                    dt,actor.vNextInputSync(),this.nSyncTime //获取下一帧操作
+                );
+            })
+
+            //执行物理帧(暂停cocos 以防多次运行物理帧)
+            cc.game.pause();
+            const physics:any = cc.director.getPhysicsManager();
+            physics.enabled = true;
+            physics.FIXED_TIME_STEP = dt / 1000;
+            physics.update(dt / 1000);
+            physics.enabled = false;
+            cc.game.resume();
+
+            //大于nMaxFrameBan 进行 追帧
+            if(this.nFrameQueue.length > this.nMaxFrameBan) {
+                //适当追快点
+                if(frame.i != null) 
+                    loop = 0;
+                else
+                    loop = -1;
+            }else if(this.nFrameQueue.length > 0) { //正常继续执行
+                loop = dt;
+            }
+
         }else{
-            this.isRunFrame = false;
+            //延迟 循环
+            loop = dt;
         }
+
+        //如果需要延迟则延迟
+        if(loop !== -1){
+            await uWait(loop);
+        }
+
+        this.nUseFrame().then();
 
     }
 

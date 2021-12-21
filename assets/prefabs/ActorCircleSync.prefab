@@ -45,8 +45,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
+      "width": 20,
+      "height": 20
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -158,7 +158,7 @@
       "x": 0,
       "y": 0
     },
-    "_radius": 48.8,
+    "_radius": 10.1,
     "_id": ""
   },
   {
@@ -170,6 +170,7 @@
     },
     "_enabled": true,
     "nGameSyncWorld": null,
+    "nId": -1,
     "_id": ""
   },
   {

@@ -14,3 +14,15 @@ export const newReededRandom = (seed) => {
         return min + rnd * (max - min);
     }
 }
+
+/**
+ * 同步Next数字
+ * @param seed 种子
+ * @returns 
+ */
+export const newNextId = (seed:number) => {
+    let next = 1;
+    return () => {
+        return `${next++}${seed}`
+    }
+}
