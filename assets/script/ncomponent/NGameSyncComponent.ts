@@ -1,5 +1,5 @@
 import SNCocosFrameAction from "../ncontroller/service/SNCocosFrameAction";
-import { NInputMessage, NSyncInput } from "../nenity/NFrameInfo";
+import { NFrameInfo, NInputMessage, NSyncInput } from "../nenity/NFrameInfo";
 import NGameSyncWorld from "../nscript/NGameSyncWorld";
 
 const {ccclass, property} = cc._decorator;
@@ -35,6 +35,12 @@ export default abstract class NGameSyncComponent<InputSync extends NSyncInput> e
     }
 
 
+    // ---------------- 实现需要预测和回滚的属性 --------------------
+    //预测 的状态
+    nLastPositions:cc.Vec2[] = [];
+    nLastAngles:number[] = [];
+
+
     onLoad(){
         //添加同步Actor
         this.nGameSyncWorld.nSyncActors.push(this);
@@ -59,8 +65,38 @@ export default abstract class NGameSyncComponent<InputSync extends NSyncInput> e
     }
 
     
+    // /**
+    //  * 预测通知 开始预测的时候调用 通常保存状态
+    //  */
+    //  nForecastStart(){
+    //     //将当前状态保存起来 用于回滚
+    //     this.nLastPosition = this.node.position;
+    //     this.nLastRotation = this.node.rotation;
+    // }
 
-    //定时保存操作 到 服务器
+    /**
+     * 预测 更新 通常保存状态
+     */
+    nForecastUpdate(index:number){
+        
+        //将当前状态保存起来 用于回滚
+        this.nLastPositions[index] = this.node.getPosition().clone();
+        this.nLastAngles[index] = this.node.angle;
+    }
 
-    
+    /**
+     * 回滚帧 通常预测失败之后调用 需要处理回滚逻辑
+     */
+    nForecastRollBack(index:number,frame:NFrameInfo){
+
+        //将当前状态 回滚回去
+        this.node.setPosition(this.nLastPositions[index]);
+        //将当前状态 回滚回去
+        this.node.angle = this.nLastAngles[index];
+
+        //回滚完 将预测初始化
+        this.nLastPositions = [];
+        this.nLastAngles = [];
+
+    }
 }

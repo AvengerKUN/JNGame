@@ -35,8 +35,13 @@ export default class NGameSyncWorld extends cc.Component {
     //帧队列
     nFrameQueue:NFrameInfo[] = [];
 
+    //预测操作
+    nForecastFrameQueue:{key:number,info:NFrameInfo}[] = [];
+    //预测index
+    nForecastFrameIndex:number = -1;
+
     //未列入的帧 (帧(index),帧数据)
-    nNoFrame:Map<number,NFrameInfo[]> = new Map();
+    nNoFrame:Map<number,NFrameInfo> = new Map();
 
     //本地同步帧
     nLocalFrame:number = -1;
@@ -52,7 +57,9 @@ export default class NGameSyncWorld extends cc.Component {
 
     //是否正在获取服务器帧
     isGetServerFrame:boolean = false;
-    
+
+    //本地运行的帧
+    localFrameNumber:number = 0;
 
     // //缓存帧
     // nFrameCacheQueue:NFrameInfo[] = [];
@@ -133,7 +140,7 @@ export default class NGameSyncWorld extends cc.Component {
         
         //将服务器帧数进行平分
         let frames:NFrameInfo[] = [...Array(this.nDivideFrame)].map((item,index) => {
-            return index === 0 ? frame : new NFrameInfo();
+            return index === 0 ? Object.assign(new NFrameInfo(),frame) : new NFrameInfo();
         })
         this.nFrameQueue = this.nFrameQueue.concat(frames)
 
@@ -161,8 +168,10 @@ export default class NGameSyncWorld extends cc.Component {
         
     }
 
+
     /**
      * 消费帧
+     * @returns 
      */
     async nUseFrame(){
 
@@ -170,8 +179,52 @@ export default class NGameSyncWorld extends cc.Component {
 
         let loop:number = dt;
 
-        //取出帧
-        let frame:NFrameInfo = this.nFrameQueue.shift();
+        let frame:NFrameInfo = null; //帧数据
+        let isForecast:boolean = false; //是否预测
+        //取出 (在帧队列 或者 预测队列中 取出)
+        if(!(frame = this.nFrameQueue.shift())){
+            //如果取出没有则给预测帧
+            frame = new NFrameInfo();
+            this.nForecastFrameIndex++;
+            this.nForecastFrameQueue.push({key:this.nForecastFrameIndex,info:frame});
+            isForecast = true;
+
+            //循环处理预测更新
+            this.nSyncActors.forEach(actor => {
+                //预测更新
+                actor.nForecastUpdate(this.nForecastFrameIndex);
+            })
+
+        }else{
+            //在帧队列取出 如果 之前有预测则判断之前预测的对不对
+            let fFrame:{key:number,info:NFrameInfo} = null;
+            if((fFrame = this.nForecastFrameQueue.shift())){
+                console.log(frame,fFrame);
+                console.log("this.nForecastFrameQueue",this.nForecastFrameQueue.length);
+                //判断之前预测的对不对 如果不对则回滚 (这里虚假判断)
+                if(frame.getDs().length !== fFrame.info.getDs().length){
+                    //(暂停cocos 以防影响回滚)
+                    cc.game.pause();
+                    //将nSyncActors回滚 信息
+                    this.nSyncActors.forEach(actor => {
+                        actor.nForecastRollBack(fFrame.key,frame);
+                    });
+                    //回滚之后将预测队列初始化
+                    this.nForecastFrameQueue = [];
+                    //继续执行正确的帧
+                    //强行更新游戏帧 保证 回滚完成
+                    cc.game.step();
+                    cc.game.resume();
+                }else{
+                    //如果预测成功则不执行当前帧 并且继续验证 下一帧
+                    frame = null;
+                    //适当追快点
+                    loop = 0;
+                }
+            }
+        }
+
+        // console.log(frame);
 
         if(frame) {
 
@@ -214,13 +267,10 @@ export default class NGameSyncWorld extends cc.Component {
                     loop = 0;
                 else
                     loop = -1;
-            }else if(this.nFrameQueue.length > 0) { //正常继续执行
+            }else{
                 loop = dt;
             }
 
-        }else{
-            //延迟 循环
-            loop = dt;
         }
 
         //如果需要延迟则延迟

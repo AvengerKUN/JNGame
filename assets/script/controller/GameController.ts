@@ -1,4 +1,6 @@
 import NGameSyncComponent from "../ncomponent/NGameSyncComponent";
+import { CNCocosFrameAction } from "../ncontroller/client/CNCocosFrameAction";
+import SNCocosFrameAction from "../ncontroller/service/SNCocosFrameAction";
 import { NSyncInput } from "../nenity/NFrameInfo";
 import ActorSyncController from "./ActorSyncController";
 
@@ -22,10 +24,17 @@ export default class GameController extends NGameSyncComponent<GameInput> {
     @property({displayName:'生成的物体的地图',type:cc.Node})
     iGenWorld:cc.Node = null;
 
+    @property({displayName:'是否接受帧数据',type:cc.Boolean})
+    isReceiveInfo:boolean = true;
+    @property({displayName:'是否接受帧数据 Text',type:cc.Label})
+    isReceiveInfoText:cc.Label = null;
+
     isClick:boolean = false;
 
     onLoad(): void {
         super.onLoad();
+
+        CNCocosFrameAction.vGameController = this;
 
         console.log("创建点击事件");
 
@@ -60,6 +69,13 @@ export default class GameController extends NGameSyncComponent<GameInput> {
         this.getInput().create = this.iGenWorld.convertToNodeSpaceAR(e.getLocation());
     }
 
+    //修改接受帧消息状态
+    flipReceiveInfo(){
+        this.isReceiveInfo = !this.isReceiveInfo;
+        this.isReceiveInfoText.string = `断网:${this.isReceiveInfo}`;
+    }
+
+
     initInput(): GameInput {
         return new GameInput();
     }
@@ -89,5 +105,15 @@ export default class GameController extends NGameSyncComponent<GameInput> {
         node.parent = this.iGenWorld;
 
     }
+
+    /**
+     * 预测 更新 通常保存状态
+     */
+    nForecastUpdate(index:number){}
+
+    /**
+     * 回滚帧 通常预测失败之后调用 需要处理回滚逻辑
+     */
+    nForecastRollBack(index:number){}
     
 }

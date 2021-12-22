@@ -20,5 +20,10 @@ export class NInputMessage {
 //帧数据实体
 export class NFrameInfo {
     i:number = null;
-    ds:Array<NInputMessage> = null;
+    ds:Array<NInputMessage> = [];
+
+    public getDs():Array<NInputMessage>{
+        if(!this.ds) this.ds = [];
+        return this.ds;
+    }
 }
