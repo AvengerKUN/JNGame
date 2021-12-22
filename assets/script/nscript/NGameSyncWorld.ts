@@ -199,22 +199,22 @@ export default class NGameSyncWorld extends cc.Component {
             //在帧队列取出 如果 之前有预测则判断之前预测的对不对
             let fFrame:{key:number,info:NFrameInfo} = null;
             if((fFrame = this.nForecastFrameQueue.shift())){
-                console.log(frame,fFrame);
-                console.log("this.nForecastFrameQueue",this.nForecastFrameQueue.length);
+                // console.log(frame,fFrame);
+                // console.log("this.nForecastFrameQueue",this.nForecastFrameQueue.length);
                 //判断之前预测的对不对 如果不对则回滚 (这里虚假判断)
                 if(frame.getDs().length !== fFrame.info.getDs().length){
-                    //(暂停cocos 以防影响回滚)
-                    cc.game.pause();
+                    // //(暂停cocos 以防影响回滚)
+                    // cc.game.pause();
                     //将nSyncActors回滚 信息
                     this.nSyncActors.forEach(actor => {
                         actor.nForecastRollBack(fFrame.key,frame);
                     });
                     //回滚之后将预测队列初始化
                     this.nForecastFrameQueue = [];
-                    //继续执行正确的帧
-                    //强行更新游戏帧 保证 回滚完成
-                    cc.game.step();
-                    cc.game.resume();
+                    // //继续执行正确的帧
+                    // //强行更新游戏帧 保证 回滚完成
+                    // cc.game.step();
+                    // cc.game.resume();
                 }else{
                     //如果预测成功则不执行当前帧 并且继续验证 下一帧
                     frame = null;
