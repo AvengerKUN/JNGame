@@ -38,7 +38,7 @@ export default abstract class NGameSyncComponent<InputSync extends NSyncInput> e
     // ---------------- 实现需要预测和回滚的属性 --------------------
     //预测 的状态
     nLastPositions:cc.Vec2[] = [];
-    nLastAngles:number[] = [];
+    nLastRotations:number[] = [];
 
 
     onLoad(){
@@ -81,7 +81,7 @@ export default abstract class NGameSyncComponent<InputSync extends NSyncInput> e
         
         //将当前状态保存起来 用于回滚
         this.nLastPositions[index] = this.node.getPosition().clone();
-        this.nLastAngles[index] = this.node.angle;
+        this.nLastRotations[index] = this.node.rotation;
     }
 
     /**
@@ -92,11 +92,11 @@ export default abstract class NGameSyncComponent<InputSync extends NSyncInput> e
         //将当前状态 回滚回去
         this.node.setPosition(this.nLastPositions[index]);
         //将当前状态 回滚回去
-        this.node.angle = this.nLastAngles[index];
+        this.node.setRotation(this.nLastRotations[index]);
 
         //回滚完 将预测初始化
         this.nLastPositions = [];
-        this.nLastAngles = [];
+        this.nLastRotations = [];
 
     }
 }

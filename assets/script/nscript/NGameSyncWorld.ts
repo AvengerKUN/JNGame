@@ -61,6 +61,9 @@ export default class NGameSyncWorld extends cc.Component {
     //本地运行的帧
     localFrameNumber:number = 0;
 
+    //是否开启预测
+    isForecast:boolean = false;
+
     // //缓存帧
     // nFrameCacheQueue:NFrameInfo[] = [];
 
@@ -183,17 +186,20 @@ export default class NGameSyncWorld extends cc.Component {
         let isForecast:boolean = false; //是否预测
         //取出 (在帧队列 或者 预测队列中 取出)
         if(!(frame = this.nFrameQueue.shift())){
-            //如果取出没有则给预测帧
-            frame = new NFrameInfo();
-            this.nForecastFrameIndex++;
-            this.nForecastFrameQueue.push({key:this.nForecastFrameIndex,info:frame});
-            isForecast = true;
-
-            //循环处理预测更新
-            this.nSyncActors.forEach(actor => {
-                //预测更新
-                actor.nForecastUpdate(this.nForecastFrameIndex);
-            })
+            
+            if(this.isForecast){
+                //如果取出没有则给预测帧
+                frame = new NFrameInfo();
+                this.nForecastFrameIndex++;
+                this.nForecastFrameQueue.push({key:this.nForecastFrameIndex,info:frame});
+                isForecast = true;
+    
+                //循环处理预测更新
+                this.nSyncActors.forEach(actor => {
+                    //预测更新
+                    actor.nForecastUpdate(this.nForecastFrameIndex);
+                })
+            }
 
         }else{
             //在帧队列取出 如果 之前有预测则判断之前预测的对不对
@@ -204,17 +210,17 @@ export default class NGameSyncWorld extends cc.Component {
                 //判断之前预测的对不对 如果不对则回滚 (这里虚假判断)
                 if(frame.getDs().length !== fFrame.info.getDs().length){
                     // //(暂停cocos 以防影响回滚)
-                    // cc.game.pause();
+                    cc.game.pause();
                     //将nSyncActors回滚 信息
                     this.nSyncActors.forEach(actor => {
                         actor.nForecastRollBack(fFrame.key,frame);
                     });
                     //回滚之后将预测队列初始化
                     this.nForecastFrameQueue = [];
-                    // //继续执行正确的帧
-                    // //强行更新游戏帧 保证 回滚完成
-                    // cc.game.step();
-                    // cc.game.resume();
+                    //继续执行正确的帧
+                    //强行更新游戏帧 保证 回滚完成
+                    cc.game.step();
+                    cc.game.resume();
                 }else{
                     //如果预测成功则不执行当前帧 并且继续验证 下一帧
                     frame = null;

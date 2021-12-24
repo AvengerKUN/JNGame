@@ -23,6 +23,19 @@ export const uGetFunArgs = (func) => {
     });
 }
 
+/**
+ * 
+ * @param dt 
+ * @returns 
+ */
+export const uDeepObjectCopy = (source: Object) => {
+    const newObject = {};
+    for (const key of Object.keys(source)) {
+        newObject[key] = typeof source[key] === 'object' ? uDeepObjectCopy(source[key]) : source[key];
+    }
+    return newObject;
+}
+
 export const uWait = (dt) => {
     return new Promise((resolve) => {
         setTimeout(resolve,dt)

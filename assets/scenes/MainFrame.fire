@@ -184,7 +184,7 @@
       "array": [
         0,
         0,
-        349.87426312891324,
+        516.1511406555254,
         0,
         0,
         0,
@@ -1695,7 +1695,7 @@
     "_enabled": true,
     "nSyncTime": 66,
     "nMaxFrameBan": 6,
-    "nDivideFrame": 3,
+    "nDivideFrame": 4,
     "_id": "1fYKXg+R9K2Z7B/U4ImnZu"
   },
   {
@@ -1895,7 +1895,7 @@
       "__id__": 44
     },
     "_enabled": true,
-    "ws": "ws://localhost:9190/game/cocos/frame",
+    "ws": "ws://106.53.124.8:9190/game/cocos/frame",
     "nId": "default",
     "_id": "45ExUoHmdJ0Y4K9XsRbU+Q"
   },
