@@ -88,6 +88,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.2.9.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.9.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.dyn4j:dyn4j:4.2.0" level="project" />
     <orderEntry type="library" name="Maven: net.mikera:vectorz:0.66.0" level="project" />
     <orderEntry type="library" name="Maven: us.bpsm:edn-java:0.4.7" level="project" />
     <orderEntry type="library" name="Maven: net.mikera:randomz:0.3.0" level="project" />

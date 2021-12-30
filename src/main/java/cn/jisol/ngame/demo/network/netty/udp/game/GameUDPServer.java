@@ -1,4 +1,4 @@
-package cn.jisol.ngame.demo.network.netty.udp;
+package cn.jisol.ngame.demo.network.netty.udp.game;
 
 
 import cn.jisol.ngame.demo.client.UnityNClient;
