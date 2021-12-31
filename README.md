@@ -1,7 +1,7 @@
 # JNGame
 
 #### 介绍
-NGame 是一个Java网络游戏服务器框架 基于 Spring Boot 编写 完美支持IOC AOP  
+NGame 是一个Java网络游戏服务器框架 基于 Spring Boot + Netty 编写 完美支持IOC AOP  
 拥有RPC调用方式 使用 WebSocket UDP 成熟 注解API 立即启动各种服务器  
 
 NGame还有 各种游戏引擎联机同步DEMO (cocos,unity)   
