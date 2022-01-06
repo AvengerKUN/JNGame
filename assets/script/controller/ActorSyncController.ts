@@ -128,15 +128,15 @@ export default class ActorSyncController extends NGameSyncComponent<ActorSyncInp
 
         // if(input.x != null || input.y != null || input.ball != null || input.bodyType != null){
         // }
-        if(this.rigidBody._getBody()){
-            console.log(
-                input,this.node.position.clone(),this.node.angle,this.rigidBody
-                ,this.rigidBody._getBody().GetTransform().Clone()
-                ,this.rigidBody._getBody().m_sweep.Clone()
-                ,this.rigidBody._getBody()._angularVelocity
-                ,this.rigidBody._getBody()._linearVelocity
-                );
-        }
+        // if(this.rigidBody._getBody()){
+        //     console.log(
+        //         input,this.node.position.clone(),this.node.angle,this.rigidBody
+        //         ,this.rigidBody._getBody().GetTransform().Clone()
+        //         ,this.rigidBody._getBody().m_sweep.Clone()
+        //         ,this.rigidBody._getBody()._angularVelocity
+        //         ,this.rigidBody._getBody()._linearVelocity
+        //         );
+        // }
 
         //执行移动输入
         this.upInputMove(dt.valueOf(),input,nt);

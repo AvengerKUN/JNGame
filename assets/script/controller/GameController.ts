@@ -2,6 +2,7 @@ import NGameSyncComponent from "../ncomponent/NGameSyncComponent";
 import { CNCocosFrameAction } from "../ncontroller/client/CNCocosFrameAction";
 import SNCocosFrameAction from "../ncontroller/service/SNCocosFrameAction";
 import { NSyncInput } from "../nenity/NFrameInfo";
+import NGameSyncWorld from "../nscript/NGameSyncWorld";
 import ActorSyncController from "./ActorSyncController";
 
 const {ccclass, property} = cc._decorator;
@@ -28,6 +29,11 @@ export default class GameController extends NGameSyncComponent<GameInput> {
     isReceiveInfo:boolean = true;
     @property({displayName:'是否接受帧数据 Text',type:cc.Label})
     isReceiveInfoText:cc.Label = null;
+
+    @property({displayName:'NGame 类',type:NGameSyncWorld})
+    ngame:NGameSyncWorld = null;
+    @property({displayName:'是否开启预测 Text',type:cc.Label})
+    isForecastText:cc.Label = null;
 
     isClick:boolean = false;
 
@@ -73,6 +79,12 @@ export default class GameController extends NGameSyncComponent<GameInput> {
     flipReceiveInfo(){
         this.isReceiveInfo = !this.isReceiveInfo;
         this.isReceiveInfoText.string = `断网:${this.isReceiveInfo}`;
+    }
+
+    //修改预测状态
+    flipForecastTextInfo(){
+        this.ngame.isForecast = !this.ngame.isForecast;
+        this.isForecastText.string = `预测:${this.ngame.isForecast}`;
     }
 
 
