@@ -62,8 +62,6 @@ export default class GameController extends NGameSyncComponent<GameInput> {
         }
     }
     tEnd(e) {
-        console.log(e);
-        console.log(this.isClick);
         if(this.isClick){
             this.eMouseDown(e);
         }
@@ -78,7 +76,7 @@ export default class GameController extends NGameSyncComponent<GameInput> {
     //修改接受帧消息状态
     flipReceiveInfo(){
         this.isReceiveInfo = !this.isReceiveInfo;
-        this.isReceiveInfoText.string = `断网:${this.isReceiveInfo}`;
+        this.isReceiveInfoText.string = `断网:${!this.isReceiveInfo}`;
     }
 
     //修改预测状态

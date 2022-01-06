@@ -68,9 +68,6 @@ export default class ActorSyncController extends NGameSyncComponent<ActorSyncInp
         this.rigidBody = this.getComponent(cc.RigidBody);
 
     }
-    protected update(dt: number): void {
-        let int;
-    }
 
     initInput(): ActorSyncInput {
         return new ActorSyncInput();
@@ -126,18 +123,6 @@ export default class ActorSyncController extends NGameSyncComponent<ActorSyncInp
      */
     nUpdate(dt: number,input: ActorSyncInput,nt:number) {
 
-        // if(input.x != null || input.y != null || input.ball != null || input.bodyType != null){
-        // }
-        // if(this.rigidBody._getBody()){
-        //     console.log(
-        //         input,this.node.position.clone(),this.node.angle,this.rigidBody
-        //         ,this.rigidBody._getBody().GetTransform().Clone()
-        //         ,this.rigidBody._getBody().m_sweep.Clone()
-        //         ,this.rigidBody._getBody()._angularVelocity
-        //         ,this.rigidBody._getBody()._linearVelocity
-        //         );
-        // }
-
         //执行移动输入
         this.upInputMove(dt.valueOf(),input,nt);
 
@@ -165,18 +150,6 @@ export default class ActorSyncController extends NGameSyncComponent<ActorSyncInp
         this.nLastLinearDamping[index] = this.rigidBody.linearDamping;
         this.nLastAngularDampingy[index] = this.rigidBody.angularDamping;
 
-
-        // if(((<any>this.rigidBody))._getBody()) {
-        //     // this.nLastRigidBodyMXF[index] = (<any>this.rigidBody)._getBody().GetTransform().Clone();
-        //     // this.nLastRigidBodyMXF0[index] = (<any>this.rigidBody)._getBody().m_xf0.Clone();
-        //     this.nLastRigidBodyTransforms[index] = (<any>this.rigidBody)._getBody().GetTransform().Clone();
-        //     this.nLastRigidBodySweeps[index] = (<any>this.rigidBody)._getBody().m_sweep.Clone();
-            
-        //     this.nLastRigidBodyAngularVelocitys[index] = (<any>this.rigidBody)._getBody().m_angularVelocity;
-        //     this.nLastRigidBodyLinearVelocitys[index] = (<any>this.rigidBody)._getBody().m_linearVelocity;
-        // };
-
-
     }
 
     /**
@@ -184,51 +157,19 @@ export default class ActorSyncController extends NGameSyncComponent<ActorSyncInp
      */
     nForecastRollBack(index:number,frame:NFrameInfo){
         console.log("预测失败 进行回滚");
-
         super.nForecastRollBack(index,frame);
-
-        // console.log(index,this.nLastPositions,this.nLastAngles,this.nLastPositions[index],this.nLastAngles[index],frame,this.nLastRigidBodyTransforms,this.nLastRigidBodyTransforms,this.nLastRigidBodySweeps);
-        
-        // let body2d = null;
 
         // //将当前状态 回滚回去
         (<any>this.rigidBody).linearVelocity = this.nLastLinearVelocity[index];
         (<any>this.rigidBody).angularVelocity = this.nLastAngularVelocity[index];
         (<any>this.rigidBody).linearDamping = this.nLastLinearDamping[index];
         (<any>this.rigidBody).angularDamping = this.nLastAngularDampingy[index];
-        
-        // if((body2d = (<any>this.rigidBody)._getBody())){
-
-        //     console.log(this.nLastRigidBodyTransforms[index],this.nLastRigidBodySweeps[index],this.nLastRigidBodyAngularVelocitys[index],this.nLastRigidBodyLinearVelocitys[index]);
-        //     body2d.m_transform = this.nLastRigidBodyTransforms[index];
-            
-        //     (<any>this.rigidBody)._getBody().m_sweep = this.nLastRigidBodySweeps[index];
-        //     (<any>this.rigidBody)._getBody().m_angularVelocity = this.nLastRigidBodyAngularVelocitys[index];
-        //     (<any>this.rigidBody)._getBody().m_linearVelocity = this.nLastRigidBodyLinearVelocitys[index];
-        //     // console.log("修改MXF",{...(<any>this.rigidBody)._b2Body.m_xf},{...(<any>this.rigidBody)._b2Body.m_xf0});
-        //     // console.log("修改MXF值",this.nLastRigidBodyMXF[index],this.nLastRigidBodyMXF0[index]);
-
-        //     // (<any>this.rigidBody)._b2Body.m_xf = this.nLastRigidBodyMXF[index];
-        //     // (<any>this.rigidBody)._b2Body.m_xf0 = this.nLastRigidBodyMXF0[index];
-
-        //     // console.log("修改成功",(<any>this.rigidBody)._b2Body.m_xf,(<any>this.rigidBody)._b2Body.m_xf0);
-        //     console.log(body2d.GetTransform().Clone(),(<any>this.rigidBody)._getBody().m_sweep.Clone());
-
-        // }
 
         //回滚完 将预测初始化
         this.nLastLinearVelocity = [];
         this.nLastAngularVelocity = [];
         this.nLastLinearDamping = [];
         this.nLastAngularDampingy = [];
-
-        // this.nLastRigidBodyTransforms = [];
-        // this.nLastRigidBodySweeps = [];
-        // this.nLastRigidBodyAngularVelocitys = [];
-        // this.nLastRigidBodyLinearVelocitys = [];
-
-        // // this.nLastRigidBodyMXFP = [];
-        // // this.nLastRigidBodyMXFQ = [];
 
     }
 
