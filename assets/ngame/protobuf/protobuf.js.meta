@@ -1,0 +1,18 @@
+{
+  "ver": "4.0.22",
+  "importer": "javascript",
+  "imported": true,
+  "uuid": "49beee22-b3c6-4ecf-8524-6e09c5309b84",
+  "files": [
+    ".js"
+  ],
+  "subMetas": {},
+  "userData": {
+    "isPlugin": true,
+    "loadPluginInWeb": true,
+    "loadPluginInNative": true,
+    "loadPluginInEditor": true,
+    "executionScope": "global",
+    "importAsPlugin": true
+  }
+}
