@@ -1,4 +1,4 @@
-import { google } from "./NGameMessage/NGameMessage.js";
+import google from "./NGameMessage/NGameMessage.js";
 
 export default {
 

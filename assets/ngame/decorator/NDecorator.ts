@@ -1,8 +1,8 @@
 import { uGetFunArgs } from "../util/util-func";
 import NGameApplication from "../network/NGameApplication";
-import { NGameMessage } from "../protobuf/NGameMessage/NGameMessage.js";
+import NGameMessage from "../protobuf/NGameMessage/NGameMessage.js";
 import ProtoAnyUtil from "../protobuf/ProtoAnyUtil";
-import { google } from "../protobuf/NGameMessage/NGameMessage.js";
+import google from "../protobuf/NGameMessage/NGameMessage.js";
 
 type Consturctor = { new (...args: any[]): any };
 

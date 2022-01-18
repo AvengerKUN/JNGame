@@ -2,7 +2,7 @@
 import axios from "./axios.js"
 
 let http = axios.create({
-    baseURL:"http://127.0.0.1:9190"
+    baseURL:"http://192.168.1.79:9190"
 });
 
 export const JGet = async (url,data = {}) => {

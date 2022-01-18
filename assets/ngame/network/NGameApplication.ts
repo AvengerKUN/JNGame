@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { NGameMessage } from "../protobuf/NGameMessage/NGameMessage.js";
+import NGameMessage from "../protobuf/NGameMessage/NGameMessage.js";
 import ProtoAnyUtil from "../protobuf/ProtoAnyUtil";
 
 import { _decorator, Component, Enum } from 'cc';

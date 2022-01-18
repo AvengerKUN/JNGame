@@ -1,8 +1,8 @@
 {
   "ver": "4.0.22",
-  "importer": "javascript",
+  "importer": "typescript",
   "imported": true,
-  "uuid": "59c78611-76ee-4b79-9751-a3cdac7c2ccc",
+  "uuid": "d1ad97c4-34e3-443c-9031-47e489cc5851",
   "files": [],
   "subMetas": {},
   "userData": {}
