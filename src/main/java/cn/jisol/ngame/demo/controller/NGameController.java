@@ -1,10 +1,14 @@
 package cn.jisol.ngame.demo.controller;
 
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.jisol.ngame.demo.client.cocos_bridge.CocosBridgeServer;
 import cn.jisol.ngame.demo.game.action.cocos.frame.service.SNCocosFrameAction;
+import cn.jisol.ngame.demo.network.websocket.game.CocosBridgeWebSocket;
 import cn.jisol.ngame.demo.util.NServerUtil;
 import cn.jisol.ngame.demo.util.NewsContext;
 import cn.jisol.ngame.sync.fps.NFPSInfo;
+import com.sun.management.OperatingSystemMXBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -12,7 +16,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
+import java.lang.management.ManagementFactory;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,6 +28,8 @@ import java.util.Objects;
 public class NGameController {
 
     public NServerUtil nServerUtil = new NServerUtil((byte) 101);
+
+    private static OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
     @Autowired
     SNCocosFrameAction snCocosFrameAction;
@@ -54,4 +61,42 @@ public class NGameController {
         }
         return NewsContext.onSuccess("获取成功",frames);
     }
+
+
+    @ApiImplicitParams({})
+    @ApiOperation(value = "获取DEMO CocosBridge 房间列表")
+    @GetMapping("/cocos-bridge/rooms")
+    public NewsContext<List<HashMap>> vCocosBridgeRooms(){
+        List<HashMap> map = ArrayUtil.map(CocosBridgeWebSocket.SERVERS.values().toArray(new CocosBridgeServer[0]), (v) -> {
+            return new HashMap() {
+                {
+                    put("uuid", v.getUuid());
+                    put("client", v.getClients().size());
+                }
+            };
+        });
+        return NewsContext.onSuccess("获取成功", map);
+    }
+
+    @ApiImplicitParams({})
+    @ApiOperation(value = "获取系统占用")
+    @GetMapping("/server")
+    public NewsContext<HashMap> vServer(){
+        //获取CPU
+        double cpuLoad = osmxb.getSystemCpuLoad();
+        int percentCpuLoad = (int) (cpuLoad * 100);
+        //获取内存
+        double totalvirtualMemory = osmxb.getTotalPhysicalMemorySize();
+        double freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize();
+        double value = freePhysicalMemorySize/totalvirtualMemory;
+        int percentMemoryLoad = (int) ((1-value)*100);
+
+        return NewsContext.onSuccess("获取成功", new HashMap() {
+            {
+                put("cpu", percentCpuLoad);
+                put("memory", percentMemoryLoad);
+            }
+        });
+    }
+
 }
