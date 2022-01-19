@@ -25,6 +25,16 @@ public class CocosBridgeServer extends QueueNClient<NGameMessageOuterClass.NGame
         super(uuid, session);
     }
 
+    //玩家加入服务器
+    public void nJoinServer(CocosBridgeClient client){
+        client.nExitServer();
+        clients.remove(client);
+
+        //加入服务器
+        clients.add(client);
+        client.setServer(this);
+    }
+
     @Override
     public void onMessage(NGameMessageOuterClass.NGameMessage data) {
         //调用RPC功能

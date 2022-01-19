@@ -70,6 +70,15 @@ public class CocosBridgeWebSocket {
     @OnMessage
     public void onMessage(Session session, NGameMessageOuterClass.NGameMessage message){
 
+        String uuid = session.getPathParameters().get("uuid");
+
+        //找到用户
+        NClient client = null;
+        if(Objects.nonNull(client = CLIENTS.get(uuid)) || Objects.nonNull(client = SERVERS.get(uuid))){
+            //调用客户端消息统一接收
+            client.onMessage(message);
+        }
+
     }
 
 
@@ -86,7 +95,8 @@ public class CocosBridgeWebSocket {
                 if(Objects.nonNull(client)){
                     //删除玩家
                     CLIENTS.remove(uuid);
-                    client.getServer().getClients().remove(client);
+                    //退出服务器
+                    client.nExitServer();
                 }
                 break;
             case "server":
