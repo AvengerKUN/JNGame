@@ -1,8 +1,7 @@
 import { uGetFunArgs } from "../util/util-func";
 import NGameApplication from "../network/NGameApplication";
-import NGameMessage from "../protobuf/NGameMessage/NGameMessage.js";
 import ProtoAnyUtil from "../protobuf/ProtoAnyUtil";
-import google from "../protobuf/NGameMessage/NGameMessage.js";
+import NGameMessageProtobuf from "../protobuf/NGameMessage/NGameMessage.js";
 
 type Consturctor = { new (...args: any[]): any };
 
@@ -13,7 +12,7 @@ type Consturctor = { new (...args: any[]): any };
  * @param original 
  * @param args 参数
  */
-function toNGameMessage(target,propertyKey,original,args) : NGameMessage{
+function toNGameMessage(target,propertyKey,original,args) : NGameMessageProtobuf.NGameMessage{
 
     //参数列表
     let param = [];
@@ -45,8 +44,8 @@ function toNGameMessage(target,propertyKey,original,args) : NGameMessage{
      * event : 方法名 - (事件)
      * message : 消息 - body
      */
-    let data:NGameMessage = 
-                NGameMessage.create({
+    let data:NGameMessageProtobuf.NGameMessage = 
+                NGameMessageProtobuf.NGameMessage.create({
                     action: target.name,
                     event: propertyKey,
                     message: null
@@ -69,7 +68,7 @@ function toNGameMessage(target,propertyKey,original,args) : NGameMessage{
 
         //JSON序列化 字节 创建Protobuf Any对象
         data.message = 
-                google.protobuf.Any.create({
+                NGameMessageProtobuf.google.protobuf.Any.create({
                     value:new TextEncoder().encode(JSON.stringify(obj))
                 })
     }
@@ -143,10 +142,7 @@ export function NGameRPCFun(mode:NRPCMode = NRPCMode.DEFAULT) {
             //找到特殊标识 (ngame) 的参数然后找到key 默认: default
             let key:string = vGetArgsValue(arg,args,'ngame') || 'default';
 
-            let application:NGameApplication = NGameApplication.applications.get(key);
-            if(application)
-                application.send(toNGameMessage(target,propertyKey,original,args))
-    
+            NGameApplication.send(key,toNGameMessage(target,propertyKey,original,args))
             //返回结果
             return result;
         }
@@ -179,7 +175,7 @@ export function NUIDMode(value:number){
             // console.log(`NUIDMode() Run : ${target.name}-${propertyKey}`);
 
             //获取 NGameMessage
-            let data:NGameMessage = toNGameMessage(target,propertyKey,original,args);
+            let data:NGameMessageProtobuf.NGameMessage = toNGameMessage(target,propertyKey,original,args);
 
             //重构NGameMessage 为 UID
             data.action = null;
@@ -188,11 +184,9 @@ export function NUIDMode(value:number){
             
             //找到特殊标识 (ngame) 的参数然后找到key 默认: default
             let key:string = vGetArgsValue(arg,args,'ngame') || 'default';
-            let application:NGameApplication = NGameApplication.applications.get(key);
 
             //发送消息
-            if(application)
-                application.send(data)
+            NGameApplication.send(key,data)
 
             //返回结果
             return result;

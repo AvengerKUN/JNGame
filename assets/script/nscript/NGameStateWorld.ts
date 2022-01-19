@@ -1,7 +1,8 @@
 
 import { _decorator, Component, Enum, Game, game, PhysicsSystem2D, PhysicsSystem, CCInteger, director } from 'cc';
 import NGameApplication, { NClientType } from '../../ngame/network/NGameApplication';
-import { NSyncInput } from '../nenity/NFrameInfo';
+import { NInputMessage, NSyncInput } from '../nenity/NFrameInfo';
+import SNCocosBridgeAction from './ncontroller/service/SNCocosBridgeAction';
 import NGameSyncComponent, { NStateSync } from './NGameSyncComponent';
 
 const {ccclass, property} = _decorator;
@@ -13,7 +14,7 @@ const {ccclass, property} = _decorator;
 export default class NGameStateWorld extends Component {
 
     //当前连接的服务器
-    nServerId:String = '1642554330845';
+    nServerId:string = '1642582201434';
 
     //是否是服务端
     isServer:boolean = (NGameApplication.ntype == NClientType.SERVER);
@@ -25,14 +26,16 @@ export default class NGameStateWorld extends Component {
     nSyncTime:number = 1000/10;
 
     @property({displayName:'帧数进行平分',type:CCInteger})
-    nDivideFrame:number = 3;
+    nDivideFrame:number = 1;
 
-    
+
     onLoad(){
         if(this.isServer){
             this.initServer();
         }else{
             this.initClient();
+            //加入服务器
+            SNCocosBridgeAction.nJoinServer(this.nServerId);
         }
     }
 
@@ -54,8 +57,8 @@ export default class NGameStateWorld extends Component {
     //初始化客户端逻辑
     initClient(){
 
-        //为了性能 物理帧 和 视图帧都以同步帧(nSyncTime)为准
-        this.nDivideFrame = 3;
+        //同步帧
+        this.nDivideFrame = 6;
 
         //关闭物理帧
         PhysicsSystem2D && (PhysicsSystem2D.instance.autoSimulation = false);
@@ -66,10 +69,45 @@ export default class NGameStateWorld extends Component {
 
     }
 
+    //初始化提交操作(将客户端的操作提交到服务器)
+    initSubmitInput(){
+
+        //帧数据
+        let inputs:Array<NInputMessage> = new Array();
+
+        //定时发送输入给服务器
+        this.nSyncActors.forEach(nGameSync => {
+            let actor:NInputMessage = new NInputMessage();
+            actor.nId = nGameSync.nId;
+            actor.input = nGameSync.input;
+
+            //将输入初始
+            nGameSync.input = null;
+
+            //整理输入数据
+            if(actor.input) inputs.push(actor);
+        });
+        inputs = inputs.filter(item => item);
+
+
+    }
+
     //运行Server主程序
     nRunMainServer(){
+
+        console.log('nRunMainServer');
+
         game.step();
         this.nNextPhysics();
+        game.pause();
+
+        //获取所有Actor 状态 然后传播出去
+        let states = this.nSyncActors.map(actor => {
+            return actor.vGetStateSync();
+        });
+
+        SNCocosBridgeAction.vSendState(states);
+
     }
 
     //运行Client主程序
@@ -114,8 +152,8 @@ export default class NGameStateWorld extends Component {
         if(isAdd){
             this.nSyncActors.push(actor);
         }else{
-            //如果不能添加则删除
-            // actor.node.destroy();
+            // 如果不能添加则删除
+            actor.node.destroy();
         }
     }
 

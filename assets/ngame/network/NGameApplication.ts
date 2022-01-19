@@ -5,8 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import NGameMessage from "../protobuf/NGameMessage/NGameMessage.js";
+import NGameMessageProtobuf from "../protobuf/NGameMessage/NGameMessage.js";
 import ProtoAnyUtil from "../protobuf/ProtoAnyUtil";
+import { dGetUrlParams } from "../../script/util/NGameUtil";
 
 import { _decorator, Component, Enum } from 'cc';
 const {ccclass, property} = _decorator;
@@ -31,7 +32,7 @@ export default class NGameApplication extends Component {
     socket:WebSocket = null;
 
     //当前Application 消息队列(发送)
-    messages:NGameMessage[] = [];
+    static messages:Map<String,NGameMessageProtobuf.NGameMessage[]> = new Map();
 
     //普通方法列表 {action:{event:method}}
     static methods = {};
@@ -43,7 +44,7 @@ export default class NGameApplication extends Component {
     static applications:Map<String,NGameApplication> = new Map();
 
     //客户端类型
-    static ntype:NClientType = NClientType.CLIENT;
+    static ntype:NClientType = dGetUrlParams('type') === 'server' ? NClientType.SERVER : NClientType.CLIENT;
 
 
     onLoad(){
@@ -66,7 +67,8 @@ export default class NGameApplication extends Component {
                 break;
         }
 
-        this.socket = new WebSocket(`${this.ws}/${ntype}/${Date.now()}`);
+        // this.socket = new WebSocket(`${this.ws}/${ntype}/${Date.now()}`);
+        this.socket = new WebSocket(`${this.ws}/${ntype}/${ntype === "server" ? 1642582201434 : Date.now()}`);
         this.socket.binaryType = 'arraybuffer';
 
         this.socket.onopen = () => {
@@ -76,12 +78,12 @@ export default class NGameApplication extends Component {
             NGameApplication.applications.set(this.nId,this);
 
             //激活发送队列
-            this.send();
+            NGameApplication.send(this.nId);
         }
         
         this.socket.onmessage = (message) => {
 
-            let data:NGameMessage = NGameMessage.decode(new Uint8Array(message.data));
+            let data:NGameMessageProtobuf.NGameMessage = NGameMessageProtobuf.NGameMessage.decode(new Uint8Array(message.data));
 
             //方法参数
             let args = [];
@@ -127,20 +129,37 @@ export default class NGameApplication extends Component {
 
     }
 
+
     //发送消息
-    send(message:NGameMessage = null){
+    send(message:NGameMessageProtobuf.NGameMessage = null){
+
+        let mess = NGameApplication.messages[`${this.nId}`];
 
         //将消息添加到队列中
-        if(message) this.messages.push(message);
+        if(message) mess.push(message);
 
         //如果未连接成功则返回
-        if(this.socket.readyState !== 1 || this.messages.length <= 0) return;
+        if(this.socket.readyState !== 1 || mess.length <= 0) return;
 
         //发送消息
-        while(message = this.messages.shift()){
-            this.socket.send(NGameMessage.encode(message).finish());
+        while(message = mess.shift()){
+            this.socket.send(NGameMessageProtobuf.NGameMessage.encode(message).finish());
         }
 
+    }
+
+    static send(key:String,message:NGameMessageProtobuf.NGameMessage = null){
+
+        if(!NGameApplication.messages[`${key}`]){
+            NGameApplication.messages[`${key}`] = [];
+        }
+        
+        message && NGameApplication.messages[`${key}`].push(message);
+
+        let application = null;
+        if(application = NGameApplication.applications.get(`${key}`))
+            application.send();
+        
     }
 
     // update (dt) {}

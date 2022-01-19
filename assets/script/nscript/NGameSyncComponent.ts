@@ -9,7 +9,7 @@ const {ccclass, property} = _decorator;
 //同步类(默认)
 export class NStateSync {
     position:Vec3;
-    angle:Vec3;
+    angle:number;
 }
 
 /**
@@ -29,23 +29,30 @@ export class NStateSync {
     //是否是服务器添加的Actor (默认不是)
     isActorServer:boolean = false;
 
+    //当前输入
+    public input:InputSync = null;
+
+    public getInput():InputSync{
+        if(!this.input) this.input = this.initInput();
+        return this.input;
+    }
+
     onLoad(){
         this.initSyncComponent();
     }
+
+    //初始化输入对象
+    abstract initInput():InputSync;
+
+    //获取状态同步(同步的信息)
+    abstract vGetStateSync() : StateSync;
 
     //初始化同步
     initSyncComponent(){
         //将当前Actor 添加 到同步世界中
         this.nGameSyncWorld.nAddSyncActor(this);
     }
-    
-    //获取状态同步(同步的信息) 如果有多个则重写方法
-    vGetStateSync(state:StateSync) : StateSync{
-        return Object.assign(state,{
-            position:this.node.position,
-            angle:this.node.angle,
-        })
-    }
+
 
  }
 

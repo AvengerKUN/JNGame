@@ -15,5 +15,18 @@ class SPlayer extends NStateSync{
 @ccclass('NPlayerController')
 export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlayer> {
 
-    
+    initInput(): IPlayer {
+        return new IPlayer();
+    }
+
+    vGetStateSync(): SPlayer {
+        
+        let player = new SPlayer();
+        player.position = this.node.position;
+        player.angle = this.node.angle;
+
+        return player;
+
+    }
+
 }

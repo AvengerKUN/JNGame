@@ -1,4 +1,4 @@
-import google from "./NGameMessage/NGameMessage.js";
+import NGameMessageProtobuf from "./NGameMessage/NGameMessage.js";
 
 export default {
 
@@ -7,8 +7,8 @@ export default {
     ],
 
     //解析Protobuf消息
-    pack(message:any): google.protobuf.Any{
-        return google.protobuf.Any.create(
+    pack(message:any): NGameMessageProtobuf.google.protobuf.Any{
+        return NGameMessageProtobuf.google.protobuf.Any.create(
                     {
                         type_url:`type.googleapis.com/${message.constructor.name}`,
                         value: message.constructor.encode(message).finish()
