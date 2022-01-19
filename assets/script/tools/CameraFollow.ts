@@ -25,8 +25,8 @@ export class CameraFollow extends Component {
     fNode:Node | null = null;
 
     update (deltaTime: number) {
-        if(this.fNode){
-            this.node.setPosition(v3(this.fNode.getPosition().x,this.fNode.getPosition().y,this.node.position.z))
+        if(this.fNode && this.fNode.isValid){
+            this.node.setPosition(this.fNode.getPosition().x,this.fNode.getPosition().y)
         }
     }
 }

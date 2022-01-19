@@ -32,10 +32,13 @@
       },
       {
         "__id__": 10
+      },
+      {
+        "__id__": 12
       }
     ],
     "_prefab": {
-      "__id__": 12
+      "__id__": 14
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -152,6 +155,7 @@
       "__uuid__": "ea10ca11-d2dd-4baa-8193-875593c85bf7",
       "__expectedType__": "cc.Prefab"
     },
+    "bulletMap": null,
     "speedType": 0,
     "moveSpeed": 0,
     "moveDir": {
@@ -234,6 +238,25 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "7cs1yFlF9GOpkNbLo2c/qf"
+  },
+  {
+    "__type__": "4755e13wqlPfKkQfcERAXnK",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 13
+    },
+    "nGameSyncWorld": null,
+    "nId": -1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "d594Sc3ZBDt7l9eWEvGZ7Z"
   },
   {
     "__type__": "cc.PrefabInfo",

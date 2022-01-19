@@ -12,17 +12,13 @@ import { _decorator, Component, Enum } from 'cc';
 const {ccclass, property} = _decorator;
 
 //客户端类型
-enum NClientType {
+export enum NClientType {
     CLIENT, //client
     SERVER //server
 }
 
 @ccclass
 export default class NGameApplication extends Component {
-
-    //编译时设置导出服务器还是客户端
-    @property({displayName:'客户端类型',type:Enum(NClientType), serializable:true})
-    ntype:NClientType = NClientType.CLIENT;
 
     @property({displayName:'WebSocket链接',type:String})
     ws:string = "";
@@ -46,6 +42,9 @@ export default class NGameApplication extends Component {
     //NGameApplication 列表
     static applications:Map<String,NGameApplication> = new Map();
 
+    //客户端类型
+    static ntype:NClientType = NClientType.CLIENT;
+
 
     onLoad(){
         //将时间戳标识id
@@ -58,7 +57,7 @@ export default class NGameApplication extends Component {
     nStartNetwork() {
 
         let ntype = "client";
-        switch(this.ntype){
+        switch(NGameApplication.ntype){
             case NClientType.CLIENT:
                 ntype = "client";
                 break;

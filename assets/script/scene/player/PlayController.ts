@@ -77,6 +77,13 @@ export class PlayController extends Component {
         instance.on(SystemEventType.TOUCH_MOVE, this.onTouchMove, this);
         instance.on(SystemEventType.TOUCH_END, this.onTouchEnd, this);
     }
+
+    onDestroy(){
+        console.log('onDestroy');
+        instance.off(SystemEventType.TOUCH_START, this.onTouchStart, this);
+        instance.off(SystemEventType.TOUCH_MOVE, this.onTouchMove, this);
+        instance.off(SystemEventType.TOUCH_END, this.onTouchEnd, this);
+    }
     
     onTouchStart() {}
 
@@ -147,7 +154,7 @@ export class PlayController extends Component {
         let body = bullet.getComponent(RigidBody2D);
 
         if (body) {
-            body.linearVelocity = direction.normalize().multiply(v2(100,100));
+            body.linearVelocity = direction.normalize().multiply(v2(10,10));
             // body.applyForceToCenter(  , true);
         }
         

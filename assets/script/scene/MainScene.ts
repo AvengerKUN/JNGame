@@ -18,6 +18,7 @@ const { ccclass, property } = _decorator;
 export class MainScene extends Component {
     start () {
         
+        PhysicsSystem2D.instance.autoSimulation = false;
         PhysicsSystem2D.instance.enable = true;
         PhysicsSystem2D.instance.gravity = v2();
 
