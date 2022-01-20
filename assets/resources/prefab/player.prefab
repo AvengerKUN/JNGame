@@ -252,6 +252,7 @@
     },
     "nGameSyncWorld": null,
     "nId": -1,
+    "nPrefabIndex": null,
     "_id": ""
   },
   {

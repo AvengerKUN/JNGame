@@ -1,5 +1,5 @@
 import { NGameRPCClass, NGameRPCFun } from "../../../../ngame/decorator/NDecorator";
-import { NStateSync } from "../../NGameSyncComponent";
+import { NFrameInfo, NInputMessage, NStateInfo } from "../../../nenity/NFrameInfo";
 
 
 @NGameRPCClass
@@ -16,12 +16,29 @@ export default class SNCocosBridgeAction {
     }
 
     /**
-     * 发送状态数据
+     * 向所有客户端发送状态数据 (服务器)
      * @param actors 
      */
     @NGameRPCFun()
-    static vSendState(states: NStateSync[]) {
-        console.log(`SNCocosBridgeAction - vSendState 发送帧数据 : `,states);
+    static vSSendState(states: NStateInfo) {
+        console.log(`SNCocosBridgeAction - vSSendState 发送状态数据 : `,states);
+    }
+
+    /**
+     * 向所有客户端发送帧数据 (服务器)
+     * @param frames 
+     */
+    @NGameRPCFun()
+    static vSSendFrame(frames: NFrameInfo){
+        console.log(`SNCocosBridgeAction - vSSendFrame 服务器发送帧数据 : `,frames);
+    }
+
+    /**
+     * 发送帧数据给服务端 (客户端) 操作
+     */
+    @NGameRPCFun()
+    static vCSendInput(inputs: NInputMessage) {
+        console.log(`SNCocosBridgeAction - vCSendInput 发送帧数据 : `, inputs);
     }
 
 }
