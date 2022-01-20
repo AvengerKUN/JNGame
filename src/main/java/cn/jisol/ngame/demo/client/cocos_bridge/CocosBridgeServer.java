@@ -1,7 +1,9 @@
 package cn.jisol.ngame.demo.client.cocos_bridge;
 
 import cn.jisol.ngame.client.tool.QueueNClient;
+import cn.jisol.ngame.demo.game.action.cocos.bridge.client.CNCocosBridgeAction;
 import cn.jisol.ngame.proto.message.NGameMessageOuterClass;
+import cn.jisol.ngame.rpc.CNGameCActionValue;
 import cn.jisol.ngame.rpc.NGameRPC;
 import com.google.protobuf.InvalidProtocolBufferException;
 import lombok.Getter;
@@ -20,6 +22,9 @@ public class CocosBridgeServer extends QueueNClient<NGameMessageOuterClass.NGame
 
     //当前服务端的客户端列表
     private List<CocosBridgeClient> clients = new CopyOnWriteArrayList<>();
+
+    @CNGameCActionValue
+    public CNCocosBridgeAction cnCocosBridgeAction;
 
     public CocosBridgeServer(String uuid, Session session) {
         super(uuid, session);

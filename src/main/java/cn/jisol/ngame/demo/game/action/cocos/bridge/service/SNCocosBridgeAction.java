@@ -40,17 +40,47 @@ public class SNCocosBridgeAction {
     }
 
     /**
-     * 发送状态数据(服务器)
+     * 向所有客户端发送状态数据 (服务器)
      */
     @NGameRPCMethod
-    public void vSendState(CocosBridgeServer server, @NRPCParam("states") List<HashMap> states){
+    public void vSSendState(CocosBridgeServer server, @NRPCParam("states") HashMap states){
 
-        System.out.println("SNCocosBridgeAction - vSendState 发送状态数据 : " + states.size());
+        System.out.println("SNCocosBridgeAction - vSSendState");
 
         //向所有的客户端发送状态
         server.getClients().forEach(client -> {
             client.getCnCocosBridgeAction().vGetStateCallBack(states);
         });
+
+    }
+
+
+    /**
+     * 向所有客户端发送帧数据 (服务器)
+     */
+    @NGameRPCMethod
+    public void vSSendFrame(CocosBridgeServer server, @NRPCParam("frames") HashMap frames){
+
+        System.out.println("SNCocosBridgeAction - vSSendFrame");
+
+        //向所有的客户端发送状态
+        server.getClients().forEach(client -> {
+            client.getCnCocosBridgeAction().vGetFrameCallBack(frames);
+        });
+
+    }
+
+
+    /**
+     * 发送帧操作给服务端(客户端) 操作
+     */
+    @NGameRPCMethod
+    public void vCSendInput(CocosBridgeClient client, @NRPCParam("frames") List<HashMap> inputs){
+
+        if(Objects.isNull(client.getServer())) return;
+
+        //向服务器发送帧数据
+        client.getServer().getCnCocosBridgeAction().vGetInputCallBack(inputs);
 
     }
 
