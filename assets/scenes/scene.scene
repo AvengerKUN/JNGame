@@ -2029,7 +2029,6 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "nDivideFrame": 3,
     "nSyncPrefabs": [
       {
         "__uuid__": "7ae46261-8921-455c-ab4b-fffb86219e85",

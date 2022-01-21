@@ -41,9 +41,9 @@ export class NStateMessage {
 //帧数据实体
 export class NFrameInfo {
     i:number;
-    ds:Array<NInputMessage> = [];
+    ds:NInputMessage[] = [];
 
-    public getDs():Array<NInputMessage>{
+    public getDs():NInputMessage[]{
         if(!this.ds) this.ds = [];
         return this.ds;
     }

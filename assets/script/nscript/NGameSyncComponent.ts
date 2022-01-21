@@ -45,6 +45,7 @@ const {ccclass, property} = _decorator;
         }
         this.nFillInfo();
         this.initSyncComponent();
+
     }
 
     //补充信息
@@ -98,6 +99,12 @@ const {ccclass, property} = _decorator;
      * 同步状态
      */
      abstract nSyncState(state:StateSync);
+     
+    /**
+     * 逻辑帧
+     * @param dt 同步间隔时间
+     */
+    abstract nUpdate(dt:number,input:InputSync,nt:number);
 
  }
 

@@ -32,13 +32,10 @@
       },
       {
         "__id__": 10
-      },
-      {
-        "__id__": 12
       }
     ],
     "_prefab": {
-      "__id__": 14
+      "__id__": 12
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -141,39 +138,6 @@
     "fileId": "aadF/zImdCi4FhzMwxu1rq"
   },
   {
-    "__type__": "d1ad9fENONEPJAxR+SJzFhR",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 7
-    },
-    "bullet": {
-      "__uuid__": "ea10ca11-d2dd-4baa-8193-875593c85bf7",
-      "__expectedType__": "cc.Prefab"
-    },
-    "bulletMap": null,
-    "speedType": 0,
-    "moveSpeed": 0,
-    "moveDir": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 1,
-      "z": 0
-    },
-    "stopSpeed": 0,
-    "normalSpeed": 100,
-    "fastSpeed": 200,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "f4cYaSQ1FBJYESX29Lk9Zu"
-  },
-  {
     "__type__": "cc.RigidBody2D",
     "_name": "",
     "_objFlags": 0,
@@ -182,7 +146,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 9
+      "__id__": 7
     },
     "enabledContactListener": false,
     "bullet": false,
@@ -215,7 +179,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 11
+      "__id__": 9
     },
     "tag": 0,
     "_group": 1,
@@ -248,11 +212,13 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 13
+      "__id__": 11
     },
     "nGameSyncWorld": null,
     "nId": -1,
-    "nPrefabIndex": null,
+    "stopSpeed": 0,
+    "normalSpeed": 100,
+    "fastSpeed": 200,
     "_id": ""
   },
   {

@@ -1,4 +1,4 @@
-import { CCInteger, EventTouch, SystemEventType, Vec3, _decorator } from "cc";
+import { CCInteger, EventTouch, misc, RigidBody2D, SystemEventType, Vec2, Vec3, _decorator } from "cc";
 import { NStateSync, NSyncInput } from "../../nenity/NFrameInfo";
 import NGameSyncComponent from "../../nscript/NGameSyncComponent";
 import { instance, JoystickDataType, SpeedType } from "./JoyStick";
@@ -22,11 +22,6 @@ class SPlayer extends NStateSync{
 
 @ccclass('NPlayerController')
 export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlayer> {
-
-    @property({
-        tooltip: "速度级别",
-    })
-    speedType: SpeedType = SpeedType.STOP;
     
     @property({
         type: CCInteger,
@@ -46,8 +41,13 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
     })
     fastSpeed = 200;
 
+    body: RigidBody2D | null = null;
+
     onLoad(){
-        
+
+        super.onLoad();
+
+        this.body = this.node.getComponent(RigidBody2D);
         instance.on(SystemEventType.TOUCH_START, this.onTouchStart, this);
         instance.on(SystemEventType.TOUCH_MOVE, this.onTouchMove, this);
         instance.on(SystemEventType.TOUCH_END, this.onTouchEnd, this);
@@ -62,14 +62,12 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
     onTouchStart() {}
 
     onTouchMove(event: EventTouch, data: JoystickDataType) {
-        this.speedType = data.speedType;
         this.getInput().dir = data.moveVec;
-        this.onSetMoveSpeed(this.speedType);
+        this.onSetMoveSpeed(data.speedType);
     }
 
     onTouchEnd(event: EventTouch, data: JoystickDataType) {
-        this.speedType = data.speedType;
-        this.onSetMoveSpeed(this.speedType);
+        this.onSetMoveSpeed(data.speedType);
     }
 
     onSetMoveSpeed(speedType: any) {
@@ -88,6 +86,10 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
         }
     }
 
+    /**
+     * 获取同步类
+     * @returns 返回同步类
+     */
     vGetStateSync(): SPlayer {
         
         let player = new SPlayer();
@@ -98,10 +100,36 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
 
     }
 
+    /**
+     * 同步状态
+     */
     nSyncState(state: SPlayer) {
 
         state.position && (this.node.position = state.position);
         state.angle && (this.node.angle = state.angle);
+
+    }
+
+    //逻辑帧(核心 处理 输入)
+    nUpdate(dt: number, input: IPlayer, nt: number) {
+
+        console.log("NPlayerController - nUpdate",dt,input,nt);
+        this.nInputMove(input);
+
+    }
+
+    //执行移动
+    nInputMove(input:IPlayer){
+
+        if(input.dir == null || input.speed == null) return;
+
+        this.node.angle = misc.radiansToDegrees(Math.atan2(input.dir.y, input.dir.x)) - 90;
+        
+        if (this.body) {
+            const moveVec = Object.assign(new Vec3(),input.dir).multiplyScalar(input.speed / 20);
+            const force = new Vec2(moveVec.x, moveVec.y);
+            this.body.applyForceToCenter(force, true);
+        }
 
     }
 

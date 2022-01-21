@@ -20,7 +20,16 @@ export default class SNCocosBridgeAction {
      * @param actors 
      */
     @NGameRPCFun()
-    static vSSendState(states: NStateInfo) {
+    static vSAllSendState(states: NStateInfo) {
+        console.log(`SNCocosBridgeAction - vSAllSendState 发送状态数据 : `,states);
+    }
+
+    /**
+     * 向指定客户端发送状态数据 (服务器)
+     * @param actors 
+     */
+    @NGameRPCFun()
+    static vSSendState(uuid:string, states: NStateInfo) {
         console.log(`SNCocosBridgeAction - vSSendState 发送状态数据 : `,states);
     }
 
@@ -37,8 +46,7 @@ export default class SNCocosBridgeAction {
      * 发送帧数据给服务端 (客户端) 操作
      */
     @NGameRPCFun()
-    static vCSendInput(inputs: NInputMessage) {
-        console.log(`SNCocosBridgeAction - vCSendInput 发送帧数据 : `, inputs);
+    static vCSendInput(inputs: NInputMessage[]) {
+        console.log(`SNCocosBridgeAction - vCSendInput 发送帧操作 : `, inputs);
     }
-
 }

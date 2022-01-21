@@ -122,6 +122,7 @@ export default class NGameApplication extends Component {
         }
 
         this.socket.onclose = () => {
+            console.log(`${this.nId} WebSocket 断开连接`);
             //失去连接将applications对象移除
             NGameApplication.applications.delete(this.nId);
         }
