@@ -37,19 +37,38 @@ public class SNCocosBridgeAction {
         //加入服务器
         server.nJoinServer(client);
 
+        //加入服务器 将服务器的Actor 推送到玩家
+        server.getCnCocosBridgeAction().vAskWorldState(client.getUuid());
+
     }
 
     /**
      * 向所有客户端发送状态数据 (服务器)
      */
     @NGameRPCMethod
-    public void vSSendState(CocosBridgeServer server, @NRPCParam("states") HashMap states){
+    public void vSAllSendState(CocosBridgeServer server, @NRPCParam("states") HashMap states){
+
+        System.out.println("SNCocosBridgeAction - vSAllSendState");
+
+        //向所有的客户端发送状态
+        server.getClients().forEach(client -> {
+            client.getCnCocosBridgeAction().vGetStateCallBack(states);
+        });
+
+    }
+
+    /**
+     * 向指定客户端发送状态数据 (服务器)
+     */
+    @NGameRPCMethod
+    public void vSSendState(CocosBridgeServer server,@NRPCParam("uuid") String uuid, @NRPCParam("states") HashMap states){
 
         System.out.println("SNCocosBridgeAction - vSSendState");
 
         //向所有的客户端发送状态
         server.getClients().forEach(client -> {
-            client.getCnCocosBridgeAction().vGetStateCallBack(states);
+            if(client.getUuid().equals(uuid))
+                client.getCnCocosBridgeAction().vGetStateCallBack(states);
         });
 
     }
@@ -75,7 +94,7 @@ public class SNCocosBridgeAction {
      * 发送帧操作给服务端(客户端) 操作
      */
     @NGameRPCMethod
-    public void vCSendInput(CocosBridgeClient client, @NRPCParam("frames") List<HashMap> inputs){
+    public void vCSendInput(CocosBridgeClient client, @NRPCParam("inputs") List<Object> inputs){
 
         if(Objects.isNull(client.getServer())) return;
 

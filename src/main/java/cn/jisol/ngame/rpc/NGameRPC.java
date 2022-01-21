@@ -73,10 +73,14 @@ public class NGameRPC {
 
             //判断是否存在 NRPCParam 注解
             if(Objects.nonNull(nRPCParam = AnnotationUtil.getAnnotation(parameters[i],NRPCParam.class))){
-                if(message.get(nRPCParam.value()).getClass().equals(JSONObject.class)){
-                    param[i] = ((JSONObject)message.get(nRPCParam.value())).toBean(parameters[i].getType());
-                }else{
-                    param[i] = message.get(nRPCParam.value());
+                try {
+                    if(message.get(nRPCParam.value()).getClass().equals(JSONObject.class)){
+                        param[i] = ((JSONObject)message.get(nRPCParam.value())).toBean(parameters[i].getType());
+                    }else{
+                        param[i] = message.get(nRPCParam.value());
+                    }
+                }catch (NullPointerException e){
+                    System.out.println("未找到 RPC 参数:"+nRPCParam.value());
                 }
             }else if(NClient.class.equals(parameters[i].getType()) || NClient.class.isAssignableFrom(parameters[i].getType()) ){ //判断类型是否是Client
                 param[i] = client;

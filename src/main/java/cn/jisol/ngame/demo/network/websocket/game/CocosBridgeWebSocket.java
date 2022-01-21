@@ -112,7 +112,7 @@ public class CocosBridgeWebSocket {
 
     @OnError
     public void onError(Session session, Throwable t){
-
+        t.printStackTrace();
     }
 
 }
