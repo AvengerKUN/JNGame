@@ -2,6 +2,13 @@ import { Vec3 } from "cc";
 
 
 /**
+ * 这是一个生成节点的操作
+ */
+export abstract class NAddActor{
+    nId:number; // 生成节点的Id
+}
+
+/**
  * 基础帧同步 输入数据
  */
 export abstract class NSyncInput{

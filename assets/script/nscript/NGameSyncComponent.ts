@@ -1,7 +1,7 @@
 
 
 import { _decorator, Component, Enum, CCInteger, Vec3, v3, Prefab, Node } from 'cc';
-import { NStateSync, NSyncInput } from '../nenity/NFrameInfo';
+import { NAddActor, NStateSync, NSyncInput } from '../nenity/NFrameInfo';
 import NGameStateWorld from './NGameStateWorld';
 
 const {ccclass, property} = _decorator;
@@ -18,8 +18,8 @@ const {ccclass, property} = _decorator;
     @property({displayName:'属于那个同步类',type:NGameStateWorld})
     nGameSyncWorld:NGameStateWorld = null;
 
-    @property({displayName:'同步ID',type:CCInteger})
-    nId:number = -1;
+    // @property({displayName:'同步ID',type:CCInteger})
+    nId:number = null;
 
     //是否是服务器添加的Actor (默认不是)
     isActorServer:boolean = false;
@@ -40,9 +40,12 @@ const {ccclass, property} = _decorator;
 
     onLoad(){
 
-        if(this.nId){
-            this.node.name = `sync_${this.nId}`
-        }
+        // if(this.nId){
+        //     this.node.name = `sync_${this.nId}`
+        // }else{
+            
+        // }
+
         this.nFillInfo();
         this.initSyncComponent();
 
@@ -93,6 +96,16 @@ const {ccclass, property} = _decorator;
     initSyncComponent(){
         //将当前Actor 添加 到同步世界中
         this.nGameSyncWorld.nAddSyncActor(this);
+    }
+
+    /**
+     * 动态初始化
+     * @param nGameSyncComponent 控制的组件
+     * @param nAddActor 添加的操作
+     */
+    dyInit(nGameSyncComponent:NGameSyncComponent<NSyncInput,NStateSync>,nAddActor:NAddActor){
+        this.nGameSyncWorld = nGameSyncComponent.nGameSyncWorld;
+        this.nId = nAddActor.nId;
     }
 
     /**

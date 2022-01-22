@@ -23,4 +23,9 @@ export class MainScene extends Component {
         PhysicsSystem2D.instance.gravity = v2();
 
     }
+    
+    //加入游戏
+    nJoinGame(){
+        
+    }
 }

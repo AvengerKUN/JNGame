@@ -29,10 +29,13 @@
       },
       {
         "__id__": 8
+      },
+      {
+        "__id__": 10
       }
     ],
     "_prefab": {
-      "__id__": 10
+      "__id__": 12
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -195,6 +198,25 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "fdmyuuUpBNUrD88Nipfi2+"
+  },
+  {
+    "__type__": "70330Uk0KJCcoYwxMZGpFX+",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 11
+    },
+    "nGameSyncWorld": null,
+    "nId": -1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "59/NdltqZC2Y/206Msg0Vd"
   },
   {
     "__type__": "cc.PrefabInfo",

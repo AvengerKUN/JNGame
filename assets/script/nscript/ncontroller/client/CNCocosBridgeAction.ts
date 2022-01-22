@@ -15,7 +15,7 @@ export class CNCocosBridgeAction {
      */
     @NGameRPCFun()
     vGetStateCallBack(states:NStateInfo){
-        console.log(`CNCocosBridgeAction - vGetStateCallBack 接收到`,states);
+        // console.log(`CNCocosBridgeAction - vGetStateCallBack 接收到`,states);
 
         let nSyncWorld = CNCocosBridgeAction.nSyncWorld;
         //接收到状态 交给同步世界组件处理
@@ -31,7 +31,7 @@ export class CNCocosBridgeAction {
     @NGameRPCFun()
     vGetInputCallBack(inputs:NInputMessage[]){
 
-        console.log(`CNCocosBridgeAction - vGetInputCallBack 接收到帧输入`,inputs);
+        // console.log(`CNCocosBridgeAction - vGetInputCallBack 接收到帧输入`,inputs);
 
         let nSyncWorld = CNCocosBridgeAction.nSyncWorld;
         //接收到输入 处理输入
@@ -46,7 +46,7 @@ export class CNCocosBridgeAction {
      */
     @NGameRPCFun()
     vGetFrameCallBack(frame:NFrameInfo){
-        console.log(`CNCocosBridgeAction - vGetFrameCallBack 接收到帧数据`,frame);
+        // console.log(`CNCocosBridgeAction - vGetFrameCallBack 接收到帧数据`,frame);
 
         let nSyncWorld = CNCocosBridgeAction.nSyncWorld;
         //接收到帧数据 处理帧数据

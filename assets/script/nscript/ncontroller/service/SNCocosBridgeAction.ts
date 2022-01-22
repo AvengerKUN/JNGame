@@ -12,7 +12,7 @@ export default class SNCocosBridgeAction {
      */
     @NGameRPCFun()
     static nJoinServer(id:string){
-        console.log(`SNCocosBridgeAction - nJoinServer 加入服务器 : ${id}`);
+        // console.log(`SNCocosBridgeAction - nJoinServer 加入服务器 : ${id}`);
     }
 
     /**
@@ -21,7 +21,7 @@ export default class SNCocosBridgeAction {
      */
     @NGameRPCFun()
     static vSAllSendState(states: NStateInfo) {
-        console.log(`SNCocosBridgeAction - vSAllSendState 发送状态数据 : `,states);
+        // console.log(`SNCocosBridgeAction - vSAllSendState 发送状态数据 : `,states);
     }
 
     /**
@@ -30,7 +30,7 @@ export default class SNCocosBridgeAction {
      */
     @NGameRPCFun()
     static vSSendState(uuid:string, states: NStateInfo) {
-        console.log(`SNCocosBridgeAction - vSSendState 发送状态数据 : `,states);
+        // console.log(`SNCocosBridgeAction - vSSendState 发送状态数据 : `,states);
     }
 
     /**
@@ -39,7 +39,7 @@ export default class SNCocosBridgeAction {
      */
     @NGameRPCFun()
     static vSSendFrame(frames: NFrameInfo){
-        console.log(`SNCocosBridgeAction - vSSendFrame 服务器发送帧数据 : `,frames);
+        // console.log(`SNCocosBridgeAction - vSSendFrame 服务器发送帧数据 : `,frames);
     }
 
     /**
@@ -47,6 +47,6 @@ export default class SNCocosBridgeAction {
      */
     @NGameRPCFun()
     static vCSendInput(inputs: NInputMessage[]) {
-        console.log(`SNCocosBridgeAction - vCSendInput 发送帧操作 : `, inputs);
+        // console.log(`SNCocosBridgeAction - vCSendInput 发送帧操作 : `, inputs);
     }
 }
