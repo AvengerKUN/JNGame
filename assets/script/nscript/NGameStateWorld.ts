@@ -6,6 +6,7 @@ import { newNextId } from '../../ngame/util/util-ngame';
 import { NFrameInfo, NInputMessage, NStateInfo, NStateMessage, NStateSync, NSyncInput } from '../nenity/NFrameInfo';
 import { CNCocosBridgeAction } from './ncontroller/client/CNCocosBridgeAction';
 import SNCocosBridgeAction from './ncontroller/service/SNCocosBridgeAction';
+import NGameComponent from './NGameComponent';
 import NGameSyncComponent from './NGameSyncComponent';
 
 const {ccclass, property} = _decorator;
@@ -25,19 +26,22 @@ export default class NGameStateWorld extends Component {
     //所有同步类
     private nSyncActors:Map<number,NGameSyncComponent<NSyncInput,NStateSync>> = new Map();
 
+    //所有组件类
+    private nComponents:Map<number,NGameComponent<NSyncInput>> = new Map();
+
     //设置帧数
-    nSyncTime:number = 1000/1;
+    nSyncTime:number = 1000/10;
 
     //本地同步帧
     nLocalFrame:number = 0;
 
     @property({displayName:'大于多少帧进行追帧',type:CCInteger})
-    nMaxFrameBan:number = 5;
+    nMaxFrameBan:number = 3;
     @property({displayName:'大于多少帧进行循环追帧',type:CCInteger})
-    nMaxFrameLoopBan:number = 10;
+    nMaxFrameLoopBan:number = 6;
 
     // @property({displayName:'帧数进行平分',type:CCInteger})
-    nDivideFrame:number = 1;
+    nDivideFrame:number = 3;
 
     @property({displayName:'同步 Prefab 列表',type:[Prefab]})
     nSyncPrefabs:Prefab[] = [];
@@ -216,7 +220,7 @@ export default class NGameStateWorld extends Component {
         let inputs:Array<NInputMessage> = new Array();
 
         //定时发送输入给服务器
-        for (const nGameSync of this.nSyncActors.values()) {
+        for (const nGameSync of [...Array.from(this.nSyncActors.values()),...Array.from(this.nComponents.values())]) {
             let actor:NInputMessage = new NInputMessage();
             actor.nId = nGameSync.nId;
             actor.input = nGameSync.input;
@@ -244,19 +248,27 @@ export default class NGameStateWorld extends Component {
         this.nFameInfo.i = this.nLocalFrame++;
 
         //执行物理层
-        (Array.from(new Array(this.nDivideFrame).keys())).forEach(() => {
-            //执行下一帧逻辑
-            this.nNextLogic(this.nFameInfo);
-            this.nNextPhysics(this.nFameInfo);
+        (Array.from(new Array(this.nDivideFrame).keys())).forEach((value,index) => {
+
+            if(index === 0){
+                //执行下一帧逻辑
+                this.nNextLogic(this.nFameInfo);
+                this.nNextPhysics(this.nFameInfo);
+            }else{
+                //执行下一帧逻辑
+                this.nNextLogic(new NFrameInfo());
+                this.nNextPhysics(new NFrameInfo());
+            }
         })
         
         //执行视图层
         game.step();
         game.pause();
 
+        // console.log(this.nFameInfo);
+
         //发送帧数据给所有客户端
         SNCocosBridgeAction.vSSendFrame(this.nFameInfo);
-        console.log(this.nFameInfo);
         
         //初始化帧数据
         this.nFameInfo = new NFrameInfo();
@@ -277,7 +289,8 @@ export default class NGameStateWorld extends Component {
             message.nId = actor.nId;
             message.prefab = actor.nPrefabIndex;
             message.path = actor.nWorldPath;
-            message.state = actor.vGetStateSync()
+            message.state = actor.vGetStateSync();
+            // message.input = actor.vGetInputSync();
             return message;
 
         });
@@ -339,7 +352,7 @@ export default class NGameStateWorld extends Component {
 
         let dt:number = this.nSyncTime / this.nDivideFrame;
 
-        Array.from(this.nSyncActors.values()).forEach(nGameSync => {
+        [...Array.from(this.nSyncActors.values()),...Array.from(this.nComponents.values())].forEach(nGameSync => {
 
             let input:NSyncInput = nGameSync.initInput();
 
@@ -387,7 +400,7 @@ export default class NGameStateWorld extends Component {
 
     //添加同步对象
     nAddSyncActor(actor:NGameSyncComponent<NSyncInput,NStateSync>){
-        
+
         let isAdd = false;
         if(this.isServer){
             //如果是服务器则只能添加不是服务器的Actor
@@ -399,13 +412,27 @@ export default class NGameStateWorld extends Component {
         //添加Actor
         if(isAdd){
             //如果是服务器则生成nId
-            if(this.isServer){
+            if(this.isServer && actor.nId === null){
                 actor.nId = this.nextSyncNumber();
             }
             this.nSyncActors.set(actor.nId,actor);
         }else{
             // 如果不能添加则删除
             actor.node.destroy();
+        }
+
+    }
+
+    //添加同步组件
+    nAddComponent(component:NGameComponent<NSyncInput>){
+
+        if(component.nId){
+            
+            this.nComponents.set(component.nId,component);
+
+        }else{
+            // 如果没有NID则删除
+            component.node.destroy();
         }
 
     }

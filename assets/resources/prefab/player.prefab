@@ -215,10 +215,21 @@
       "__id__": 11
     },
     "nGameSyncWorld": null,
-    "nId": -1,
     "stopSpeed": 0,
+    "bulletMap": null,
     "normalSpeed": 100,
     "fastSpeed": 200,
+    "moveDir": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 1,
+      "z": 0
+    },
+    "moveSpeed": 0,
+    "bullet": {
+      "__uuid__": "ea10ca11-d2dd-4baa-8193-875593c85bf7",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": ""
   },
   {

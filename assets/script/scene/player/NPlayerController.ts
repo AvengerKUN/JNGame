@@ -36,6 +36,8 @@ class SPlayer extends NStateSync{
     linearVelocity:Vec2;
     angularDamping:number;
     angularVelocity:number;
+    moveDir:Vec3;
+    moveSpeed:number;
 
 }
 
@@ -139,10 +141,14 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
         let player = new SPlayer();
         player.position = this.node.position;
         player.angle = this.node.angle;
+
         player.linearVelocity = this.body.linearVelocity;
         player.linearDamping = this.body.linearDamping;
         player.angularVelocity = this.body.angularVelocity;
         player.angularDamping = this.body.angularDamping;
+
+        player.moveDir = this.moveDir;
+        player.moveSpeed = this.moveSpeed;
 
         return player;
 
@@ -165,6 +171,9 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
             this.body.angularVelocity = state.angularVelocity
         if(this.body.angularDamping != state.angularDamping)
             this.body.angularDamping = state.angularDamping
+
+        state.moveDir && (this.moveDir = state.moveDir);
+        state.moveSpeed && (this.moveSpeed = state.moveSpeed);
 
     }
 

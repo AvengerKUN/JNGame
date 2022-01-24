@@ -2,6 +2,7 @@
 
 import { _decorator, Component, Enum, CCInteger, Vec3, v3, Prefab, Node } from 'cc';
 import { NAddActor, NStateSync, NSyncInput } from '../nenity/NFrameInfo';
+import NGameComponent from './NGameComponent';
 import NGameStateWorld from './NGameStateWorld';
 
 const {ccclass, property} = _decorator;
@@ -33,18 +34,15 @@ const {ccclass, property} = _decorator;
     //当前Node 在 World的位置
     nWorldPath:string = null;
 
+    // //上一次输入
+    // lastInput:InputSync = null;
+
     public getInput():InputSync{
         if(!this.input) this.input = this.initInput();
         return this.input;
     }
 
     onLoad(){
-
-        // if(this.nId){
-        //     this.node.name = `sync_${this.nId}`
-        // }else{
-            
-        // }
 
         this.nFillInfo();
         this.initSyncComponent();
@@ -92,6 +90,11 @@ const {ccclass, property} = _decorator;
     //获取状态同步(同步的信息)
     abstract vGetStateSync() : StateSync;
 
+    // //获取输入同步(输入的信息)
+    // vGetInputSync() : InputSync {
+    //     return this.lastInput;
+    // }
+
     //初始化同步
     initSyncComponent(){
         //将当前Actor 添加 到同步世界中
@@ -103,15 +106,27 @@ const {ccclass, property} = _decorator;
      * @param nGameSyncComponent 控制的组件
      * @param nAddActor 添加的操作
      */
-    dyInit(nGameSyncComponent:NGameSyncComponent<NSyncInput,NStateSync>,nAddActor:NAddActor){
+    dyInit(nGameSyncComponent:NGameSyncComponent<NSyncInput,NStateSync> | NGameComponent<NSyncInput>,nAddActor:NAddActor){
+
         this.nGameSyncWorld = nGameSyncComponent.nGameSyncWorld;
+
+        if(nAddActor.nId != null)
+            this.isActorServer = true;
+        else
+            this.isActorServer = false;
+
+        if(this.nGameSyncWorld.isServer && !nAddActor.nId){
+            nAddActor.nId = this.nGameSyncWorld.nextSyncNumber();
+        }
+
         this.nId = nAddActor.nId;
+
     }
 
     /**
      * 同步状态
      */
-     abstract nSyncState(state:StateSync);
+    abstract nSyncState(state:StateSync);
      
     /**
      * 逻辑帧

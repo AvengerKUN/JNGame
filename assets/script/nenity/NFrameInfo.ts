@@ -42,6 +42,8 @@ export class NStateMessage {
     path:string;
     //状态
     state:NStateSync;
+    //输入
+    input:NSyncInput;
 
 }
 
