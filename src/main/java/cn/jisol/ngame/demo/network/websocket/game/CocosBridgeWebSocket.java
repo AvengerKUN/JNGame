@@ -39,6 +39,9 @@ public class CocosBridgeWebSocket {
     @OnOpen
     public void onOpen(Session session){
 
+        session.setMaxTextMessageBufferSize((1024*1024)*1);
+        session.setMaxBinaryMessageBufferSize((1024*1024)*1);
+
         String uuid = session.getPathParameters().get("uuid");
         String type = session.getPathParameters().get("type");
 

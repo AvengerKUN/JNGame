@@ -80,7 +80,7 @@ public class SNCocosBridgeAction {
     @NGameRPCMethod
     public void vSSendFrame(CocosBridgeServer server, @NRPCParam("frames") HashMap frames){
 
-        System.out.println("SNCocosBridgeAction - vSSendFrame");
+//        System.out.println("SNCocosBridgeAction - vSSendFrame");
 
         //向所有的客户端发送状态
         server.getClients().forEach(client -> {
