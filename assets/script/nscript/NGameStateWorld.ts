@@ -30,7 +30,7 @@ export default class NGameStateWorld extends Component {
     private nComponents:Map<number,NGameComponent<NSyncInput>> = new Map();
 
     //设置帧数
-    nSyncTime:number = 1000/10;
+    nSyncTime:number = 1000/15;
 
     //本地同步帧
     nLocalFrame:number = 0;
@@ -41,7 +41,7 @@ export default class NGameStateWorld extends Component {
     nMaxFrameLoopBan:number = 6;
 
     // @property({displayName:'帧数进行平分',type:CCInteger})
-    nDivideFrame:number = 3;
+    nDivideFrame:number = 4;
 
     @property({displayName:'同步 Prefab 列表',type:[Prefab]})
     nSyncPrefabs:Prefab[] = [];

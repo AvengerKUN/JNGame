@@ -1,6 +1,8 @@
 import { CCInteger , debug, EventTouch, misc,Node, Prefab, RigidBody2D, SystemEventType, instantiate,  Vec2, Vec3, _decorator, v2 } from "cc";
+import { UserInfo } from "../../data/UserData";
 import { NAddActor, NStateSync, NSyncInput } from "../../nenity/NFrameInfo";
 import NGameSyncComponent from "../../nscript/NGameSyncComponent";
+import { MainScene } from "../MainScene";
 import { instance, JoystickDataType, SpeedType } from "./JoyStick";
 import { NBulletController } from "./NBulletController";
 
@@ -38,11 +40,15 @@ class SPlayer extends NStateSync{
     angularVelocity:number;
     moveDir:Vec3;
     moveSpeed:number;
+    owner:number;
 
 }
 
 @ccclass('NPlayerController')
 export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlayer> {
+
+    //控制者
+    owner:number;
     
     @property({
         type: CCInteger,
@@ -67,7 +73,6 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
         tooltip: "最快速度",
     })
     fastSpeed = 200;
-
     
     @property({
         displayName: "Move Dir",
@@ -94,10 +99,13 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
         super.onLoad();
 
         this.body = this.node.getComponent(RigidBody2D);
-        instance.on(SystemEventType.TOUCH_START, this.onTouchStart, this);
-        instance.on(SystemEventType.TOUCH_MOVE, this.onTouchMove, this);
-        instance.on(SystemEventType.TOUCH_END, this.onTouchEnd, this);
-        
+
+        if(this.owner === UserInfo.userId){
+            instance.on(SystemEventType.TOUCH_START, this.onTouchStart, this);
+            instance.on(SystemEventType.TOUCH_MOVE, this.onTouchMove, this);
+            instance.on(SystemEventType.TOUCH_END, this.onTouchEnd, this);
+        }
+
     }
 
 
@@ -113,6 +121,7 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
     }
 
     onTouchEnd(event: EventTouch, data: JoystickDataType) {
+        this.getInput().dir = data.moveVec;
         this.onSetMoveSpeed(data.speedType);
     }
 
@@ -149,6 +158,7 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
 
         player.moveDir = this.moveDir;
         player.moveSpeed = this.moveSpeed;
+        player.owner = this.owner;
 
         return player;
 
@@ -174,6 +184,9 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
 
         state.moveDir && (this.moveDir = state.moveDir);
         state.moveSpeed && (this.moveSpeed = state.moveSpeed);
+        state.owner && (this.owner = state.owner);
+
+        this.bulletMap = MainScene.SBulletMap;
 
     }
 
@@ -192,15 +205,15 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
     //执行移动
     nInputMove(input:IPlayer){
 
-        if(input.dir != null || input.speed != null) {
+        if(input.dir) {
             this.moveDir = input.dir;
         };
 
-        if(input.speed != null) {
+        if(input.speed) {
             this.moveSpeed = input.speed;
         };
 
-        if(this.moveSpeed === 0) return;
+        if(this.moveSpeed === null && input.dir === null) return;
 
         this.node.angle = misc.radiansToDegrees(Math.atan2(this.moveDir.y, this.moveDir.x)) - 90;
         
@@ -242,10 +255,10 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
         bulletController.dyInit(this,aBullet);
 
         bullet.angle = aBullet.angle;
-        let ration = (aBullet.angle*Math.PI/180) + (Math.PI/2);
+        let ration = aBullet.angle * Math.PI / 180;
         let direction = v2(Math.cos(ration),Math.sin(ration));
 
-        bullet.setPosition(aBullet.position.x + 40 * direction.x,aBullet.position.y + 40 * direction.y);
+        bullet.setPosition(aBullet.position.x + 50 * direction.x,aBullet.position.y + 50 * direction.y);
         this.bulletMap.addChild(bullet);
         
         //射击

@@ -3400,7 +3400,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "ws": "ws://localhost:9190/game/cocos/bridge",
+    "ws": "ws://127.0.0.1:9190/game/cocos/bridge",
     "nId": "default",
     "_id": "07bocCyFpOzIrZ2o5v3us6"
   },
@@ -3462,6 +3462,10 @@
       {
         "__uuid__": "7ae46261-8921-455c-ab4b-fffb86219e85",
         "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "ea10ca11-d2dd-4baa-8193-875593c85bf7",
+        "__expectedType__": "cc.Prefab"
       }
     ],
     "nSyncWorld": {
@@ -3491,6 +3495,12 @@
     },
     "camera": {
       "__id__": 57
+    },
+    "shoot": {
+      "__id__": 81
+    },
+    "bulletMap": {
+      "__id__": 53
     },
     "_id": "69ECSnUQRAjrAXf8a77Rx2"
   },
