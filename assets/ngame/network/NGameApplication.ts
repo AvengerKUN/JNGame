@@ -10,6 +10,7 @@ import ProtoAnyUtil from "../protobuf/ProtoAnyUtil";
 import { dGetUrlParams } from "../../script/util/NGameUtil";
 
 import { _decorator, Component, Enum } from 'cc';
+import { UserInfo } from "../../script/data/UserData";
 const {ccclass, property} = _decorator;
 
 //客户端类型
@@ -48,14 +49,16 @@ export default class NGameApplication extends Component {
 
 
     onLoad(){
-        //将时间戳标识id
-        this.nId = this.nId || Date.now().toString();
 
         //连接WebSocket
         this.nStartNetwork();
+
     }
 
     nStartNetwork() {
+
+        //将时间戳标识id
+        this.nId = this.nId || Date.now().toString();
 
         let ntype = "client";
         switch(NGameApplication.ntype){
@@ -67,8 +70,7 @@ export default class NGameApplication extends Component {
                 break;
         }
 
-        // this.socket = new WebSocket(`${this.ws}/${ntype}/${Date.now()}`);
-        this.socket = new WebSocket(`${this.ws}/${ntype}/${ntype === "server" ? 1642582201434 : Date.now()}`);
+        this.socket = new WebSocket(`${this.ws}/${ntype}/${UserInfo.userId}`);
         this.socket.binaryType = 'arraybuffer';
 
         this.socket.onopen = () => {

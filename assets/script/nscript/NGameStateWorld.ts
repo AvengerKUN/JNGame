@@ -3,6 +3,7 @@ import { _decorator, Component, Enum, Game, game, PhysicsSystem2D, PhysicsSystem
 import NGameApplication, { NClientType } from '../../ngame/network/NGameApplication';
 import { uWait } from '../../ngame/util/util-func';
 import { newNextId } from '../../ngame/util/util-ngame';
+import { UserInfo } from '../data/UserData';
 import { NFrameInfo, NInputMessage, NStateInfo, NStateMessage, NStateSync, NSyncInput } from '../nenity/NFrameInfo';
 import { CNCocosBridgeAction } from './ncontroller/client/CNCocosBridgeAction';
 import SNCocosBridgeAction from './ncontroller/service/SNCocosBridgeAction';
@@ -16,9 +17,6 @@ const {ccclass, property} = _decorator;
  */
 @ccclass
 export default class NGameStateWorld extends Component {
-
-    //当前连接的服务器
-    nServerId:string = '1642582201434';
 
     //是否是服务端
     isServer:boolean = (NGameApplication.ntype == NClientType.SERVER);
@@ -64,6 +62,12 @@ export default class NGameStateWorld extends Component {
 
     onLoad(){
 
+        this.init();
+        
+    }
+
+    init(){
+
         CNCocosBridgeAction.nSyncWorld = this;
 
         if(this.isServer){
@@ -71,8 +75,9 @@ export default class NGameStateWorld extends Component {
         }else{
             this.initClient();
             //加入服务器
-            SNCocosBridgeAction.nJoinServer(this.nServerId);
+            if(UserInfo.nServerID) SNCocosBridgeAction.nJoinServer(UserInfo.nServerID);
         }
+
     }
 
     //初始化服务器逻辑

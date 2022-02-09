@@ -93,6 +93,8 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
     bullet:Prefab = null;
 
     body: RigidBody2D | null = null;
+    //临时角度
+    degrees: number = 0;
 
     onLoad(){
 
@@ -209,13 +211,15 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
             this.moveDir = input.dir;
         };
 
-        if(input.speed) {
+        if(input.speed != null) {
             this.moveSpeed = input.speed;
         };
 
         if(this.moveSpeed === null && input.dir === null) return;
 
-        this.node.angle = misc.radiansToDegrees(Math.atan2(this.moveDir.y, this.moveDir.x)) - 90;
+        this.degrees = Math.atan2(this.moveDir.y, this.moveDir.x);
+        this.node.angle = misc.radiansToDegrees(this.degrees) - 90;
+        
         
         if (this.body) {
             const moveVec = Object.assign(new Vec3(),this.moveDir).multiplyScalar(this.moveSpeed / 20);
@@ -235,7 +239,7 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
 
         let bullet = new ABullet();
         
-        bullet.angle = this.node.angle;
+        bullet.angle = this.degrees;
         bullet.position = this.node.position;
 
         this.getInput().bullet = bullet;
@@ -254,8 +258,7 @@ export default class NPlayerController extends NGameSyncComponent<IPlayer,SPlaye
         let bulletController:NBulletController = bullet.getComponent(NBulletController);
         bulletController.dyInit(this,aBullet);
 
-        bullet.angle = aBullet.angle;
-        let ration = aBullet.angle * Math.PI / 180;
+        let ration = aBullet.angle;
         let direction = v2(Math.cos(ration),Math.sin(ration));
 
         bullet.setPosition(aBullet.position.x + 50 * direction.x,aBullet.position.y + 50 * direction.y);

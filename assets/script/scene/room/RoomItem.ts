@@ -1,5 +1,6 @@
 
-import { _decorator, Component, Node, Label } from 'cc';
+import { _decorator, Component, Node, Label, director } from 'cc';
+import { UserInfo } from '../../data/UserData';
 const { ccclass, property } = _decorator;
 
 /**
@@ -21,4 +22,27 @@ export class RoomItem extends Component {
     rNameItem:Label = null;
     @property({displayName:'服务器人数Item',type:Label})
     rNumItem:Label = null;
+
+    //场景ID
+    nServerId:string = null;
+
+    start(){
+
+        //如果有场景ID 则 激活点击事件
+        if(this.nServerId){
+            this.node.on(Node.EventType.TOUCH_END,this.loadScene,this)
+        }
+        
+    }
+
+    loadScene(){
+
+        //更改服务器ID
+        UserInfo.nServerID = this.nServerId;
+        director.loadScene("scene");
+
+    }
+
+
+
 }

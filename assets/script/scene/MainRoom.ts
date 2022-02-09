@@ -34,6 +34,7 @@ export class MainRoom extends Component {
             let room = instantiate(this.iRooms);
             let roomItem = room.getComponent(RoomItem);
             roomItem.rNameItem.string = value.uuid;
+            roomItem.nServerId = value.uuid;
             roomItem.rNumItem.string = `${value.client}`;
             this.nRooms.addChild(room);
         })

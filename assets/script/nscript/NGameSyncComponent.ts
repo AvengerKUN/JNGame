@@ -49,7 +49,7 @@ const {ccclass, property} = _decorator;
 
     }
 
-    //补充信息
+    //补充信息 节点层级
     nFillInfo(){
 
         //找到当前Node 的 Prefab 在 同步世界组件的 位置
