@@ -23,7 +23,7 @@ export class SystemInfo extends Component {
         //获取系统信息
         let info = (await JGet("/open/server")).data;
 
-        this.nServerInfo.string = `当前服务器 CPU : ${info.cpu}% 内存 : ${info.memory}%`
+        this.nServerInfo.string = `当前服务器 CPU : ${info.cpu}% 内存 : ${info.ram}%`
 
     }
 

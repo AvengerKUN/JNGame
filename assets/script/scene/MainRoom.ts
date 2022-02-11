@@ -18,13 +18,19 @@ export class MainRoom extends Component {
     @property({displayName:'房间item',type:Prefab})
     iRooms:Prefab = null;
 
+    timer:number = null;
+
     async onLoad(){
+
         //加载房间列表
-        this.nUpdateRoomList();
+        this.timer = setInterval(this.nUpdateRoomList.bind(this),1000)
+
     }
 
     //更新房间列表
     async nUpdateRoomList(){
+
+        this.nRooms.removeAllChildren();
 
         //获取房间
         this.rooms = (await JGet("/open/cocos-bridge/rooms")).data;
@@ -40,6 +46,17 @@ export class MainRoom extends Component {
         })
 
         console.log(`房间列表:`,this.rooms);
+    }
+
+    //创建房间
+    async nAddRoom(){
+        await JGet("/open/add/cocos/state/room",{roomId:Date.now()});
+    }
+
+    onDisable(){
+
+        clearInterval(this.timer);
+
     }
 
 }

@@ -45,7 +45,9 @@ export default class NGameApplication extends Component {
     static applications:Map<String,NGameApplication> = new Map();
 
     //客户端类型
-    static ntype:NClientType = dGetUrlParams('type') === 'server' ? NClientType.SERVER : NClientType.CLIENT;
+    // static ntype:NClientType = dGetUrlParams('type') === 'server' ? NClientType.SERVER : NClientType.CLIENT;
+    static ntype:NClientType = NClientType.CLIENT;
+    // static ntype:NClientType = NClientType.SERVER;
 
 
     onLoad(){
