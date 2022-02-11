@@ -1,1 +1,0 @@
-protoc --proto_path=src --csharp_out=build/gen --csharp_opt=file_extension=.g.cs,base_namespace=Example src/foo.proto
