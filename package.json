@@ -1,0 +1,20 @@
+{
+  "author": "",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "protobufjs": "^6.11.2"
+  },
+  "description": "",
+  "devDependencies": {},
+  "license": "ISC",
+  "main": "index.js",
+  "name": "friendpass",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "3.4.0",
+  "creator": {
+    "version": "3.4.0"
+  },
+  "uuid": "eb61af4c-eedc-4cfe-a0e1-a43951312ace"
+}

@@ -1,0 +1,29 @@
+
+
+/**
+ * 基础帧同步 输入数据
+ */
+export abstract class NSyncInput{
+
+}
+
+//帧输入数据
+export class NInputMessage {
+
+    //针对某个SyncComponent
+    nId:Number = null;
+    //操作
+    input:NSyncInput = null;
+
+}
+
+//帧数据实体
+export class NFrameInfo {
+    i:number = null;
+    ds:Array<NInputMessage> = [];
+
+    public getDs():Array<NInputMessage>{
+        if(!this.ds) this.ds = [];
+        return this.ds;
+    }
+}
