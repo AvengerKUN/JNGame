@@ -1,10 +1,8 @@
 package cn.jisol.ngame.demo.controller;
 
 
-import cn.hutool.core.util.ArrayUtil;
-import cn.jisol.ngame.demo.client.cocos_bridge.CocosBridgeServer;
 import cn.jisol.ngame.demo.game.action.cocos.frame.service.SNCocosFrameAction;
-import cn.jisol.ngame.demo.network.websocket.game.CocosBridgeWebSocket;
+import cn.jisol.ngame.demo.service.CocosStateService;
 import cn.jisol.ngame.demo.util.NServerUtil;
 import cn.jisol.ngame.demo.util.NewsContext;
 import cn.jisol.ngame.sync.fps.NFPSInfo;
@@ -17,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -29,10 +28,15 @@ public class NGameController {
 
     public NServerUtil nServerUtil = new NServerUtil((byte) 101);
 
-    private static OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+    private static final OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+
+    //Cocos State房间列表
+    private final List<String> rCocosState = new ArrayList<>();
 
     @Autowired
     SNCocosFrameAction snCocosFrameAction;
+    @Autowired
+    CocosStateService cocosStateService;
 
     @ApiImplicitParams({
     })
@@ -67,16 +71,9 @@ public class NGameController {
     @ApiOperation(value = "获取DEMO CocosBridge 房间列表")
     @GetMapping("/cocos-bridge/rooms")
     public NewsContext<List<HashMap>> vCocosBridgeRooms(){
-        List<HashMap> map = ArrayUtil.map(CocosBridgeWebSocket.SERVERS.values().toArray(new CocosBridgeServer[0]), (v) -> {
-            return new HashMap() {
-                {
-                    put("uuid", v.getUuid());
-                    put("client", v.getClients().size());
-                }
-            };
-        });
-        return NewsContext.onSuccess("获取成功", map);
+        return NewsContext.onSuccess("获取成功", cocosStateService.vGetCocosStateRooms());
     }
+
 
     @ApiImplicitParams({})
     @ApiOperation(value = "获取系统占用")
@@ -94,9 +91,30 @@ public class NGameController {
         return NewsContext.onSuccess("获取成功", new HashMap() {
             {
                 put("cpu", percentCpuLoad);
-                put("memory", percentMemoryLoad);
+                put("ram", percentMemoryLoad);
             }
         });
+    }
+
+    @ApiImplicitParams({
+        @ApiImplicitParam(name="roomId",value="房间ID")
+    })
+    @ApiOperation(value = "添加房间")
+    @GetMapping("/add/cocos/state/room")
+    public NewsContext<Object> addCocosStateRoom(String roomId){
+
+        this.rCocosState.add(roomId);
+        return NewsContext.onSuccess("添加房间成功");
+
+    }
+
+    @ApiImplicitParams({})
+    @ApiOperation(value = "查看创建房间列表")
+    @GetMapping("/cocos/state/room/list")
+    public NewsContext<List<String>> vCocosStateRoomList(){
+
+        return NewsContext.onSuccess("查询成功", this.rCocosState);
+
     }
 
 }
