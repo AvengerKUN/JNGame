@@ -1,0 +1,13 @@
+{
+  "name": "cocos3d_demo1",
+  "type": "3d",
+  "uuid": "5ac9288e-45d6-49bf-8935-92947bd997cc",
+  "version": "3.4.1",
+  "creator": {
+    "version": "3.4.1"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "protobufjs": "^6.11.2"
+  }
+}

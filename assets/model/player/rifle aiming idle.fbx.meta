@@ -1,0 +1,79 @@
+{
+  "ver": "2.1.10",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "624a23c5-38dd-4028-9d50-a7c231a633a8",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "63470": {
+      "importer": "gltf-scene",
+      "uuid": "624a23c5-38dd-4028-9d50-a7c231a633a8@63470",
+      "displayName": "",
+      "id": "63470",
+      "name": "rifle aiming idle.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "18d6f": {
+      "importer": "gltf-animation",
+      "uuid": "624a23c5-38dd-4028-9d50-a7c231a633a8@18d6f",
+      "displayName": "",
+      "id": "18d6f",
+      "name": "mixamo.com.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 3.0833332538604736
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "legacyFbxImporter": false,
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 3.0833332538604736,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "mixamo.com",
+            "from": 0,
+            "to": 3.0833332538604736,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ],
+    "redirect": "624a23c5-38dd-4028-9d50-a7c231a633a8@63470",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "624a23c5-38dd-4028-9d50-a7c231a633a8@63470"
+      ]
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "ver": "2.1.10",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "6af94338-4ab0-477a-9559-2945555f070d",
+  "files": [],
+  "subMetas": {
+    "30732": {
+      "importer": "gltf-skeleton",
+      "uuid": "6af94338-4ab0-477a-9559-2945555f070d@30732",
+      "displayName": "",
+      "id": "30732",
+      "name": "UnnamedSkeleton-0.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 52
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "01512": {
+      "importer": "gltf-mesh",
+      "uuid": "6af94338-4ab0-477a-9559-2945555f070d@01512",
+      "displayName": "",
+      "id": "01512",
+      "name": "Beta_Joints.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "eca75": {
+      "importer": "gltf-mesh",
+      "uuid": "6af94338-4ab0-477a-9559-2945555f070d@eca75",
+      "displayName": "",
+      "id": "eca75",
+      "name": "Beta_Surface.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f1394": {
+      "importer": "gltf-skeleton",
+      "uuid": "6af94338-4ab0-477a-9559-2945555f070d@f1394",
+      "displayName": "",
+      "id": "f1394",
+      "name": "UnnamedSkeleton-1.skeleton",
+      "userData": {
+        "gltfIndex": 1,
+        "jointsLength": 52
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "0f0f9": {
+      "importer": "gltf-material",
+      "uuid": "6af94338-4ab0-477a-9559-2945555f070d@0f0f9",
+      "displayName": "",
+      "id": "0f0f9",
+      "name": "Beta_Joints_MAT.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "124e8": {
+      "importer": "gltf-material",
+      "uuid": "6af94338-4ab0-477a-9559-2945555f070d@124e8",
+      "displayName": "",
+      "id": "124e8",
+      "name": "asdf1:Beta_HighLimbsGeoSG2.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "981a5": {
+      "importer": "gltf-scene",
+      "uuid": "6af94338-4ab0-477a-9559-2945555f070d@981a5",
+      "displayName": "",
+      "id": "981a5",
+      "name": "xbot.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "legacyFbxImporter": false,
+    "redirect": "6af94338-4ab0-477a-9559-2945555f070d@981a5",
+    "assetFinder": {
+      "meshes": [
+        "6af94338-4ab0-477a-9559-2945555f070d@01512",
+        "6af94338-4ab0-477a-9559-2945555f070d@eca75"
+      ],
+      "skeletons": [
+        "6af94338-4ab0-477a-9559-2945555f070d@30732",
+        "6af94338-4ab0-477a-9559-2945555f070d@f1394"
+      ],
+      "textures": [],
+      "materials": [
+        "6af94338-4ab0-477a-9559-2945555f070d@0f0f9",
+        "6af94338-4ab0-477a-9559-2945555f070d@124e8"
+      ],
+      "scenes": [
+        "6af94338-4ab0-477a-9559-2945555f070d@981a5"
+      ]
+    }
+  }
+}
